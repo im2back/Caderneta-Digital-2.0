@@ -1,7 +1,9 @@
-package com.github.im2back.customerms.model.entities;
+package com.github.im2back.customerms.model.entities.customer;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.github.im2back.customerms.model.entities.purchase.PurchaseRecord;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;

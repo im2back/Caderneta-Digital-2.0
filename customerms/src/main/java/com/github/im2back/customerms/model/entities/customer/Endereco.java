@@ -1,4 +1,4 @@
-package com.github.im2back.customerms.model.entities;
+package com.github.im2back.customerms.model.entities.customer;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
