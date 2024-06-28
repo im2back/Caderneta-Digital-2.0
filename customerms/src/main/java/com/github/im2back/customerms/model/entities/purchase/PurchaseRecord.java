@@ -1,5 +1,6 @@
 package com.github.im2back.customerms.model.entities.purchase;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 import com.github.im2back.customerms.model.entities.customer.Customer;
@@ -25,6 +26,16 @@ import lombok.Setter;
 @Entity
 public class PurchaseRecord {
 	
+	public PurchaseRecord(String productName, BigDecimal productprice, String productCode, Instant purchaseDate,
+			Customer customer) {
+		super();
+		this.productName = productName;
+		this.productprice = productprice;
+		this.productCode = productCode;
+		this.purchaseDate = purchaseDate;
+		this.customer = customer;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -32,8 +43,11 @@ public class PurchaseRecord {
 	@Column(name = "product_name")
 	private String productName;
 	
+	@Column(name = "product_price")
+	private BigDecimal productprice;
+	
 	@Column(name = "product_code")
-    private Integer productCode;
+    private String productCode;
 	
 	@Column(name = "purchase_date")
 	private Instant purchaseDate;

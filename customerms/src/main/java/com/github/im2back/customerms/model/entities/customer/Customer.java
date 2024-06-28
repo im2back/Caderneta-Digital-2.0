@@ -28,6 +28,17 @@ import lombok.Setter;
 @Entity
 public class Customer {
 	
+	public Customer(String name, String document, String email, String phone, Endereco address,
+			List<PurchaseRecord> purchaseRecord) {
+		super();
+		this.name = name;
+		this.document = document;
+		this.email = email;
+		this.phone = phone;
+		this.address = address;
+		this.purchaseRecord = purchaseRecord;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -42,5 +53,7 @@ public class Customer {
 	
 	@OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
 	private List<PurchaseRecord> purchaseRecord = new ArrayList<>();
+	
+	
 
 }
