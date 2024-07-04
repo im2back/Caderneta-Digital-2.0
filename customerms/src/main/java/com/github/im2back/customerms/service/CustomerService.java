@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.im2back.customerms.model.dto.GetCustomerDto;
 import com.github.im2back.customerms.model.dto.PurchaseRequestDto;
 import com.github.im2back.customerms.model.entities.customer.Customer;
 import com.github.im2back.customerms.model.entities.purchase.PurchaseRecord;
@@ -21,14 +22,15 @@ public class CustomerService {
 	private CustomerRepository repository;
 
 	@Transactional(readOnly = true)
-	public Customer findCustomerById(Long id) {
-		return repository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+	public GetCustomerDto findCustomerById(Long id) {
+		Customer customer = repository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+		return new GetCustomerDto(customer);		
 	}
 
 	@Transactional
-	public Customer saveNewCustomer(Customer customerParam) {
-		Customer customerReturn = repository.save(customerParam);
-		return customerReturn;
+	public GetCustomerDto saveNewCustomer(Customer customerParam) {
+		Customer customer = repository.save(customerParam);
+		return new GetCustomerDto(customer);
 	}
 
 	@Transactional

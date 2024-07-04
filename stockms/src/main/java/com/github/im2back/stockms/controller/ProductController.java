@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.github.im2back.stockms.model.dto.ProductDto;
+import com.github.im2back.stockms.model.dto.ProductRegister;
 import com.github.im2back.stockms.model.dto.ProductsPurchaseRequestDto;
-import com.github.im2back.stockms.model.entities.Product;
 import com.github.im2back.stockms.service.ProductService;
 
 @RestController
@@ -23,15 +24,15 @@ public class ProductController {
 	private ProductService service;
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Product> findProductById(@PathVariable Long id) {
-		var response = service.findProductById(id);
+	public ResponseEntity<ProductDto> findProductById(@PathVariable Long id) {
+		ProductDto response = service.findProductById(id);
 		return ResponseEntity.ok(response);
 	}
 
 	@PostMapping
-	public ResponseEntity<Product> saveNewProduct(@RequestBody Product product, UriComponentsBuilder uriBuilder) {
-		var response = service.saveNewProduct(product);
-		var uri = uriBuilder.path("/product/{id}").buildAndExpand(response.getId()).toUri();
+	public ResponseEntity<ProductDto> saveNewProduct(@RequestBody ProductRegister product, UriComponentsBuilder uriBuilder) {
+		ProductDto response = service.saveNewProduct(product);
+		var uri = uriBuilder.path("/product/{id}").buildAndExpand(response.id()).toUri();
 		return ResponseEntity.created(uri).body(response);
 	}
 
@@ -42,7 +43,7 @@ public class ProductController {
 	}
 	
 	@PostMapping("/purchase")
-	public ResponseEntity<Product> updateStock(@RequestBody ProductsPurchaseRequestDto dto) {
+	public ResponseEntity<Void> updateStock(@RequestBody ProductsPurchaseRequestDto dto) {
 		service.updateStock(dto);
 		return ResponseEntity.ok().build();
 	}

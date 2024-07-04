@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.github.im2back.customerms.model.dto.GetCustomerDto;
 import com.github.im2back.customerms.model.dto.PurchaseRequestDto;
 import com.github.im2back.customerms.model.entities.customer.Customer;
 import com.github.im2back.customerms.service.CustomerService;
@@ -24,15 +25,15 @@ public class CustomerController {
 	private CustomerService service;
 
 	@GetMapping("/{id}")
-	ResponseEntity<Customer> findCustomerById(@PathVariable Long id) {
-		var response = service.findCustomerById(id);
+	ResponseEntity<GetCustomerDto> findCustomerById(@PathVariable Long id) {
+		GetCustomerDto response = service.findCustomerById(id);
 		return ResponseEntity.ok(response);
 	}
 
 	@PostMapping
-	ResponseEntity<Customer> saveNewCustomer(@RequestBody Customer customer, UriComponentsBuilder uriBuilder) {
-		var response = service.saveNewCustomer(customer);
-		var uri = uriBuilder.path("/customer/{id}").buildAndExpand(response.getId()).toUri();
+	ResponseEntity<GetCustomerDto> saveNewCustomer(@RequestBody Customer customer, UriComponentsBuilder uriBuilder) {
+		GetCustomerDto response = service.saveNewCustomer(customer);
+		var uri = uriBuilder.path("/customer/{id}").buildAndExpand(response.id()).toUri();
 		return ResponseEntity.created(uri).body(response);
 	}
 

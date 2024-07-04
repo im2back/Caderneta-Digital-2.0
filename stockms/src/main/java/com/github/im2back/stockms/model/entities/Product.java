@@ -23,6 +23,14 @@ import lombok.Setter;
 @Entity
 public class Product {
 	
+	public Product(String name, BigDecimal price, String code, Integer quantity) {
+		super();
+		this.name = name;
+		this.price = price;
+		this.code = code;
+		this.quantity = quantity;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -38,4 +46,6 @@ public class Product {
 	
 	@Column(name = "product_quantity")
 	private Integer quantity;
+	
+	
 }
