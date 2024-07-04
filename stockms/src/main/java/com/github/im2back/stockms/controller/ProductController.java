@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.github.im2back.stockms.model.dto.ProductsPurchaseRequestDto;
 import com.github.im2back.stockms.model.entities.Product;
 import com.github.im2back.stockms.service.ProductService;
 
 @RestController
 @RequestMapping("product")
-public class ProductController {
+public class ProductController { 
 
 	@Autowired
 	private ProductService service;
@@ -38,6 +39,12 @@ public class ProductController {
 	public ResponseEntity<Void> deleteProductById(@PathVariable Long id) {
 		service.deleProductById(id);
 		return ResponseEntity.noContent().build();
+	}
+	
+	@PostMapping("/purchase")
+	public ResponseEntity<Product> updateStock(@RequestBody ProductsPurchaseRequestDto dto) {
+		service.updateStock(dto);
+		return ResponseEntity.ok().build();
 	}
 
 }

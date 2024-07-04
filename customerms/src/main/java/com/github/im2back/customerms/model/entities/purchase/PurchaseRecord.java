@@ -1,11 +1,14 @@
 package com.github.im2back.customerms.model.entities.purchase;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 import com.github.im2back.customerms.model.entities.customer.Customer;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,6 +28,18 @@ import lombok.Setter;
 @Entity
 public class PurchaseRecord {
 	
+	public PurchaseRecord(String productName, BigDecimal productprice, String productCode, Instant purchaseDate,
+			Integer quantity, Status status,Customer customer) {
+		super();
+		this.productName = productName;
+		this.productprice = productprice;
+		this.productCode = productCode;
+		this.purchaseDate = purchaseDate;
+		this.customer = customer;
+		this.quantity = quantity;
+		this.status = status;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -32,14 +47,26 @@ public class PurchaseRecord {
 	@Column(name = "product_name")
 	private String productName;
 	
+	@Column(name = "product_price")
+	private BigDecimal productprice;
+	
 	@Column(name = "product_code")
-    private Integer productCode;
+    private String productCode;
 	
 	@Column(name = "purchase_date")
 	private Instant purchaseDate;
 	
+	@Column(name = "product_quantity")
+	private Integer quantity;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "payment_status")
+	private Status status;
+	
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
+	
+
 
 }

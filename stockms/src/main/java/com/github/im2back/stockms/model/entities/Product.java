@@ -34,6 +34,8 @@ public class Product {
 	private BigDecimal price;
 	
 	@Column(name = "product_code")
-	private Integer code;
-
+	private String code;
+	
+	@Column(name = "product_quantity")
+	private Integer quantity;
 }
