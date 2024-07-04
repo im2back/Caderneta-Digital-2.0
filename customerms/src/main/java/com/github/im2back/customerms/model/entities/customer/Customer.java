@@ -28,15 +28,14 @@ import lombok.Setter;
 @Entity
 public class Customer {
 	
-	public Customer(String name, String document, String email, String phone, Endereco address,
-			List<PurchaseRecord> purchaseRecord) {
+	public Customer(String name, String document, String email, String phone, Address address) {
 		super();
 		this.name = name;
 		this.document = document;
 		this.email = email;
 		this.phone = phone;
 		this.address = address;
-		this.purchaseRecord = purchaseRecord;
+		
 	}
 
 	@Id
@@ -49,7 +48,7 @@ public class Customer {
 	private String phone;
 	
 	@Embedded
-	private Endereco address;
+	private Address address;
 	
 	@OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
 	private List<PurchaseRecord> purchaseRecord = new ArrayList<>();
