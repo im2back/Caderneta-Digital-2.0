@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.github.im2back.stockms.infra.ClientResourceCustomer;
+import com.github.im2back.stockms.model.dto.ProductDto;
 import com.github.im2back.stockms.model.dto.ProductRegister;
 import com.github.im2back.stockms.model.dto.ProductsPurchaseRequestDto;
 import com.github.im2back.stockms.model.dto.PurchaseRegister;
@@ -23,13 +24,14 @@ public class ProductService {
 	@Autowired
 	private ClientResourceCustomer clientResourceCustomer;
 
-	public Product findProductById(Long id) {
-		return repository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
+	public ProductDto findProductById(Long id) {
+		 Product product = repository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
+		 return new ProductDto(product);
 	}
 
-	public Product saveNewProduct(Product product) {
-		Product response = repository.save(product);
-		return response;
+	public ProductDto saveNewProduct(ProductRegister p) {
+		Product product = repository.save(new Product( p.name(), p.price(), p.code(), p.quantity()));
+		 return new ProductDto(product);
 	}
 
 	public void deleProductById(Long id) {
