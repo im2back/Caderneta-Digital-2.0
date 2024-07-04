@@ -16,6 +16,7 @@ import com.github.im2back.customerms.model.entities.customer.Customer;
 import com.github.im2back.customerms.model.entities.purchase.PurchaseRecord;
 import com.github.im2back.customerms.model.entities.purchase.Status;
 import com.github.im2back.customerms.repositories.CustomerRepository;
+import com.github.im2back.customerms.service.exeptions.CustomerNotFoundException;
 
 @Service
 public class CustomerService {
@@ -25,14 +26,15 @@ public class CustomerService {
 
 	@Transactional(readOnly = true)
 	public GetCustomerDto findCustomerById(Long id) {
-		Customer customer = repository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
-		return new GetCustomerDto(customer);		
+		Customer customer = repository.findById(id)
+				.orElseThrow(() -> new CustomerNotFoundException("User not found for id: " + id));
+		return new GetCustomerDto(customer);
 	}
 
 	@Transactional
 	public GetCustomerDto saveNewCustomer(CustomerDto c) {
 		Customer customer = repository.save(new Customer(c.name(), c.document(), c.email(), c.phone(),
-				new Address(c.address().streetName(),c.address().houseNumber(),c.address().complement())));
+				new Address(c.address().streetName(), c.address().houseNumber(), c.address().complement())));
 		return new GetCustomerDto(customer);
 	}
 
@@ -42,19 +44,18 @@ public class CustomerService {
 	}
 
 	public void purchase(PurchaseRequestDto dtoRequest) {
-		Customer customer = repository.findByDocument(dtoRequest.document())
-				.orElseThrow(() -> new RuntimeException());
+		Customer customer = repository.findByDocument(dtoRequest.document()).orElseThrow(
+				() -> new CustomerNotFoundException("User not found for document: " + dtoRequest.document()));
 
-		 // Adiciona os produtos na lista referente ao histórico de compras
-	    Instant instant = Instant.now();
-	    List<PurchaseRecord> purchaseRecords = dtoRequest.products().stream()
-	            .map(p -> new PurchaseRecord(p.name(), p.price(), p.code(), instant,p.quantity(),Status.EM_ABERTO,customer))
-	            .collect(Collectors.toList());
+		// Adiciona os produtos na lista referente ao histórico de compras
+		Instant instant = Instant.now();
+		List<PurchaseRecord> purchaseRecords = dtoRequest.products().stream().map(p -> new PurchaseRecord(p.name(),
+				p.price(), p.code(), instant, p.quantity(), Status.EM_ABERTO, customer)).collect(Collectors.toList());
 
-	    customer.getPurchaseRecord().addAll(purchaseRecords);
-	    
-	    // Persiste o histórico
-	    repository.save(customer);
+		customer.getPurchaseRecord().addAll(purchaseRecords);
+
+		// Persiste o histórico
+		repository.save(customer);
 	}
 
 }
