@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.github.im2back.stockms.infra.ClientResourceCustomer;
-import com.github.im2back.stockms.model.dto.ProductDto;
-import com.github.im2back.stockms.model.dto.ProductRegister;
-import com.github.im2back.stockms.model.dto.ProductsPurchaseRequestDto;
-import com.github.im2back.stockms.model.dto.PurchaseRegister;
-import com.github.im2back.stockms.model.dto.PurchasedItem;
+import com.github.im2back.stockms.model.dto.inputdata.ProductRegister;
+import com.github.im2back.stockms.model.dto.inputdata.ProductsPurchaseRequestDto;
+import com.github.im2back.stockms.model.dto.inputdata.PurchasedItem;
+import com.github.im2back.stockms.model.dto.outputdata.ProductDto;
+import com.github.im2back.stockms.model.dto.outputdata.PurchaseRegister;
 import com.github.im2back.stockms.model.entities.Product;
 import com.github.im2back.stockms.repositories.ProductRepository;
 

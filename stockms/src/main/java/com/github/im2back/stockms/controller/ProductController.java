@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.github.im2back.stockms.model.dto.ProductDto;
-import com.github.im2back.stockms.model.dto.ProductRegister;
-import com.github.im2back.stockms.model.dto.ProductsPurchaseRequestDto;
+import com.github.im2back.stockms.model.dto.inputdata.ProductRegister;
+import com.github.im2back.stockms.model.dto.inputdata.ProductsPurchaseRequestDto;
+import com.github.im2back.stockms.model.dto.outputdata.ProductDto;
 import com.github.im2back.stockms.service.ProductService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("product")
@@ -30,7 +32,7 @@ public class ProductController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ProductDto> saveNewProduct(@RequestBody ProductRegister product, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<ProductDto> saveNewProduct(@RequestBody @Valid ProductRegister product, UriComponentsBuilder uriBuilder) {
 		ProductDto response = service.saveNewProduct(product);
 		var uri = uriBuilder.path("/product/{id}").buildAndExpand(response.id()).toUri();
 		return ResponseEntity.created(uri).body(response);
@@ -43,7 +45,7 @@ public class ProductController {
 	}
 	
 	@PostMapping("/purchase")
-	public ResponseEntity<Void> updateStock(@RequestBody ProductsPurchaseRequestDto dto) {
+	public ResponseEntity<Void> updateStock(@RequestBody @Valid ProductsPurchaseRequestDto dto) {
 		service.updateStock(dto);
 		return ResponseEntity.ok().build();
 	}
