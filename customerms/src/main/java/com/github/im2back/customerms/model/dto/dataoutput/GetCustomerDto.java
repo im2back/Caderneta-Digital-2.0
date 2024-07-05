@@ -1,4 +1,4 @@
-package com.github.im2back.customerms.model.dto;
+package com.github.im2back.customerms.model.dto.dataoutput;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,12 +6,12 @@ import java.util.List;
 import com.github.im2back.customerms.model.entities.customer.Customer;
 import com.github.im2back.customerms.model.entities.purchase.PurchaseRecord;
 
-public record GetCustomerDto(Long id, String name, String document, String email, String phone, EnderecoDto address,
+public record GetCustomerDto(Long id, String name, String document, String email, String phone, AddressDto address,
 		List<PurchaseRecordDto> purchaseRecord) {
 	
 	public GetCustomerDto (Customer c) {
 		    this(c.getId(),c.getName(),c.getDocument(),c.getEmail(),c.getPhone(),
-				new EnderecoDto(c.getAddress()),
+				new AddressDto(c.getAddress()),
 				assembleList(c.getPurchaseRecord())
 				);
 	}

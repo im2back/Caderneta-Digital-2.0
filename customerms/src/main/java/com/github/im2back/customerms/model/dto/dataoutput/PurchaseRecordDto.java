@@ -1,4 +1,4 @@
-package com.github.im2back.customerms.model.dto;
+package com.github.im2back.customerms.model.dto.dataoutput;
 
 import java.math.BigDecimal;
 import java.time.Instant;

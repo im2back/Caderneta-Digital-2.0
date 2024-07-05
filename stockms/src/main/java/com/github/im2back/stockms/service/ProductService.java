@@ -5,15 +5,17 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.github.im2back.stockms.infra.ClientResourceCustomer;
-import com.github.im2back.stockms.model.dto.ProductDto;
-import com.github.im2back.stockms.model.dto.ProductRegister;
-import com.github.im2back.stockms.model.dto.ProductsPurchaseRequestDto;
-import com.github.im2back.stockms.model.dto.PurchaseRegister;
-import com.github.im2back.stockms.model.dto.PurchasedItem;
+import com.github.im2back.stockms.model.dto.inputdata.ProductRegister;
+import com.github.im2back.stockms.model.dto.inputdata.ProductsPurchaseRequestDto;
+import com.github.im2back.stockms.model.dto.inputdata.PurchasedItem;
+import com.github.im2back.stockms.model.dto.outputdata.ProductDto;
+import com.github.im2back.stockms.model.dto.outputdata.PurchaseRegister;
 import com.github.im2back.stockms.model.entities.Product;
 import com.github.im2back.stockms.repositories.ProductRepository;
+import com.github.im2back.stockms.service.exceptions.ProductNotFoundException;
 
 @Service
 public class ProductService {
@@ -23,37 +25,49 @@ public class ProductService {
 
 	@Autowired
 	private ClientResourceCustomer clientResourceCustomer;
-
+	
+	@Transactional(readOnly = true)
 	public ProductDto findProductById(Long id) {
-		 Product product = repository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
-		 return new ProductDto(product);
+		Product product = repository.findById(id)
+				.orElseThrow(() -> new ProductNotFoundException("Product Not found for id: " + id));
+		return new ProductDto(product);
 	}
-
+	
+	@Transactional(readOnly = true)
+	private Product findByCode(PurchasedItem p) {
+		Product product = repository.findByCode(p.code())
+				.orElseThrow(() -> new ProductNotFoundException("Product Not found for code: " + p.code()));
+		return product;
+	}
+	
+	@Transactional
 	public ProductDto saveNewProduct(ProductRegister p) {
-		Product product = repository.save(new Product( p.name(), p.price(), p.code(), p.quantity()));
-		 return new ProductDto(product);
+		Product product = repository.save(new Product(p.name(), p.price(), p.code(), p.quantity()));
+		return new ProductDto(product);
 	}
-
+	
+	@Transactional
 	public void deleProductById(Long id) {
 		repository.deleteById(id);
 	}
-
+	
+	@Transactional
 	public void updateStock(ProductsPurchaseRequestDto dto) {
-		List<ProductRegister> listProductRegister = new ArrayList<>();
-
+		
+		List<ProductRegister> listPurchaseHistory = new ArrayList<>();
 		List<PurchasedItem> productsList = dto.purchasedItems();
+
 		for (PurchasedItem p : productsList) {
-			Product product = repository.findByCode(p.code()).orElseThrow(() -> new RuntimeException("Not found"));
+			Product product = findByCode(p);
 			product.setQuantity(product.getQuantity() - p.quantity());
-			listProductRegister
-					.add(new ProductRegister(product.getName(), product.getPrice(), product.getCode(), p.quantity()));
+			listPurchaseHistory.add(new ProductRegister(product, p.quantity()));
 			repository.save(product);
 		}
 
-		saveHistory(listProductRegister, dto.document());
+		saveUserPurchaseHistory(listPurchaseHistory, dto.document());
 	}
 
-	private void saveHistory(List<ProductRegister> products, String document) {
+	private void saveUserPurchaseHistory(List<ProductRegister> products, String document) {
 		PurchaseRegister purchaseRegister = new PurchaseRegister(document, products);
 		clientResourceCustomer.purchase(purchaseRegister);
 	}
