@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,6 +70,6 @@ public class ProductService {
 
 	private void saveUserPurchaseHistory(List<ProductRegister> products, String document) {
 		PurchaseRegister purchaseRegister = new PurchaseRegister(document, products);
-		clientResourceCustomer.purchase(purchaseRegister);
+		ResponseEntity<Void> responseRequest = clientResourceCustomer.purchase(purchaseRegister);
 	}
 }
