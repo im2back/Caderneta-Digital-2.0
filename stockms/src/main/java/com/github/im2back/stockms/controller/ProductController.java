@@ -14,6 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.github.im2back.stockms.model.dto.inputdata.ProductRegister;
 import com.github.im2back.stockms.model.dto.inputdata.ProductsPurchaseRequestDto;
 import com.github.im2back.stockms.model.dto.outputdata.ProductDto;
+import com.github.im2back.stockms.model.dto.outputdata.PurchaseResponseDto;
 import com.github.im2back.stockms.service.ProductService;
 
 import jakarta.validation.Valid;
@@ -45,9 +46,9 @@ public class ProductController {
 	}
 	
 	@PostMapping("/purchase")
-	public ResponseEntity<Void> updateStock(@RequestBody @Valid ProductsPurchaseRequestDto dto) {
-		service.updateStock(dto);
-		return ResponseEntity.ok().build();
+	public ResponseEntity<PurchaseResponseDto> updateStock(@RequestBody @Valid ProductsPurchaseRequestDto dto) {
+		PurchaseResponseDto response =  service.updateStock(dto);
+		return ResponseEntity.ok(response);
 	}
 
 }

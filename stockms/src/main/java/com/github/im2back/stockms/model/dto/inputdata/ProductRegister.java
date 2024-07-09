@@ -13,7 +13,7 @@ public record ProductRegister(
 		@NotBlank 
 		String name,
 
-		@NotBlank 
+		@NotNull
 		BigDecimal price,
 
 		@NotBlank

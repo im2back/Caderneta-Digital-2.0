@@ -6,11 +6,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.github.im2back.stockms.model.dto.outputdata.PurchaseRegister;
+import com.github.im2back.stockms.model.dto.outputdata.PurchaseResponseDto;
 
 @FeignClient(name = "customerClient", url = "http://localhost:8080", path = "/customer")
 public interface ClientResourceCustomer {
 
 	
 	@PutMapping
-	ResponseEntity<Void> purchase(@RequestBody PurchaseRegister dtoRequest);
+	ResponseEntity<PurchaseResponseDto> purchase(@RequestBody PurchaseRegister dtoRequest);
 }
