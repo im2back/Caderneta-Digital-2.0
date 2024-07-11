@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpClientErrorException;
 
 import com.github.im2back.stockms.service.exceptions.ProductNotFoundException;
 
@@ -38,5 +39,18 @@ public class GlobalHandlerExceptions {
 				"Bad Request", messages, request.getRequestURI());
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+	}
+	
+	@ExceptionHandler(HttpClientErrorException.class)
+	public ResponseEntity<StandardError> customClientException(HttpClientErrorException ex,
+			HttpServletRequest request) {
+
+		StandardError response = new StandardError(
+				ex.getStatusCode().value(), 
+				"Error Feing Client",
+				ex.getMessage(),
+				request.getRequestURI());
+
+		return ResponseEntity.status(ex.getStatusCode()).body(response);
 	}
 }

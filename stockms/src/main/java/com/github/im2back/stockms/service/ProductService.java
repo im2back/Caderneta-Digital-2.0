@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.im2back.stockms.infra.ClientResourceCustomer;
+import com.github.im2back.stockms.infra.clients.ClientResourceCustomer;
 import com.github.im2back.stockms.model.dto.inputdata.ProductRegister;
 import com.github.im2back.stockms.model.dto.inputdata.ProductsPurchaseRequestDto;
 import com.github.im2back.stockms.model.dto.inputdata.PurchasedItem;

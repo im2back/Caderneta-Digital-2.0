@@ -1,4 +1,4 @@
-package com.github.im2back.stockms.infra;
+package com.github.im2back.stockms.infra.clients;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
