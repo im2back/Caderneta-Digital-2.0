@@ -15,6 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.github.im2back.customerms.model.dto.datainput.CustomerDto;
 import com.github.im2back.customerms.model.dto.datainput.PurchaseRequestDto;
 import com.github.im2back.customerms.model.dto.dataoutput.GetCustomerDto;
+import com.github.im2back.customerms.model.dto.dataoutput.PurchaseResponseDto;
 import com.github.im2back.customerms.service.CustomerService;
 
 import jakarta.validation.Valid;
@@ -33,7 +34,8 @@ public class CustomerController {
 	}
 
 	@PostMapping
-	ResponseEntity<GetCustomerDto> saveNewCustomer(@RequestBody @Valid CustomerDto customer, UriComponentsBuilder uriBuilder) {
+	ResponseEntity<GetCustomerDto> saveNewCustomer(@RequestBody @Valid CustomerDto customer,
+			UriComponentsBuilder uriBuilder) {
 		GetCustomerDto response = service.saveNewCustomer(customer);
 		var uri = uriBuilder.path("/customer/{id}").buildAndExpand(response.id()).toUri();
 		return ResponseEntity.created(uri).body(response);
@@ -44,11 +46,11 @@ public class CustomerController {
 		service.deleteCustomerById(id);
 		return ResponseEntity.noContent().build();
 	}
-	
+
 	@PutMapping
-	ResponseEntity<Void> purchase(@RequestBody @Valid PurchaseRequestDto dtoRequest) {
-		service.purchase(dtoRequest);
-		return ResponseEntity.ok().build();
+	ResponseEntity<PurchaseResponseDto> purchase(@RequestBody @Valid PurchaseRequestDto dtoRequest) {
+		PurchaseResponseDto response = service.purchase(dtoRequest);
+		return ResponseEntity.ok(response);
 	}
 
 }

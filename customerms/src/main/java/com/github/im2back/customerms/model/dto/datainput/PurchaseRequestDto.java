@@ -6,9 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public record PurchaseRequestDto(
 		@NotBlank
-		String document,
-		
-		
+		String document,	
 		List<ProductRequestDto> products
 		) {
 
