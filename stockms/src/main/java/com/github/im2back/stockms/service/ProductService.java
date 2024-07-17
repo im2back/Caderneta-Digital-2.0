@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ import com.github.im2back.stockms.model.dto.outputdata.PurchaseResponseDto;
 import com.github.im2back.stockms.model.entities.Product;
 import com.github.im2back.stockms.repositories.ProductRepository;
 import com.github.im2back.stockms.service.exceptions.ProductNotFoundException;
+import com.github.im2back.stockms.validation.purchasevalidations.PurchaseValidations;
 
 @Service
 public class ProductService {
@@ -27,6 +29,9 @@ public class ProductService {
 
 	@Autowired
 	private ClientResourceCustomer clientResourceCustomer;
+	
+	@Autowired
+	private List<PurchaseValidations> purchaseValidations;
 	
 	@Transactional(readOnly = true)
 	public ProductDto findProductById(Long id) {
@@ -44,8 +49,13 @@ public class ProductService {
 	
 	@Transactional
 	public ProductDto saveNewProduct(ProductRegister p) {
-		Product product = repository.save(new Product(p.name(), p.price(), p.code(), p.quantity()));
-		return new ProductDto(product);
+		try {
+			Product product = repository.save(new Product(p.name(), p.price(), p.code(), p.quantity()));
+			return new ProductDto(product);
+		} catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityViolationException("Error when trying to save product to database");
+		}
+			
 	}
 	
 	@Transactional
@@ -55,6 +65,8 @@ public class ProductService {
 	
 	@Transactional
 	public PurchaseResponseDto updateStock(ProductsPurchaseRequestDto dto) {
+		
+		purchaseValidations.forEach(t -> t.valid(dto));
 		
 		List<ProductRegister> listPurchaseHistory = new ArrayList<>();
 		List<PurchasedItem> productsList = dto.purchasedItems();
