@@ -1,4 +1,4 @@
-package com.github.im2back.stockms.exceptions;
+package com.github.im2back.stockms.exceptions.feingexceptions;
 
 import java.io.IOException;
 import java.io.InputStream;

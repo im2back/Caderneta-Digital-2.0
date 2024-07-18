@@ -6,6 +6,7 @@ import java.util.List;
 import com.github.im2back.customerms.model.entities.purchase.PurchaseRecord;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,12 +29,13 @@ import lombok.Setter;
 @Entity
 public class Customer {
 	
-	public Customer(String name, String document, String email, String phone, Address address) {
+	public Customer(String name, String document, String email, String phone, boolean isActive, Address address) {
 		super();
 		this.name = name;
 		this.document = document;
 		this.email = email;
 		this.phone = phone;
+		this.isActive = isActive;
 		this.address = address;
 		
 	}
@@ -43,9 +45,17 @@ public class Customer {
 	private Long id;
 	
 	private String name;
+	
+	@Column(unique = true)
 	private String document;
+	
+	@Column(unique = true)
 	private String email;
+	
+	@Column(unique = true)
 	private String phone;
+	
+	private boolean isActive;
 	
 	@Embedded
 	private Address address;
