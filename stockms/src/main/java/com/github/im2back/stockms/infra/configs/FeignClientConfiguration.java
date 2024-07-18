@@ -3,7 +3,7 @@ package com.github.im2back.stockms.infra.configs;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.github.im2back.stockms.exceptions.CustomErrorDecoder;
+import com.github.im2back.stockms.exceptions.feingexceptions.CustomErrorDecoder;
 
 import feign.codec.ErrorDecoder;
 

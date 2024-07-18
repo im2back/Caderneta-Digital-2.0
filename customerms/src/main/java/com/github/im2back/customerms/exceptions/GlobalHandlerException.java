@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.github.im2back.customerms.service.exeptions.CustomerNotFoundException;
+import com.github.im2back.customerms.validations.exceptions.CustomerRegisterValidationException;
+import com.github.im2back.customerms.validations.exceptions.PurchaseValidationException;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -26,7 +28,7 @@ public class GlobalHandlerException {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
 
 	}
-
+	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	ResponseEntity<StandardErrorBeanValidation> methodArgumentNotValidException(MethodArgumentNotValidException ex,
 			HttpServletRequest request, BindingResult bidingResult) {
@@ -38,6 +40,32 @@ public class GlobalHandlerException {
 				"Bad Request", messages, request.getRequestURI());
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+
+	}
+	
+	@ExceptionHandler(CustomerRegisterValidationException.class)
+	ResponseEntity<StandardErrorBeanValidation> customerRegisterValidations(CustomerRegisterValidationException ex,
+			HttpServletRequest request) {
+		
+		StandardErrorBeanValidation response = new StandardErrorBeanValidation(
+				HttpStatus.CONFLICT.value(),
+				"Error at register customer",
+				ex.getErrorMessages(), 
+				request.getRequestURI());
+		
+		System.out.println(ex.getErrorMessages());
+
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+
+	}
+	
+	@ExceptionHandler(PurchaseValidationException.class)
+	ResponseEntity<StandardError> PurchaseValidationException(PurchaseValidationException ex, HttpServletRequest request) {
+
+		StandardError response = new StandardError(HttpStatus.CONFLICT.value(), "Error at Purchase", ex.getMessage(),
+				request.getRequestURI());
+
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
 
 	}
 

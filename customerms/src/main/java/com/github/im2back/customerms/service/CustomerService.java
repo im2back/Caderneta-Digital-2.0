@@ -20,12 +20,20 @@ import com.github.im2back.customerms.model.entities.purchase.PurchaseRecord;
 import com.github.im2back.customerms.model.entities.purchase.Status;
 import com.github.im2back.customerms.repositories.CustomerRepository;
 import com.github.im2back.customerms.service.exeptions.CustomerNotFoundException;
+import com.github.im2back.customerms.validations.customervalidations.CustomerValidations;
+import com.github.im2back.customerms.validations.purchasevalidations.PurchaseValidations;
 
 @Service
 public class CustomerService {
 
 	@Autowired
 	private CustomerRepository repository;
+
+	@Autowired
+	private List<CustomerValidations> customerValidations;
+
+	@Autowired
+	private List<PurchaseValidations> purchaseValidations;
 
 	@Transactional(readOnly = true)
 	public GetCustomerDto findCustomerById(Long id) {
@@ -35,9 +43,11 @@ public class CustomerService {
 	}
 
 	@Transactional
-	public GetCustomerDto saveNewCustomer(CustomerDto c) {
-		Customer customer = repository.save(new Customer(c.name(), c.document(), c.email(), c.phone(),
-				new Address(c.address().streetName(), c.address().houseNumber(), c.address().complement())));
+	public GetCustomerDto saveNewCustomer(CustomerDto dto) {
+		customerValidations.forEach(t -> t.valid(dto));
+
+		Customer customer = repository.save(new Customer(dto.name(), dto.document(), dto.email(), dto.phone(), true,
+				new Address(dto.address().streetName(), dto.address().houseNumber(), dto.address().complement())));
 		return new GetCustomerDto(customer);
 	}
 
@@ -48,6 +58,8 @@ public class CustomerService {
 
 	@Transactional
 	public PurchaseResponseDto purchase(PurchaseRequestDto dtoRequest) {
+		purchaseValidations.forEach(t -> t.valid(dtoRequest));
+		
 		Customer customer = repository.findByDocument(dtoRequest.document()).orElseThrow(
 				() -> new CustomerNotFoundException("User not found for document: " + dtoRequest.document()));
 
@@ -69,15 +81,13 @@ public class CustomerService {
 	}
 
 	private PurchaseResponseDto assembleResponse(PurchaseRequestDto dtoRequest, Customer customer) {
-	    List<PurchasedProduct> purchasedProducts = dtoRequest.products().stream()
-	            .map(p -> new PurchasedProduct(p.name(), p.quantity(), p.price()))
-	            .collect(Collectors.toList());
+		List<PurchasedProduct> purchasedProducts = dtoRequest.products().stream()
+				.map(p -> new PurchasedProduct(p.name(), p.quantity(), p.price())).collect(Collectors.toList());
 
-	    BigDecimal total = purchasedProducts.stream()
-	            .map(p -> p.value().multiply(new BigDecimal(p.quantity())))
-	            .reduce(BigDecimal.ZERO, BigDecimal::add);
+		BigDecimal total = purchasedProducts.stream().map(p -> p.value().multiply(new BigDecimal(p.quantity())))
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
 
-	    return new PurchaseResponseDto(customer.getName(), purchasedProducts, total);
+		return new PurchaseResponseDto(customer.getName(), purchasedProducts, total);
 	}
 
 }
