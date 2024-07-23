@@ -1,1 +1,21 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'primeflex/primeflex.css';
+
+body {
+  margin: 0;
+  padding: 2px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.container{
+  padding: 10px;
+
+ }
+
+@media (min-width :1200px) {
+  .container{
+    width: 1200px;
+    margin: 0 auto;
+  }
+}

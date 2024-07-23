@@ -1,0 +1,57 @@
+.navbar{
+  background-color: #1e94d2;
+  padding: 10px 0;
+}
+
+
+
+.icon-hover {
+  color: white;
+  font-size: 1.5rem;
+  margin-top: 8px;
+  transition: color 0.3s ease;
+}
+
+.icon-hover:hover {
+  color: rgb(1, 54, 49);
+
+}
+
+
+.menu-title{
+  font-size: 23px;
+  font-weight: bolder;
+  border-bottom: 1px solid;
+  color: white;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  padding: 10px 17px;
+}
+
+.navbar-menu{
+  background-color: #3a3633;
+  position: fixed;
+  top: 2px;
+  bottom: 0;
+  right: 0;
+  width: 210px;
+  margin: 0;
+  z-index: 9999;
+  list-style: none;
+  padding: 0;
+  }
+
+a{
+  text-decoration: none;
+  color: cadetblue;
+  font-size: 20px;
+  font-weight: bolder;
+}
+
+a:hover{
+  color: white;
+}
+
+li{
+  padding: 10px 17px;
+}
