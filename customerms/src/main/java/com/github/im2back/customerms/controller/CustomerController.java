@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -32,7 +33,14 @@ public class CustomerController {
 		GetCustomerDto response = service.findCustomerById(id);
 		return ResponseEntity.ok(response);
 	}
-
+	
+	@GetMapping("/findDocument")
+	ResponseEntity<GetCustomerDto> findCustomerByDocument(@RequestParam String document) {
+		GetCustomerDto response = service.findCustomerByDocument(document);
+		return ResponseEntity.ok(response);
+	}
+	
+		
 	@PostMapping
 	ResponseEntity<GetCustomerDto> saveNewCustomer(@RequestBody @Valid CustomerDto customer,
 			UriComponentsBuilder uriBuilder) {

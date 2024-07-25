@@ -41,6 +41,13 @@ public class CustomerService {
 				.orElseThrow(() -> new CustomerNotFoundException("User not found for id: " + id));
 		return new GetCustomerDto(customer);
 	}
+	
+	@Transactional(readOnly = true)
+	public GetCustomerDto findCustomerByDocument(String document) {
+		Customer customer = repository.findByDocument(document)
+				.orElseThrow(() -> new CustomerNotFoundException("User not found for document: " + document));
+		return new GetCustomerDto(customer);
+	}
 
 	@Transactional
 	public GetCustomerDto saveNewCustomer(CustomerDto dto) {
@@ -89,5 +96,7 @@ public class CustomerService {
 
 		return new PurchaseResponseDto(customer.getName(), purchasedProducts, total);
 	}
+
+
 
 }

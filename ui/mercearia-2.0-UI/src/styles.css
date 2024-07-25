@@ -9,7 +9,7 @@ body {
 }
 
 .container{
-  padding: 10px;
+  padding: 5px;
 
  }
 
@@ -18,4 +18,49 @@ body {
     width: 1200px;
     margin: 0 auto;
   }
+}
+
+.success-message {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: #155724; /* Cor do texto */
+  background-color: #d4edda; /* Cor de fundo */
+  border-color: #c3e6cb;
+  opacity: 1;
+  transition: opacity 0.5s ease-out;
+  font-size: 16px; /* Tamanho da fonte */
+  font-weight: bold; /* Peso da fonte */
+  font-family: Arial, sans-serif; /* Família da fonte */
+
+  position: fixed; /* Faz o elemento ficar fixo na tela */
+  top: 20px;
+  left: 50%; /* Centraliza o elemento horizontalmente */
+  transform: translateX(-50%); /* Ajuste fino para centralizar precisamente */
+  z-index: 1000; /* Garante que a mensagem fique acima de outros elementos */
+}
+
+
+
+.custom-prime-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+.custom-prime-table th,
+.custom-prime-table td {
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.custom-prime-table th {
+  background-color:  #008695;
+  color: white;
+}
+
+.custom-prime-table tr:hover {
+  background-color: #8e6a6a59;
 }
