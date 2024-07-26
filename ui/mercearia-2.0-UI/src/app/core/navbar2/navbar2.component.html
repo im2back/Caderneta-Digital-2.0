@@ -3,17 +3,17 @@
       <div class="grid" >
 
         <div class="col-12" style="display: flex; align-items: center; ">
-          <a (click)="exibindoMenu = !exibindoMenu"> <i class="pi pi-bars icon-hover" ></i> </a>
+          <a style="cursor: pointer;" (click)="exibindoMenu = !exibindoMenu"> <i class="pi pi-bars icon-hover" ></i> </a>
         </div>
 
       </div>
     </div>
 
   <ul class="navbar-menu" [hidden]="!exibindoMenu">
-    <li class="menu-title" >MENU</li>
+    <li class="menu-title" >MENU <a style="cursor: pointer;"><i class="pi pi-times-circle" (click)="exibindoMenu = !exibindoMenu" style="font-size: 1.5rem" st></i></a> </li>
     <li><a href="">Métricas <i class="pi pi-chart-bar icons-menu"></i></a> </li>
-    <li><a href="">Usuários <i class="pi pi-users icons-menu"></i></a></li>
+    <li><a [routerLink]="['/user']"  href="">Usuários <i class="pi pi-users icons-menu"></i></a></li>
     <li><a href="">Compras <i class="pi pi-shopping-cart icons-menu"></i></a></li>
-    <li><a href="">Estoque <i class="pi pi-database icons-menu"></i></a></li>
+    <li><a href="">Estoque <i class="pi pi-database icons-menu" ></i></a></li>
   </ul>
 </nav>

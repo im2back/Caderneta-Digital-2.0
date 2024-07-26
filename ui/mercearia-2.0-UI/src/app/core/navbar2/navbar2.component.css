@@ -21,6 +21,7 @@
 
 
 .menu-title{
+  display: flex;
   font-size: 23px;
   font-weight: bolder;
   border-bottom: 1px solid;
@@ -29,6 +30,7 @@
   margin-bottom: 30px;
   padding: 20px 17px;
   font-family: Arial, Helvetica, sans-serif;
+  justify-content: space-between;
 }
 
 .navbar-menu{

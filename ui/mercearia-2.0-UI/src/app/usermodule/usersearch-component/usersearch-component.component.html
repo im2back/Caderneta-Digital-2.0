@@ -1,0 +1,47 @@
+<form #buscarForm="ngForm" (ngSubmit)="localizar(buscarForm)">
+  <div class="grid" style="display: flex; justify-content: center;">
+
+    <div class="col-12 titulosFormularios" >
+      <h2>Localizar Usuário</h2>
+    </div>
+
+    <div class="col-12 titulosFormularios" >
+      <h3>Buscar por documento</h3>
+    </div>
+
+    <div class="col-7" >
+      <label>Documento</label>
+      <input pInputText style="width: 100%;" type="text" name="document" required ngModel #document="ngModel">
+      <app-valid-messages [controlForm]="document" text="Campo obrigatorio" error="required" ></app-valid-messages>
+    </div>
+
+    <div class="col-7">
+      <button pButton type="submit" [disabled]="!buscarForm.valid" label="Localizar" icon="pi pi-search" iconPos="right"></button>
+    </div>
+
+
+  </div>
+</form>
+
+<table  class="custom-prime-table ">
+  <thead >
+    <tr>
+      <th class="responsive-hide">Id</th>
+      <th>Nome</th>
+      <th>Documento</th>
+      <th class="responsive-hide">Email</th>
+      <th class="responsive-hide">Telefone</th>
+      <th >Detalhar</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="responsive-hide">{{ userResponse?.id }}</td>
+      <td>{{ userResponse?.name }}</td>
+      <td>{{ userResponse?.document }}</td>
+      <td class="responsive-hide">{{ userResponse?.email }}</td>
+      <td class="responsive-hide">{{ userResponse?.phone }}</td>
+      <td ><a href=""><i class="pi pi-eye"></i></a></td>
+    </tr>
+  </tbody>
+</table>

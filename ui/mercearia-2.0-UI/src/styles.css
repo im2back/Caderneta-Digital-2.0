@@ -6,6 +6,11 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+  font-family: sans-serif;
+}
+
+label  {
+ color: #4B5563;
 }
 
 .container{
