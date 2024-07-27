@@ -8,11 +8,15 @@ import { UserServiceService } from '../service/UserService.service';
 import { FormsModule, NgForm } from '@angular/forms';
 import { UserResponse } from '../interfaces/UserResponse';
 import { ValidMessagesComponent } from '../../share/valid-messages/valid-messages.component';
+import { RouterModule, Routes } from '@angular/router';
+
 
 @Component({
   selector: 'app-usersearch-component',
   standalone: true,
-  imports: [CommonModule,MessagesModule,ButtonModule,InputTextModule,HttpClientModule,ValidMessagesComponent,FormsModule],
+  imports: [CommonModule,MessagesModule,ButtonModule,InputTextModule,HttpClientModule,ValidMessagesComponent,FormsModule
+    ,RouterModule
+  ],
   providers : [UserServiceService],
   templateUrl: './usersearch-component.component.html',
   styleUrl: './usersearch-component.component.css'

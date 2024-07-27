@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.im2back.customerms.model.dto.datainput.CustomerDto;
 import com.github.im2back.customerms.model.dto.datainput.PurchaseRequestDto;
+import com.github.im2back.customerms.model.dto.datainput.UndoPurchaseDto;
 import com.github.im2back.customerms.model.dto.dataoutput.GetCustomerDto;
 import com.github.im2back.customerms.model.dto.dataoutput.PurchaseResponseDto;
 import com.github.im2back.customerms.model.dto.dataoutput.PurchasedProduct;
@@ -95,6 +96,31 @@ public class CustomerService {
 				.reduce(BigDecimal.ZERO, BigDecimal::add);
 
 		return new PurchaseResponseDto(customer.getName(), purchasedProducts, total);
+	}
+
+	@Transactional
+	public void undoPurchase(UndoPurchaseDto dtoRequest) {
+		Customer customer = repository.findByPurchase(dtoRequest.purchaseId()).orElseThrow(
+				() -> new CustomerNotFoundException("User not found for purchase id: " + dtoRequest.purchaseId()));
+		
+		  var list = customer.getPurchaseRecord();	
+		  System.out.println("#####<------ Lista Antes ------->#####");
+		  
+		  for(PurchaseRecord x : list) {
+			  System.out.println(x.getProductName());
+		  }
+		  		  
+
+		    // Remover o elemento diretamente da lista original
+		    list.removeIf(t -> t.getId().equals(dtoRequest.purchaseId()));
+		  
+		  System.out.println("#####<------ Lista Depois ------->#####");
+		  for(PurchaseRecord x : list) {
+			  System.out.println(x.getProductName());
+		  }
+		  
+		  repository.save(customer);
+		
 	}
 
 

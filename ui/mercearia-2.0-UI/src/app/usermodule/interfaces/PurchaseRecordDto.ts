@@ -1,4 +1,5 @@
-export interface PurchaseRecord {
+export interface PurchaseRecordDto {
+  purchaseId: string;
   productName: string;
   productPrice: number;
   productCode: string;

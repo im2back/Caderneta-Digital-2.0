@@ -69,3 +69,7 @@ label  {
 .custom-prime-table tr:hover {
   background-color: #8e6a6a59;
 }
+
+table{
+  font-size: 14px;
+}

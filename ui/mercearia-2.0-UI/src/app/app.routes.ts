@@ -1,5 +1,6 @@
-import { Routes } from '@angular/router';
+import {  Routes } from '@angular/router';
 import { UserpageComponentComponent } from './usermodule/userpage-component/userpage-component.component';
+import { UserdetailComponentComponent } from './usermodule/userdetail-component/userdetail-component.component';
 
 
 
@@ -8,7 +9,11 @@ import { UserpageComponentComponent } from './usermodule/userpage-component/user
 export const routes: Routes = [
   {
     path : 'user',
-  component : UserpageComponentComponent
+    component : UserpageComponentComponent
+  },
+  {
+    path : 'userdetail/:id',
+    component : UserdetailComponentComponent
   },
 
 ];

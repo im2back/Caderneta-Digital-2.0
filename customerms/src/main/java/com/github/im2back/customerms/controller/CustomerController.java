@@ -15,6 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.github.im2back.customerms.model.dto.datainput.CustomerDto;
 import com.github.im2back.customerms.model.dto.datainput.PurchaseRequestDto;
+import com.github.im2back.customerms.model.dto.datainput.UndoPurchaseDto;
 import com.github.im2back.customerms.model.dto.dataoutput.GetCustomerDto;
 import com.github.im2back.customerms.model.dto.dataoutput.PurchaseResponseDto;
 import com.github.im2back.customerms.service.CustomerService;
@@ -59,6 +60,12 @@ public class CustomerController {
 	ResponseEntity<PurchaseResponseDto> purchase(@RequestBody @Valid PurchaseRequestDto dtoRequest) {
 		PurchaseResponseDto response = service.purchase(dtoRequest);
 		return ResponseEntity.ok(response);
+	}
+	
+	@PutMapping("/undopurchase")
+	ResponseEntity<Void> undoPurchase(@RequestBody @Valid UndoPurchaseDto dtoRequest) {
+		service.undoPurchase(dtoRequest);
+		return ResponseEntity.ok().build();
 	}
 
 }

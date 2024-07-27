@@ -2,10 +2,12 @@ package com.github.im2back.stockms.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.github.im2back.stockms.model.dto.inputdata.ProductRegister;
 import com.github.im2back.stockms.model.dto.inputdata.ProductsPurchaseRequestDto;
+import com.github.im2back.stockms.model.dto.inputdata.UndoPurchaseDto;
 import com.github.im2back.stockms.model.dto.outputdata.ProductDto;
 import com.github.im2back.stockms.model.dto.outputdata.PurchaseResponseDto;
 import com.github.im2back.stockms.service.ProductService;
@@ -49,6 +52,13 @@ public class ProductController {
 	public ResponseEntity<PurchaseResponseDto> updateStock(@RequestBody @Valid ProductsPurchaseRequestDto dto) {
 		PurchaseResponseDto response =  service.updateStock(dto);
 		return ResponseEntity.ok(response);
+	}
+	
+	@CrossOrigin(origins = "http://localhost:4200") // Permite apenas requests do frontend Angular
+	@PutMapping("/undopurchase")
+	public ResponseEntity<Void> undoPurchase(@RequestBody @Valid UndoPurchaseDto dto) {
+		service.undoPurchase(dto);
+		return ResponseEntity.ok().build();
 	}
 
 }

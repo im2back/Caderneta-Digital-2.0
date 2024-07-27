@@ -1,24 +1,26 @@
 package com.github.im2back.customerms.model.dto.dataoutput;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 
 import com.github.im2back.customerms.model.entities.purchase.Status;
 
 public record PurchaseRecordDto(
-
+		Long purchaseId,
+		
 		String productName,
 
-		BigDecimal productprice,
+		BigDecimal productPrice,
 
 		String productCode,
 
-		Instant purchaseDate,
+		String purchaseDate,
 
 		Integer quantity,
 
 		Status status
 
 ) {
+	
+
 
 }

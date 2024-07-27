@@ -1,5 +1,5 @@
 import { Address } from "./Adress";
-import { PurchaseRecord } from "./PurchaseRecord";
+import { PurchaseRecordDto } from "./PurchaseRecordDto";
 
 export interface UserResponse {
   id: number;
@@ -8,5 +8,6 @@ export interface UserResponse {
   email: string;
   phone: string;
   address: Address;
-  purchaseRecord: PurchaseRecord[];
+  purchaseRecord: PurchaseRecordDto[];
+  totalDaConta : string
 }

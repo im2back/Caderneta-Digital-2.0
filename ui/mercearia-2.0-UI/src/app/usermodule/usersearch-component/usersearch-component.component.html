@@ -1,6 +1,12 @@
 <form #buscarForm="ngForm" (ngSubmit)="localizar(buscarForm)">
   <div class="grid" style="display: flex; justify-content: center;">
 
+    <div class="col-12" *ngIf="message">
+      <div class="success-message">
+        {{message}}
+      </div>
+    </div>
+
     <div class="col-12 titulosFormularios" >
       <h2>Localizar Usuário</h2>
     </div>
@@ -35,13 +41,13 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td class="responsive-hide">{{ userResponse?.id }}</td>
-      <td>{{ userResponse?.name }}</td>
-      <td>{{ userResponse?.document }}</td>
-      <td class="responsive-hide">{{ userResponse?.email }}</td>
-      <td class="responsive-hide">{{ userResponse?.phone }}</td>
-      <td ><a href=""><i class="pi pi-eye"></i></a></td>
+    <tr *ngIf="userResponse != null" >
+      <td class="responsive-hide">{{ userResponse.id }}</td>
+      <td>{{ userResponse.name }}</td>
+      <td>{{ userResponse.document }}</td>
+      <td class="responsive-hide">{{ userResponse.email }}</td>
+      <td class="responsive-hide">{{ userResponse.phone }}</td>
+      <td ><a style="cursor: pointer;" [routerLink]="['/userdetail',userResponse.document]" ><i class="pi pi-eye"></i></a></td>
     </tr>
   </tbody>
 </table>
