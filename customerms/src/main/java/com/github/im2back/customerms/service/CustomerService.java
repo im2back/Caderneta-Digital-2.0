@@ -67,8 +67,10 @@ public class CustomerService {
 	}
 
 	@Transactional
-	public void deleteCustomerById(Long id) {
-		repository.deleteById(id);
+	public void logicalCustomerDeletion(String document) {
+		Customer customer = findByCustomerPerDocument(document);
+		customer.setActive(false);
+		repository.save(customer);
 	}
 
 	@Transactional
