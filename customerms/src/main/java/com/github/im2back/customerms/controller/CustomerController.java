@@ -67,5 +67,11 @@ public class CustomerController {
 		service.undoPurchase(dtoRequest);
 		return ResponseEntity.ok().build();
 	}
+	
+	@GetMapping("/note")
+	ResponseEntity<GetCustomerDto> generatePurchaseNote(@RequestParam String document) {
+		service.generatePurchaseInvoice(document);
+		return ResponseEntity.ok().build();
+	}
 
 }
