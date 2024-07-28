@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.github.im2back.customerms.model.entities.customer.Customer;
 import com.github.im2back.customerms.model.entities.purchase.PurchaseRecord;
+import com.github.im2back.customerms.utils.Util;
 
 public record GetCustomerDto(
 		Long id, 
@@ -36,19 +37,12 @@ public record GetCustomerDto(
 
 		for (PurchaseRecord p : list) {
 			response.add(new PurchaseRecordDto(p.getId(),p.getProductName(), p.getProductprice(), p.getProductCode(),
-					convertDate(p.getPurchaseDate()), p.getQuantity(), p.getStatus()));
+					Util.convertDate(p.getPurchaseDate()), p.getQuantity(), p.getStatus()));
 		}
 		return response;
 	}
 	
-	private static String convertDate(Instant instant) {
 
-		OffsetDateTime offsetDateTime = instant.atOffset(ZoneOffset.ofHours(-3));
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        String formattedDate = offsetDateTime.format(formatter);;
-         
-        return formattedDate;
-	}
-	
+
 	
 }

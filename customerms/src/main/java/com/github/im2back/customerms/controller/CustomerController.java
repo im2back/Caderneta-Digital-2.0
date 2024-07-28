@@ -37,7 +37,7 @@ public class CustomerController {
 	
 	@GetMapping("/findDocument")
 	ResponseEntity<GetCustomerDto> findCustomerByDocument(@RequestParam String document) {
-		GetCustomerDto response = service.findCustomerByDocument(document);
+		GetCustomerDto response = service.findCustomerByDocumentOrganizedPurchase(document);
 		return ResponseEntity.ok(response);
 	}
 	
@@ -50,9 +50,9 @@ public class CustomerController {
 		return ResponseEntity.created(uri).body(response);
 	}
 
-	@DeleteMapping("/{id}")
-	ResponseEntity<Void> deleteCustomerById(@PathVariable Long id) {
-		service.deleteCustomerById(id);
+	@DeleteMapping("/deletecustomer")
+	ResponseEntity<Void> deleteCustomerById(@RequestParam String document) {
+		service.logicalCustomerDeletion(document);
 		return ResponseEntity.noContent().build();
 	}
 
@@ -65,6 +65,18 @@ public class CustomerController {
 	@PutMapping("/undopurchase")
 	ResponseEntity<Void> undoPurchase(@RequestBody @Valid UndoPurchaseDto dtoRequest) {
 		service.undoPurchase(dtoRequest);
+		return ResponseEntity.ok().build();
+	}
+	
+	@GetMapping("/note")
+	ResponseEntity<GetCustomerDto> generatePurchaseNote(@RequestParam String document) {
+		service.generatePurchaseInvoice(document);
+		return ResponseEntity.ok().build();
+	}
+	
+	@GetMapping("/cleardebt")
+	ResponseEntity<Void> clearDebt(@RequestParam String document) {
+		service.clearDebt(document);
 		return ResponseEntity.ok().build();
 	}
 

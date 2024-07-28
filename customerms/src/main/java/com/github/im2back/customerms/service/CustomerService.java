@@ -1,11 +1,13 @@
 package com.github.im2back.customerms.service;
 
 import java.math.BigDecimal;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +15,7 @@ import com.github.im2back.customerms.model.dto.datainput.CustomerDto;
 import com.github.im2back.customerms.model.dto.datainput.PurchaseRequestDto;
 import com.github.im2back.customerms.model.dto.datainput.UndoPurchaseDto;
 import com.github.im2back.customerms.model.dto.dataoutput.GetCustomerDto;
+import com.github.im2back.customerms.model.dto.dataoutput.ProductDataToPdf;
 import com.github.im2back.customerms.model.dto.dataoutput.PurchaseResponseDto;
 import com.github.im2back.customerms.model.dto.dataoutput.PurchasedProduct;
 import com.github.im2back.customerms.model.entities.customer.Address;
@@ -21,6 +24,7 @@ import com.github.im2back.customerms.model.entities.purchase.PurchaseRecord;
 import com.github.im2back.customerms.model.entities.purchase.Status;
 import com.github.im2back.customerms.repositories.CustomerRepository;
 import com.github.im2back.customerms.service.exeptions.CustomerNotFoundException;
+import com.github.im2back.customerms.utils.PdfGenerator;
 import com.github.im2back.customerms.validations.customervalidations.CustomerValidations;
 import com.github.im2back.customerms.validations.purchasevalidations.PurchaseValidations;
 
@@ -36,17 +40,20 @@ public class CustomerService {
 	@Autowired
 	private List<PurchaseValidations> purchaseValidations;
 
+	@Autowired
+	private JavaMailSender javaMailSender;
+
 	@Transactional(readOnly = true)
 	public GetCustomerDto findCustomerById(Long id) {
 		Customer customer = repository.findById(id)
 				.orElseThrow(() -> new CustomerNotFoundException("User not found for id: " + id));
 		return new GetCustomerDto(customer);
 	}
-	
+
 	@Transactional(readOnly = true)
-	public GetCustomerDto findCustomerByDocument(String document) {
-		Customer customer = repository.findByDocument(document)
-				.orElseThrow(() -> new CustomerNotFoundException("User not found for document: " + document));
+	public GetCustomerDto findCustomerByDocumentOrganizedPurchase(String document) {
+		Customer customer = findByCustomerPerDocument(document);
+		organizePurchasesByStatus(customer);
 		return new GetCustomerDto(customer);
 	}
 
@@ -60,16 +67,17 @@ public class CustomerService {
 	}
 
 	@Transactional
-	public void deleteCustomerById(Long id) {
-		repository.deleteById(id);
+	public void logicalCustomerDeletion(String document) {
+		Customer customer = findByCustomerPerDocument(document);
+		customer.setActive(false);
+		repository.save(customer);
 	}
 
 	@Transactional
 	public PurchaseResponseDto purchase(PurchaseRequestDto dtoRequest) {
 		purchaseValidations.forEach(t -> t.valid(dtoRequest));
-		
-		Customer customer = repository.findByDocument(dtoRequest.document()).orElseThrow(
-				() -> new CustomerNotFoundException("User not found for document: " + dtoRequest.document()));
+
+		Customer customer = findByCustomerPerDocument(dtoRequest.document());
 
 		// Adiciona os produtos ao historico de compras do usuario
 		addProductsToPurchaseHistory(dtoRequest, customer);
@@ -102,27 +110,59 @@ public class CustomerService {
 	public void undoPurchase(UndoPurchaseDto dtoRequest) {
 		Customer customer = repository.findByPurchase(dtoRequest.purchaseId()).orElseThrow(
 				() -> new CustomerNotFoundException("User not found for purchase id: " + dtoRequest.purchaseId()));
-		
-		  var list = customer.getPurchaseRecord();	
-		  System.out.println("#####<------ Lista Antes ------->#####");
-		  
-		  for(PurchaseRecord x : list) {
-			  System.out.println(x.getProductName());
-		  }
-		  		  
 
-		    // Remover o elemento diretamente da lista original
-		    list.removeIf(t -> t.getId().equals(dtoRequest.purchaseId()));
-		  
-		  System.out.println("#####<------ Lista Depois ------->#####");
-		  for(PurchaseRecord x : list) {
-			  System.out.println(x.getProductName());
-		  }
-		  
-		  repository.save(customer);
-		
+		var list = customer.getPurchaseRecord();
+		list.removeIf(t -> t.getId().equals(dtoRequest.purchaseId()));
+		repository.save(customer);
 	}
 
+	public void generatePurchaseInvoice(String document) {
+		Customer customer = findByCustomerPerDocument(document);
+		List<ProductDataToPdf> productDataToPdfList = getProductDataToPdfList(customer);
 
+		new PdfGenerator(javaMailSender).generatePdf(productDataToPdfList, customer, getPath(customer));
+	}
+
+	private List<ProductDataToPdf> getProductDataToPdfList(Customer customer) {
+		List<PurchaseRecord> list1 = customer.getPurchaseRecord();
+		list1.removeIf(t -> t.getStatus() == Status.PAGO);
+
+		var ProductDataToPdfList = list1.stream().map(t -> new ProductDataToPdf(t)).collect(Collectors.toList());
+
+		return ProductDataToPdfList;
+	}
+
+	private String getPath(Customer customer) {
+
+		// Obtém o diretório do usuário
+		String userHome = System.getProperty("user.home");
+
+		// Obtém o diretório da área de trabalho
+		String desktopDirectory = Paths.get(userHome).toString();
+
+		var path = Paths.get(desktopDirectory, customer.getName() + "_nota_fiscal_" + ".pdf").toString();
+
+		return path;
+	}
+	
+	@Transactional
+	public void clearDebt(String document) {
+		Customer customer = findByCustomerPerDocument(document);
+		customer.getPurchaseRecord().forEach(t -> {
+			if (t.getStatus().equals(Status.EM_ABERTO)) {
+				t.setStatus(Status.PAGO);
+			}
+		});
+		repository.save(customer);
+	}
+
+	private Customer findByCustomerPerDocument(String document) {
+		return repository.findByDocument(document)
+				.orElseThrow(() -> new CustomerNotFoundException("User not found for document: " + document));
+	}
+	
+	private void organizePurchasesByStatus(Customer customer){
+		customer.getPurchaseRecord().removeIf(t -> t.getStatus().equals(Status.PAGO));
+	}
 
 }
