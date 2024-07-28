@@ -37,7 +37,7 @@ public class CustomerController {
 	
 	@GetMapping("/findDocument")
 	ResponseEntity<GetCustomerDto> findCustomerByDocument(@RequestParam String document) {
-		GetCustomerDto response = service.findCustomerByDocument(document);
+		GetCustomerDto response = service.findCustomerByDocumentOrganizedPurchase(document);
 		return ResponseEntity.ok(response);
 	}
 	
@@ -71,6 +71,12 @@ public class CustomerController {
 	@GetMapping("/note")
 	ResponseEntity<GetCustomerDto> generatePurchaseNote(@RequestParam String document) {
 		service.generatePurchaseInvoice(document);
+		return ResponseEntity.ok().build();
+	}
+	
+	@GetMapping("/cleardebt")
+	ResponseEntity<Void> clearDebt(@RequestParam String document) {
+		service.clearDebt(document);
 		return ResponseEntity.ok().build();
 	}
 

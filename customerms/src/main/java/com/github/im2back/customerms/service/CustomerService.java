@@ -51,9 +51,9 @@ public class CustomerService {
 	}
 
 	@Transactional(readOnly = true)
-	public GetCustomerDto findCustomerByDocument(String document) {
-		Customer customer = repository.findByDocument(document)
-				.orElseThrow(() -> new CustomerNotFoundException("User not found for document: " + document));
+	public GetCustomerDto findCustomerByDocumentOrganizedPurchase(String document) {
+		Customer customer = findByCustomerPerDocument(document);
+		organizePurchasesByStatus(customer);
 		return new GetCustomerDto(customer);
 	}
 
@@ -75,8 +75,7 @@ public class CustomerService {
 	public PurchaseResponseDto purchase(PurchaseRequestDto dtoRequest) {
 		purchaseValidations.forEach(t -> t.valid(dtoRequest));
 
-		Customer customer = repository.findByDocument(dtoRequest.document()).orElseThrow(
-				() -> new CustomerNotFoundException("User not found for document: " + dtoRequest.document()));
+		Customer customer = findByCustomerPerDocument(dtoRequest.document());
 
 		// Adiciona os produtos ao historico de compras do usuario
 		addProductsToPurchaseHistory(dtoRequest, customer);
@@ -116,9 +115,7 @@ public class CustomerService {
 	}
 
 	public void generatePurchaseInvoice(String document) {
-		Customer customer = repository.findByDocument(document)
-				.orElseThrow(() -> new CustomerNotFoundException("User not found for document: " + document));
-
+		Customer customer = findByCustomerPerDocument(document);
 		List<ProductDataToPdf> productDataToPdfList = getProductDataToPdfList(customer);
 
 		new PdfGenerator(javaMailSender).generatePdf(productDataToPdfList, customer, getPath(customer));
@@ -127,9 +124,9 @@ public class CustomerService {
 	private List<ProductDataToPdf> getProductDataToPdfList(Customer customer) {
 		List<PurchaseRecord> list1 = customer.getPurchaseRecord();
 		list1.removeIf(t -> t.getStatus() == Status.PAGO);
-		
+
 		var ProductDataToPdfList = list1.stream().map(t -> new ProductDataToPdf(t)).collect(Collectors.toList());
-		
+
 		return ProductDataToPdfList;
 	}
 
@@ -145,5 +142,25 @@ public class CustomerService {
 
 		return path;
 	}
-		
+	
+	@Transactional
+	public void clearDebt(String document) {
+		Customer customer = findByCustomerPerDocument(document);
+		customer.getPurchaseRecord().forEach(t -> {
+			if (t.getStatus().equals(Status.EM_ABERTO)) {
+				t.setStatus(Status.PAGO);
+			}
+		});
+		repository.save(customer);
+	}
+
+	private Customer findByCustomerPerDocument(String document) {
+		return repository.findByDocument(document)
+				.orElseThrow(() -> new CustomerNotFoundException("User not found for document: " + document));
+	}
+	
+	private void organizePurchasesByStatus(Customer customer){
+		customer.getPurchaseRecord().removeIf(t -> t.getStatus().equals(Status.PAGO));
+	}
+
 }
