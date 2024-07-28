@@ -1,0 +1,83 @@
+<div class="container">
+  <div class="grid" >
+
+    <div class="col-12 containerOptions">
+      <button class="clientOptions" >Zerar Conta</button>
+      <button class="clientOptions">Excluir Cliente</button>
+      <button class="clientOptions">Gerar Nota</button>
+    </div>
+
+    <div class="col-12" style="display: flex; justify-content: center;" >
+      <h2>Dados Pessoais</h2>
+    </div>
+
+    <div class="col-12">
+      <div class="table-responsive">
+      <table  class="custom-prime-table ">
+        <thead >
+          <tr>
+            <th >Id</th>
+            <th>Nome</th>
+            <th>Documento</th>
+            <th >Email</th>
+            <th >Telefone</th>
+            <th >Rua</th>
+            <th >Número</th>
+            <th >Complemento</th>
+            <th >Total da Conta</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr >
+            <td >{{ userResponse?.id }}</td>
+            <td>{{ userResponse?.name }}</td>
+            <td>{{ userResponse?.document }}</td>
+            <td >{{ userResponse?.email }}</td>
+            <td >{{ userResponse?.phone }}</td>
+            <td >{{ userResponse?.address?.streetName }}</td>
+            <td >{{ userResponse?.address?.houseNumber }}</td>
+            <td >{{ userResponse?.address?.complement }}</td>
+            <td > {{userResponse?.totalDaConta}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+
+    <div class="col-12" style="display: flex; justify-content: center;" >
+      <h2>Compras Realizadas</h2>
+    </div>
+
+
+    <div class="col-12">
+      <div class="table-responsive">
+        <table class="custom-prime-table" >
+          <thead>
+            <tr>
+              <th >Nome do Produto</th>
+              <th >Quantidade</th>
+              <th >Preço</th>
+              <th >Data da Compra</th>
+              <th ></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of userResponse?.purchaseRecord">
+              <td>{{ item.productName }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.productPrice }}</td>
+              <td>{{ item.purchaseDate }}</td>
+              <td>
+                <button (click)="excluir(item.purchaseId,item.productCode,item.quantity)" class="delete-button">
+                  Excluir Produto
+                  <i class="pi pi-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>

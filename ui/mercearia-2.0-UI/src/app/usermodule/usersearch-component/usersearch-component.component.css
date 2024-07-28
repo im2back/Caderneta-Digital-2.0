@@ -1,0 +1,28 @@
+h1{
+  font-size: 30px;
+}
+
+label{
+  font-weight: 600;
+  display: block;
+}
+
+input{
+  margin-top: 5px;
+}
+
+.titulosFormularios{
+  display: flex;
+  justify-content: center;
+}
+
+button{
+background-color: #008695;
+}
+
+
+@media (max-width: 1200px) {
+  .custom-prime-table .responsive-hide {
+    display: none;
+  }
+}

@@ -1,3 +1,19 @@
-import { Routes } from '@angular/router';
+import {  Routes } from '@angular/router';
+import { UserpageComponentComponent } from './usermodule/userpage-component/userpage-component.component';
+import { UserdetailComponentComponent } from './usermodule/userdetail-component/userdetail-component.component';
 
-export const routes: Routes = [];
+
+
+
+
+export const routes: Routes = [
+  {
+    path : 'user',
+    component : UserpageComponentComponent
+  },
+  {
+    path : 'userdetail/:id',
+    component : UserdetailComponentComponent
+  },
+
+];

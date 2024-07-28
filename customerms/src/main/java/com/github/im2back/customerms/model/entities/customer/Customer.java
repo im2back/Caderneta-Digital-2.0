@@ -1,5 +1,6 @@
 package com.github.im2back.customerms.model.entities.customer;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,10 +47,8 @@ public class Customer {
 	
 	private String name;
 	
-	@Column(unique = true)
 	private String document;
 	
-	@Column(unique = true)
 	private String email;
 	
 	@Column(unique = true)
@@ -60,9 +59,18 @@ public class Customer {
 	@Embedded
 	private Address address;
 	
-	@OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "customer",cascade = CascadeType.ALL,orphanRemoval = true)
 	private List<PurchaseRecord> purchaseRecord = new ArrayList<>();
 	
-	
+	public BigDecimal getTotal() {
+		BigDecimal total = BigDecimal.ZERO;
+		
+		for(PurchaseRecord p: this.purchaseRecord) {
+			if(p.getStatus().toString().equals("EM_ABERTO")) {
+				total = total.add(p.getProductprice().multiply(new BigDecimal(p.getQuantity())));
+			}
+		}
+		return total;
+	}
 
 }

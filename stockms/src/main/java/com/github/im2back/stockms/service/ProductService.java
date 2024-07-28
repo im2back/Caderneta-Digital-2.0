@@ -13,6 +13,7 @@ import com.github.im2back.stockms.infra.clients.ClientResourceCustomer;
 import com.github.im2back.stockms.model.dto.inputdata.ProductRegister;
 import com.github.im2back.stockms.model.dto.inputdata.ProductsPurchaseRequestDto;
 import com.github.im2back.stockms.model.dto.inputdata.PurchasedItem;
+import com.github.im2back.stockms.model.dto.inputdata.UndoPurchaseDto;
 import com.github.im2back.stockms.model.dto.outputdata.ProductDto;
 import com.github.im2back.stockms.model.dto.outputdata.PurchaseRegister;
 import com.github.im2back.stockms.model.dto.outputdata.PurchaseResponseDto;
@@ -85,5 +86,20 @@ public class ProductService {
 		PurchaseRegister purchaseRegister = new PurchaseRegister(document, products);
 		ResponseEntity<PurchaseResponseDto> responseRequest = clientResourceCustomer.purchase(purchaseRegister);
 		return responseRequest.getBody();
+	}
+	
+	@Transactional
+	public void undoPurchase(UndoPurchaseDto dto) {
+		//encontra o produto
+		Product product =  repository.findByCode(dto.productCode())
+				.orElseThrow(() -> new ProductNotFoundException("Product Not found for code: " + dto.productCode()));
+		
+		//adiciona a quantidade de volta ao banco de dados
+		product.setQuantity(product.getQuantity() + dto.quantity());
+		
+		//salva
+		repository.save(product);
+		
+		clientResourceCustomer.undoPurchase(dto);
 	}
 }
