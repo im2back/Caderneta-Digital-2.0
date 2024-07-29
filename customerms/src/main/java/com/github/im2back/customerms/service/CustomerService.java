@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.im2back.customerms.model.dto.datainput.CustomerDto;
 import com.github.im2back.customerms.model.dto.datainput.PurchaseRequestDto;
 import com.github.im2back.customerms.model.dto.datainput.UndoPurchaseDto;
+import com.github.im2back.customerms.model.dto.dataoutput.DataForMetricsDto;
 import com.github.im2back.customerms.model.dto.dataoutput.GetCustomerDto;
 import com.github.im2back.customerms.model.dto.dataoutput.ProductDataToPdf;
 import com.github.im2back.customerms.model.dto.dataoutput.PurchaseResponseDto;
@@ -47,6 +48,7 @@ public class CustomerService {
 	public GetCustomerDto findCustomerById(Long id) {
 		Customer customer = repository.findById(id)
 				.orElseThrow(() -> new CustomerNotFoundException("User not found for id: " + id));
+	
 		return new GetCustomerDto(customer);
 	}
 
@@ -164,5 +166,15 @@ public class CustomerService {
 	private void organizePurchasesByStatus(Customer customer){
 		customer.getPurchaseRecord().removeIf(t -> t.getStatus().equals(Status.PAGO));
 	}
+	
+	@Transactional(readOnly = true)
+	public DataForMetricsDto metrics(String document) {
+		return new DataForMetricsDto(
+				repository.totalValueForLastMonth(),
+				repository.amountStartofTheMonthUntilTodayH2(),
+				repository.totalVAlueForTheDay(),
+				repository.obterSomaPrecoPorDataUltimos7Dias()
+				);
+		}
 
 }

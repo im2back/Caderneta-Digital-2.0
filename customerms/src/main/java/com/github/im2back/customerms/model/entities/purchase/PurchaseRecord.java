@@ -26,6 +26,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "tb_purchase")
 @Entity
+
 public class PurchaseRecord {
 	
 	public PurchaseRecord(String productName, BigDecimal productprice, String productCode, Instant purchaseDate,
