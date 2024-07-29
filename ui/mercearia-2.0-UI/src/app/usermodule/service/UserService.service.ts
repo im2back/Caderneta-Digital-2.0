@@ -26,4 +26,19 @@ export class UserServiceService {
   excluirCompra(undo: UndoPurchase) : Observable<void>{
     return this.http.put<void> (`${this.APISTOCK}/undopurchase`,undo);
   }
+
+  zerarConta(document: string): Observable<void> {
+    return this.http.delete<void> (`${this.API}/cleardebt?document=${document}`);
+  }
+
+  gerarNota(document: string): Observable<void>{
+    return this.http.put<void> (`${this.API}/note?document=${document}`,null);
+  }
+
+  excluirCliente(document: string): Observable<void> {
+    return this.http.delete<void> (`${this.API}/deletecustomer?document=${document}`);
+  }
+
+
+
 }

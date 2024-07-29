@@ -68,13 +68,13 @@ public class CustomerController {
 		return ResponseEntity.ok().build();
 	}
 	
-	@GetMapping("/note")
-	ResponseEntity<GetCustomerDto> generatePurchaseNote(@RequestParam String document) {
+	@PutMapping("/note")
+	ResponseEntity<Void> generatePurchaseNote(@RequestParam String document) {
 		service.generatePurchaseInvoice(document);
 		return ResponseEntity.ok().build();
 	}
 	
-	@GetMapping("/cleardebt")
+	@DeleteMapping("/cleardebt")
 	ResponseEntity<Void> clearDebt(@RequestParam String document) {
 		service.clearDebt(document);
 		return ResponseEntity.ok().build();
