@@ -1,10 +1,17 @@
+<div class="col-12 card" *ngIf="isLoading">
+  <p-progressBar mode="indeterminate" [style]="{'height': '3px'}"></p-progressBar>
+</div>
 <div class="container">
   <div class="grid" >
 
+    <div class="card col-12 " *ngIf="messageInterruptor">
+      <p-messages [(value)]="messages!" [enableService]="false" />
+    </div>
+
     <div class="col-12 containerOptions">
-      <button class="clientOptions" >Zerar Conta</button>
-      <button class="clientOptions">Excluir Cliente</button>
-      <button class="clientOptions">Gerar Nota</button>
+      <button (click)="zerarConta(userResponse!.document)" class="clientOptions" >Zerar Conta</button>
+      <button (click)="exclusaoLogicaCliente(userResponse!.document)" class="clientOptions">Excluir Cliente</button>
+      <button (click)="gerarNota(userResponse!.document)" class="clientOptions">Gerar Nota</button>
     </div>
 
     <div class="col-12" style="display: flex; justify-content: center;" >
@@ -68,7 +75,7 @@
               <td>{{ item.productPrice }}</td>
               <td>{{ item.purchaseDate }}</td>
               <td>
-                <button (click)="excluir(item.purchaseId,item.productCode,item.quantity)" class="delete-button">
+                <button (click)="excluirProduto(item.purchaseId,item.productCode,item.quantity)" class="delete-button">
                   Excluir Produto
                   <i class="pi pi-trash"></i>
                 </button>
