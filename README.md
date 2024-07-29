@@ -1,5 +1,5 @@
-# Status de Desenvolvimento 11/07/2024 🟢 
-  Em Desenvolvimento do Back-end.
+# Status de Desenvolvimento 29/07/2024 🟢 
+  Em Desenvolvimento do Back-end e Front-end.
   
 <br>
 
