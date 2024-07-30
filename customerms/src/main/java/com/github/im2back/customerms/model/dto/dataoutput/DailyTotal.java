@@ -9,6 +9,6 @@ public record DailyTotal(String data, BigDecimal totalValue)
 
 {
 	public DailyTotal(Instant data,BigDecimal totalValue) {
-		this(Util.convertDate(data),totalValue);
+		this(Util.convertDate2(data),totalValue);
 	}
 }

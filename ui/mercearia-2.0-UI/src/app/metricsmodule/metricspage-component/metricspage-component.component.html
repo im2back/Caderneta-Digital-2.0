@@ -1,0 +1,17 @@
+<div class="container" >
+  <div class="grid">
+    <div class="col-12 md:col-6 xl:col-6" >
+      <app-monthcomparisonchart-component [financeData]="financeData" ></app-monthcomparisonchart-component>
+    </div>
+
+    <div class="col-12 md:col-6 xl:col-6">
+      <app-performancesevendays-component [financeData]="financeData" ></app-performancesevendays-component>
+    </div>
+
+    <div class="col-12" >
+      <app-valuescomponent [financeData]="financeData"></app-valuescomponent>
+    </div>
+
+  </div>
+</div>
+
