@@ -6,7 +6,8 @@ public record DataForMetricsDto(
 		Double totalValueForLastMonth,
 		Double amountStartofTheMonthUntilToday,
 		Double totalVAlueForTheDay,
-		List<SevenDayGraphData> dataGraphic 
+		Double totalOutstandingAmount,
+		List<DailyTotal> dataGraphic 
 		
 		) {
 

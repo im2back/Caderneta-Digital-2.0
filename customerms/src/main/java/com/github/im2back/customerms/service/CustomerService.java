@@ -2,7 +2,9 @@ package com.github.im2back.customerms.service;
 
 import java.math.BigDecimal;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,8 +49,7 @@ public class CustomerService {
 	@Transactional(readOnly = true)
 	public GetCustomerDto findCustomerById(Long id) {
 		Customer customer = repository.findById(id)
-				.orElseThrow(() -> new CustomerNotFoundException("User not found for id: " + id));
-	
+				.orElseThrow(() -> new CustomerNotFoundException("User not found for id: " + id));	
 		return new GetCustomerDto(customer);
 	}
 
@@ -169,11 +170,15 @@ public class CustomerService {
 	
 	@Transactional(readOnly = true)
 	public DataForMetricsDto metrics(String document) {
-		return new DataForMetricsDto(
+		Instant now = Instant.now();
+        Instant startDate = now.minus(Duration.ofDays(8)).truncatedTo(ChronoUnit.DAYS);
+        Instant endDate = now.minus(Duration.ofDays(1)).plus(1, ChronoUnit.DAYS).minusNanos(1);
+		return new DataForMetricsDto(			
 				repository.totalValueForLastMonth(),
-				repository.amountStartofTheMonthUntilTodayH2(),
-				repository.totalVAlueForTheDay(),
-				repository.obterSomaPrecoPorDataUltimos7Dias()
+				repository.partialValueOfTheCurrentMonth(),
+				repository.partialVAlueForCurrentDay(),
+				repository.totalOutstandingAmount(),
+				repository.findDailyTotalsExcludingToday(startDate, endDate)
 				);
 		}
 
