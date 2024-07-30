@@ -4,10 +4,10 @@ import java.util.List;
 
 public record DataForMetricsDto(
 		Double totalValueForLastMonth,
-		Double amountStartofTheMonthUntilToday,
-		Double totalVAlueForTheDay,
+		Double partialValueForCurrentMonth,
+		Double partialValueForCurrentDay,
 		Double totalOutstandingAmount,
-		List<DailyTotal> dataGraphic 
+		List<DailyTotal> dataGraphicSevenDays 
 		
 		) {
 

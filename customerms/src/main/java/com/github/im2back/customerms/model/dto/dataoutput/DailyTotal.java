@@ -3,20 +3,12 @@ package com.github.im2back.customerms.model.dto.dataoutput;
 import java.math.BigDecimal;
 import java.time.Instant;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.github.im2back.customerms.utils.Util;
 
-@Getter
-@Setter
-public class DailyTotal {
+public record DailyTotal(String data, BigDecimal totalValue)
 
-    private Instant data;
-    private BigDecimal totalValue;
-
-    public DailyTotal(Instant date, BigDecimal totalValue) {
-        this.data = date;
-        this.totalValue = totalValue;
-    }
-
-
+{
+	public DailyTotal(Instant data,BigDecimal totalValue) {
+		this(Util.convertDate(data),totalValue);
+	}
 }

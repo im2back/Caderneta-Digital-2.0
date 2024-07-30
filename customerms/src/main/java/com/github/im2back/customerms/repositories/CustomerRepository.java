@@ -43,7 +43,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	           "ORDER BY pr.purchaseDate DESC")
 	 List<DailyTotal> findDailyTotalsExcludingToday(@Param("startDate") Instant startDate, @Param("endDate") Instant endDate);
 	
-	 @Query("SELECT SUM(pr.productprice * pr.quantity) FROM PurchaseRecord pr WHERE pr.status = EM_ABERTO")
+	  @Query("SELECT SUM(pr.productprice * pr.quantity) FROM PurchaseRecord pr WHERE pr.status = EM_ABERTO")
 	  Double totalOutstandingAmount();
 
 }
