@@ -16,6 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.github.im2back.customerms.model.dto.datainput.CustomerDto;
 import com.github.im2back.customerms.model.dto.datainput.PurchaseRequestDto;
 import com.github.im2back.customerms.model.dto.datainput.UndoPurchaseDto;
+import com.github.im2back.customerms.model.dto.dataoutput.DataForMetricsDto;
 import com.github.im2back.customerms.model.dto.dataoutput.GetCustomerDto;
 import com.github.im2back.customerms.model.dto.dataoutput.PurchaseResponseDto;
 import com.github.im2back.customerms.service.CustomerService;
@@ -79,5 +80,12 @@ public class CustomerController {
 		service.clearDebt(document);
 		return ResponseEntity.ok().build();
 	}
+	
+	@GetMapping("/metrics")
+	ResponseEntity<DataForMetricsDto> findCustomerByDocument() {
+		DataForMetricsDto response = service.metrics();
+		return ResponseEntity.ok(response);
+	}
+	
 
 }
