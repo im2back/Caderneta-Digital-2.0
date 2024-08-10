@@ -1,0 +1,46 @@
+img {
+  width: 100px;
+}
+
+h2{
+
+  text-align: center;
+  color: rgb(0, 0, 0);
+  background: linear-gradient(to right, #3498db, #2c3e50);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8);
+}
+
+
+h1{
+  font-size: 40px;
+  text-align: center;
+  color: rgb(0, 0, 0);
+  background: linear-gradient(to right, #3498db, #2c3e50);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8);
+}
+
+label{
+  font-weight: bold;
+  display: block;
+}
+
+p-inputnumber, .p-inputnumber {
+  width: 50%;
+}
+
+
+.card-header h4 {
+  font-size: 16px; /* Ajuste o tamanho da fonte conforme necessário */
+  margin: 0; /* Ajusta a margem se necessário */
+}
+
+p-card {
+  text-align: center;
+}
+

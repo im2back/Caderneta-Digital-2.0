@@ -14,10 +14,12 @@ public record ProductDto(
 
 		String code,
 
-		Integer quantity
+		Integer quantity,
+	
+		String productUrl
 
 ) {
 	public ProductDto(Product p) {
-		this(p.getId(),p.getName(),p.getPrice(),p.getCode(),p.getQuantity());
+		this(p.getId(),p.getName(),p.getPrice(),p.getCode(),p.getQuantity(),p.getProductUrl());
 	}
 }

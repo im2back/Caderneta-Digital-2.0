@@ -23,12 +23,13 @@ import lombok.Setter;
 @Entity
 public class Product {
 	
-	public Product(String name, BigDecimal price, String code, Integer quantity) {
+	public Product(String name, BigDecimal price, String code, Integer quantity, String productUrl) {
 		super();
 		this.name = name;
 		this.price = price;
 		this.code = code;
 		this.quantity = quantity;
+		this.productUrl = productUrl;
 	}
 
 	@Id
@@ -46,6 +47,9 @@ public class Product {
 	
 	@Column(name = "product_quantity")
 	private Integer quantity;
+	
+	@Column(name = "product_url")
+	private String productUrl;
 	
 	
 }

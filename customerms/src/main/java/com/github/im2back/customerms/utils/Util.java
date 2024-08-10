@@ -15,6 +15,14 @@ public class Util {
          
         return formattedDate;
 	}
+	public static String convertDate2(Instant instant) {
+
+		OffsetDateTime offsetDateTime = instant.atOffset(ZoneOffset.ofHours(-3));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String formattedDate = offsetDateTime.format(formatter);;
+         
+        return formattedDate;
+	}
 	
 	
 }

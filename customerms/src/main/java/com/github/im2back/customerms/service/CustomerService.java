@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -170,9 +172,21 @@ public class CustomerService {
 	
 	@Transactional(readOnly = true)
 	public DataForMetricsDto metrics() {
-		Instant now = Instant.now();
-        Instant startDate = now.minus(Duration.ofDays(7)).truncatedTo(ChronoUnit.DAYS);
-        Instant endDate = now.minus(Duration.ofDays(1)).plus(1, ChronoUnit.DAYS).minusNanos(1);
+        // Definindo o fuso horário local
+        ZoneId zoneId = ZoneId.of("America/Sao_Paulo"); // Ajuste conforme o seu fuso horário
+
+        // Obtendo a data e hora atual no fuso horário local
+        ZonedDateTime nowLocal = ZonedDateTime.now(zoneId);
+
+        // Calculando a data e hora de início e fim no fuso horário local
+        ZonedDateTime startDateLocal = nowLocal.minusDays(8).truncatedTo(ChronoUnit.DAYS);
+        ZonedDateTime endDateLocal = nowLocal.truncatedTo(ChronoUnit.DAYS).minusNanos(1);
+
+        // Convertendo para Instant para comparar ou armazenar
+        Instant startDate = startDateLocal.toInstant();
+        Instant endDate = endDateLocal.toInstant(); 
+
+        
 		return new DataForMetricsDto(			
 				repository.totalValueForLastMonth(),
 				repository.partialValueOfTheCurrentMonth(),
