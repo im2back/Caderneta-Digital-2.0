@@ -1,6 +1,11 @@
-<div style="display: flex; justify-content: center;">
-  <h3>Valores : Total em Aberto e Total do Dia</h3>
+<div class=" values" style="display: flex; justify-content: center;">
+  <p>
+    Total em Aberto: <strong>R${{financeData?.totalOutstandingAmount}}</strong>
+  </p>
 </div>
-<div class="card flex justify-content-center">
-  <p-chart type="pie" [data]="data" [options]="options" />
+
+<div class=" values" style="display: flex; justify-content: center;">
+  <p>
+    Parcial do dia: <strong>R${{financeData?.partialValueForCurrentDay}}</strong>
+  </p>
 </div>

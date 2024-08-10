@@ -27,7 +27,7 @@ export class MetricspageComponentComponent implements OnDestroy {
     this.fetchData();
     this.intervalId = setInterval(() => {
       this.fetchData();
-    }, 300000);
+    }, 20000);
   }
 
   ngOnDestroy() {

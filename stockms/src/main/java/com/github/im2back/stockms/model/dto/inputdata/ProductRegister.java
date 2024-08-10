@@ -21,10 +21,13 @@ public record ProductRegister(
 
 		@NotNull
 		@Positive
-		Integer quantity) {
+		Integer quantity,
+		
+		String productUrl
+		) {
 	
 	 public ProductRegister(Product product, Integer quantity) {
-		this(product.getName(), product.getPrice(), product.getCode(), quantity);
+		this(product.getName(), product.getPrice(), product.getCode(), quantity,product.getProductUrl());
 	}
 
 }

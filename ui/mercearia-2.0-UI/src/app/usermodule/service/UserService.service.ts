@@ -10,8 +10,8 @@ import { UserResponse } from '../interfaces/UserResponse';
 
 export class UserServiceService {
 
-  private readonly API =  "http://localhost:8080/customer"
-  private readonly APISTOCK =  "http://localhost:8081/product"
+  private readonly API =  "http://127.0.1.1:8080/customer"
+  private readonly APISTOCK =  "http://127.0.1.1:8081/product"
 
   constructor( private http : HttpClient) { }
 

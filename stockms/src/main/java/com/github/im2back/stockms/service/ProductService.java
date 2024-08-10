@@ -42,16 +42,16 @@ public class ProductService {
 	}
 	
 	@Transactional(readOnly = true)
-	private Product findByCode(PurchasedItem p) {
-		Product product = repository.findByCode(p.code())
-				.orElseThrow(() -> new ProductNotFoundException("Product Not found for code: " + p.code()));
+	public Product findByCode(String code) {
+		Product product = repository.findByCode(code)
+				.orElseThrow(() -> new ProductNotFoundException("Product Not found for code: " + code));
 		return product;
 	}
 	
 	@Transactional
 	public ProductDto saveNewProduct(ProductRegister p) {
 		try {
-			Product product = repository.save(new Product(p.name(), p.price(), p.code(), p.quantity()));
+			Product product = repository.save(new Product(p.name(), p.price(), p.code(), p.quantity(),p.productUrl()));
 			return new ProductDto(product);
 		} catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityViolationException("Error when trying to save product to database");
@@ -66,14 +66,14 @@ public class ProductService {
 	
 	@Transactional
 	public PurchaseResponseDto updateStock(ProductsPurchaseRequestDto dto) {
-		
+		System.out.println("teste");
 		purchaseValidations.forEach(t -> t.valid(dto));
 		
 		List<ProductRegister> listPurchaseHistory = new ArrayList<>();
 		List<PurchasedItem> productsList = dto.purchasedItems();
 
 		for (PurchasedItem p : productsList) {
-			Product product = findByCode(p);
+			Product product = findByCode(p.code());
 			product.setQuantity(product.getQuantity() - p.quantity());
 			listPurchaseHistory.add(new ProductRegister(product, p.quantity()));
 			repository.save(product);

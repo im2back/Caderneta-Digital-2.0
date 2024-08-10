@@ -24,29 +24,6 @@ export class ValuescomponentComponent {
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
 
-    this.data = {
-        labels: ['Total em Aberto', 'Venda do dia'],
-        datasets: [
-            {
-                data: [this.financeData?.totalOutstandingAmount, this.financeData?.partialValueForCurrentDay],
-                backgroundColor: [documentStyle.getPropertyValue('--yellow-500'), documentStyle.getPropertyValue('--blue-500')],
-                hoverBackgroundColor: [documentStyle.getPropertyValue('--yellow-400'), documentStyle.getPropertyValue('--blue-400')]
-            }
-        ]
-    };
 
-    this.options = {
-      maintainAspectRatio: false,
-      aspectRatio: 1,
-        plugins: {
-            legend: {
-                labels: {
-                    usePointStyle: true,
-                    color: textColor
-                }
-            }
-        }
-    };
-}
   }
-
+}

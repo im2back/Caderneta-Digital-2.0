@@ -2,6 +2,7 @@ import { MetricspageComponentComponent } from './metricsmodule/metricspage-compo
 import {  Routes } from '@angular/router';
 import { UserpageComponentComponent } from './usermodule/userpage-component/userpage-component.component';
 import { UserdetailComponentComponent } from './usermodule/userdetail-component/userdetail-component.component';
+import { PurchasecomponentComponent } from './purchasemodule/purchasecomponent/purchasecomponent.component';
 
 
 
@@ -18,6 +19,14 @@ export const routes: Routes = [
   },
   {
     path : 'metrics',
+    component : MetricspageComponentComponent
+  },
+  {
+    path : 'purchase',
+    component : PurchasecomponentComponent
+  },
+  {
+    path : '**',
     component : MetricspageComponentComponent
   },
 
