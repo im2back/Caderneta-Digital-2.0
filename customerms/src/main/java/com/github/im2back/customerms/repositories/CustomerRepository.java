@@ -1,6 +1,5 @@
 package com.github.im2back.customerms.repositories;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.github.im2back.customerms.model.dto.dataoutput.DailyTotal;
 import com.github.im2back.customerms.model.entities.customer.Customer;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
@@ -34,16 +32,16 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	@Query("SELECT SUM(pr.productprice * pr.quantity) " + "FROM Customer c JOIN c.purchaseRecord pr "
 			+ " WHERE DATE(pr.purchaseDate) = CURRENT_DATE")
 	Double partialVAlueForCurrentDay();
+	
+	@Query(value = "SELECT DATE(purchase_date) AS purchaseDate, SUM(product_price * product_quantity) AS totalValue " +
+            "FROM tb_purchase " +
+            "WHERE DATE(purchase_date) BETWEEN CURDATE() - INTERVAL 7 DAY AND CURDATE() - INTERVAL 1 DAY " +
+            "GROUP BY DATE(purchase_date) " +
+            "ORDER BY purchaseDate DESC", nativeQuery = true)
+	List<Object[]> findTotalValueForLast7DaysExcludingToday();
 
-	
-	 @Query("SELECT NEW com.github.im2back.customerms.model.dto.dataoutput.DailyTotal(pr.purchaseDate, SUM(pr.productprice * pr.quantity)) " +
-	           "FROM PurchaseRecord pr " +
-	           "WHERE pr.purchaseDate BETWEEN :startDate AND :endDate " +
-	           "GROUP BY pr.purchaseDate " +
-	           "ORDER BY pr.purchaseDate DESC")
-	 List<DailyTotal> findDailyTotalsExcludingToday(@Param("startDate") Instant startDate, @Param("endDate") Instant endDate);
-	
-	  @Query("SELECT SUM(pr.productprice * pr.quantity) FROM PurchaseRecord pr WHERE pr.status = EM_ABERTO")
-	  Double totalOutstandingAmount();
+	 
+	@Query("SELECT SUM(pr.productprice * pr.quantity) FROM PurchaseRecord pr WHERE pr.status = EM_ABERTO")
+	Double totalOutstandingAmount();
 
 }

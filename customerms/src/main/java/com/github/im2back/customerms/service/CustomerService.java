@@ -2,11 +2,9 @@ package com.github.im2back.customerms.service;
 
 import java.math.BigDecimal;
 import java.nio.file.Paths;
-import java.time.Duration;
 import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.im2back.customerms.model.dto.datainput.CustomerDto;
 import com.github.im2back.customerms.model.dto.datainput.PurchaseRequestDto;
 import com.github.im2back.customerms.model.dto.datainput.UndoPurchaseDto;
+import com.github.im2back.customerms.model.dto.dataoutput.DailyTotal;
 import com.github.im2back.customerms.model.dto.dataoutput.DataForMetricsDto;
 import com.github.im2back.customerms.model.dto.dataoutput.GetCustomerDto;
 import com.github.im2back.customerms.model.dto.dataoutput.ProductDataToPdf;
@@ -51,7 +50,7 @@ public class CustomerService {
 	@Transactional(readOnly = true)
 	public GetCustomerDto findCustomerById(Long id) {
 		Customer customer = repository.findById(id)
-				.orElseThrow(() -> new CustomerNotFoundException("User not found for id: " + id));			
+				.orElseThrow(() -> new CustomerNotFoundException("User not found for id: " + id));	
 		return new GetCustomerDto(customer);
 	}
 
@@ -138,15 +137,9 @@ public class CustomerService {
 	}
 
 	private String getPath(Customer customer) {
-
-		// Obtém o diretório do usuário
 		String userHome = System.getProperty("user.home");
-
-		// Obtém o diretório da área de trabalho
 		String desktopDirectory = Paths.get(userHome).toString();
-
 		var path = Paths.get(desktopDirectory, customer.getName() + "_nota_fiscal_" + ".pdf").toString();
-
 		return path;
 	}
 	
@@ -172,28 +165,28 @@ public class CustomerService {
 	
 	@Transactional(readOnly = true)
 	public DataForMetricsDto metrics() {
-        // Definindo o fuso horário local
-        ZoneId zoneId = ZoneId.of("America/Sao_Paulo"); // Ajuste conforme o seu fuso horário
+	        return new DataForMetricsDto(			
+					repository.totalValueForLastMonth(),
+					repository.partialValueOfTheCurrentMonth(),
+					repository.partialVAlueForCurrentDay(),
+					repository.totalOutstandingAmount(),
+					getTotalValuesForLast7Days());
+			}
+	
+	@Transactional(readOnly = true)
+	public List<DailyTotal> getTotalValuesForLast7Days() {
+	    List<Object[]> results = repository.findTotalValueForLast7DaysExcludingToday();
+	    List<DailyTotal> dailyTotals = new ArrayList<>();
 
-        // Obtendo a data e hora atual no fuso horário local
-        ZonedDateTime nowLocal = ZonedDateTime.now(zoneId);
+	    for (Object[] result : results) {
+	        java.sql.Date sqlDate = (java.sql.Date) result[0];
+	        BigDecimal totalValue = (BigDecimal) result[1];
+	        LocalDate purchaseDate = sqlDate.toLocalDate();
+	        dailyTotals.add(new DailyTotal(purchaseDate, totalValue));
+	    }
 
-        // Calculando a data e hora de início e fim no fuso horário local
-        ZonedDateTime startDateLocal = nowLocal.minusDays(8).truncatedTo(ChronoUnit.DAYS);
-        ZonedDateTime endDateLocal = nowLocal.truncatedTo(ChronoUnit.DAYS).minusNanos(1);
+	    return dailyTotals;
+	}
 
-        // Convertendo para Instant para comparar ou armazenar
-        Instant startDate = startDateLocal.toInstant();
-        Instant endDate = endDateLocal.toInstant(); 
-
-        
-		return new DataForMetricsDto(			
-				repository.totalValueForLastMonth(),
-				repository.partialValueOfTheCurrentMonth(),
-				repository.partialVAlueForCurrentDay(),
-				repository.totalOutstandingAmount(),
-				repository.findDailyTotalsExcludingToday(startDate, endDate)
-				);
-		}
-
+	
 }

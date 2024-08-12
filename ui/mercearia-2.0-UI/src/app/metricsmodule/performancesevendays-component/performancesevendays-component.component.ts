@@ -29,7 +29,7 @@ export class PerformancesevendaysComponentComponent implements OnChanges {
 
     if (this.financeData?.dataGraphicSevenDays) {
       // Processar dataGraphicSevenDays para obter labels e valores
-      const labels = this.financeData.dataGraphicSevenDays.map(item => item.data);
+      const labels = this.financeData.dataGraphicSevenDays.map(item => item.purchaseDate);
       const values = this.financeData.dataGraphicSevenDays.map(item => item.totalValue);
 
       // Configurar os dados do gráfico

@@ -138,7 +138,7 @@ export class PurchasecomponentComponent {
         this.messageInterruptor = true;
       },
       (error) => {
-        this.messages = [{ severity: 'error', detail: `'Erro na compra: ${error.error.messages}'` }];
+        this.messages = [{ severity: 'error', detail: `'Erro na compra: ${error.error.message}'` }];
         this.messageInterruptor = true;
       });
 
