@@ -7,6 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 // the scanner!
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
@@ -25,7 +26,7 @@ import { MessagesModule } from 'primeng/messages';
 @Component({
   selector: 'app-purchasecomponent',
   standalone: true,
-  imports: [DialogModule,ButtonModule,InputTextModule,InputNumberModule,CardModule,
+  imports: [DialogModule,ButtonModule,InputTextModule,InputNumberModule,CardModule,RadioButtonModule,
     CommonModule,FormsModule,ZXingScannerModule,HttpClientModule,SpinnerModule,MessagesModule],
   providers:[PurchaseserviceService,UserServiceService],
   templateUrl: './purchasecomponent.component.html',
@@ -33,10 +34,18 @@ import { MessagesModule } from 'primeng/messages';
 })
 export class PurchasecomponentComponent {
 
+
   constructor (private service : PurchaseserviceService, private userService :UserServiceService) {}
   //menssagem de feedback de compra
   messages: Message[] | undefined;
   messageInterruptor = false;
+
+  //adicionarproduto manual
+  isSectionVisible: boolean = false;
+  toggleSection() {
+    this.isSectionVisible = !this.isSectionVisible;
+  }
+
 
   //Valores lógicos para caixa de dialogo
   displayDialog: boolean = false;

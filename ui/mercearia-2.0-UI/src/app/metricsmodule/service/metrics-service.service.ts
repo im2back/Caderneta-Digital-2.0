@@ -10,7 +10,7 @@ import { FinanceData } from '../interfaces/FinanceData';
 
 export class MetricsServiceService {
 
-  private readonly API =  "http://localhost:8080/customer"
+  private readonly API =  "https://192.168.1.111:8080/customer"
 
 
   constructor( private http : HttpClient) { }

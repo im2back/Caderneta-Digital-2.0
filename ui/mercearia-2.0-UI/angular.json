@@ -13,9 +13,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "browser": "src/main.ts",
             "outputPath": "dist/mercearia-2.0-ui",
             "index": "src/index.html",
-            "browser": "src/main.ts",
             "polyfills": [
               "zone.js"
             ],
@@ -59,7 +59,6 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "host": "0.0.0.0",
             "port": 4200
           },
           "configurations": {

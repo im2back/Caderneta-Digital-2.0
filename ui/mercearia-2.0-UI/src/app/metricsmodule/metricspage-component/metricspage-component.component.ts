@@ -27,7 +27,7 @@ export class MetricspageComponentComponent implements OnDestroy {
     this.fetchData();
     this.intervalId = setInterval(() => {
       this.fetchData();
-    }, 20000);
+    }, 30000);
   }
 
   ngOnDestroy() {
@@ -41,7 +41,9 @@ export class MetricspageComponentComponent implements OnDestroy {
       this.financeData = response;
     },
     (error) => {
-      console.log(error);
+      const errorMessage = `Status do erro: ${error.status}\nTexto do status: ${error.statusText}\nMensagem do erro: ${error.message}`;
+      alert(errorMessage);
+
     });
   }
 }

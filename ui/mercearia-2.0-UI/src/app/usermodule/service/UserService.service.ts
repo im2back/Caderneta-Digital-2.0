@@ -10,8 +10,8 @@ import { UserResponse } from '../interfaces/UserResponse';
 
 export class UserServiceService {
 
-  private readonly API =  "http://127.0.1.1:8080/customer"
-  private readonly APISTOCK =  "http://127.0.1.1:8081/product"
+  private readonly API =  "https://192.168.1.111:8080/customer"
+  private readonly APISTOCK =  "https://192.168.1.111:8443/product"
 
   constructor( private http : HttpClient) { }
 
@@ -26,6 +26,11 @@ export class UserServiceService {
   excluirCompra(undo: UndoPurchase) : Observable<void>{
     return this.http.put<void> (`${this.APISTOCK}/undopurchase`,undo);
   }
+
+  quitarCompra(undo: UndoPurchase) : Observable<void>{
+    return this.http.put<void> (`${this.API}/payment`,undo);
+  }
+
 
   zerarConta(document: string): Observable<void> {
     return this.http.delete<void> (`${this.API}/cleardebt?document=${document}`);
