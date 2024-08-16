@@ -1,34 +1,77 @@
 <div class="container">
   <div class="grid" style="margin-top: 20px;">
+
     <div class="card col-12 " *ngIf="messageInterruptor">
       <p-messages [(value)]="messages!" [enableService]="false" />
     </div>
+
     <div class="col-12" >
       <h1>Realizar Compra</h1>
     </div>
 
-    <div class="col-12 md:col-6 xl:col-6"   style="padding: 10px;">
+    <!-- Container de compras -->
+    <div class="col-12 md:col-6 xl:col-6 compras">
 
-      <div class="col-12" style="display: flex; justify-content: center; align-items: center;">
-        <h2 style="margin-right: 5px;" >Escaneie O Produto Aqui!</h2>
+      <div class="col-12" style="display: flex; justify-content: left; align-items: center;">
+        <h2 style="margin-right: 10px;" >Escaneie Aqui!</h2>
         <i class="pi pi-camera pi-barcode" style="font-size: 1.5rem;"></i>
       </div>
 
-      <div class="col-12" style="display: flex; justify-content: center; ">
-        <div style="width: 300px;">
+      <div class="col-12" style="display: flex; justify-content: left;  ">
+        <div class="container-scanner">
           <zxing-scanner
           [formats]="allowedFormats"
+          [videoConstraints]="{ width: { ideal: 1920 }, height: { ideal: 1080 } }"
           (scanSuccess)="onCodeResult($event)">
           </zxing-scanner>
         </div>
       </div>
 
-      <div class="col-12" style="padding: 10px; text-align: center;" >
+      <div class="col-12" style="padding: 10px; text-align: left;">
+        <i
+          class="pi icon-expansive"
+          [ngClass]="isSectionVisible ? 'pi-chevron-up' : '
+          pi-chevron-circle-down'"
+          style="font-size: 1.5rem; cursor: pointer;"
+          (click)="toggleSection()">
+        </i>
+      </div>
+
+      <div *ngIf="isSectionVisible">
+        <div class="col-12" style="padding: 10px; text-align: left;">
+          <label>Digite o Código</label>
+          <input pInputText type="text" #productCode>
+        </div>
+
+        <div class="col-12" style="padding: 10px; text-align: left;">
+          <button (click)="onCodeResult(productCode.value)" pButton>Adicionar</button>
+        </div>
+      </div>
+
+      <div class="col-12" style="padding: 10px; text-align: left; margin-top: 5px;">
+        <div class="card flex ">
+          <div class="flex flex-wrap gap-3">
+              <div class="flex align-items-center">
+                <label for="ingredient1" style="margin-right: 6px;">
+                  Compra Avulso
+                </label>
+                  <p-radioButton
+                      name="Compra Avulso"
+                      value="7654321589"
+                      [(ngModel)]="clientDocument"
+                      inputId="ingredient1" />
+
+              </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12" style="padding: 10px; text-align: left; margin-top: 5px;" >
         <label  >Documento</label>
         <input pInputText name="documentInput" id="documentInput" [(ngModel)]="clientDocument">
       </div>
 
-      <div class="col-12" style="padding: 10px; text-align: center;">
+      <div class="col-12" style="padding: 10px; text-align: left;">
         <button (click)="iniciarCompra()" pButton >Finalizar Compra</button>
       </div>
 
@@ -94,14 +137,8 @@
       </div>
     </div>
 
-
-    <div class="col-12 md:col-6 xl:col-6" >
-
-      <div class="grid">
-        <div class="col-12">
-          <h2>Carrinho</h2>
-        </div>
-      </div>
+     <!-- Container do carrinho compras -->
+    <div class="col-12 md:col-6 xl:col-6 carrinho" >
 
       <div class="grid">
         <div class="col-12 md:col-6 xl:col-4" *ngFor="let item of dataPurchaseArray">
@@ -115,7 +152,8 @@
 
             <ng-template pTemplate="footer">
               <div class="flex gap-3 mt-1">
-                <p-button (click)="removeProduct(item.code)" label="Excluir" severity="secondary" class="w-full" styleClass="w-full" />
+                <p-button (click)="removeProduct(item.code)" label="Excluir" class="w-full blue-button" />
+
               </div>
             </ng-template>
           </p-card>

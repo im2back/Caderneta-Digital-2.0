@@ -57,6 +57,23 @@ export class UserdetailComponentComponent {
       });
   }
 
+  quitarProduto(id: string, code: string, quantity: number): void {
+    const undoPurchase: UndoPurchase = {
+      purchaseId: Number(id),
+      productCode: code,
+      quantity: quantity
+    };
+
+    this.service.quitarCompra(undoPurchase).subscribe({
+        next: () => {
+          console.log('Compra excluída com sucesso!');
+          this.ngOnInit();
+        },
+        error: (err) => {
+          console.error('Erro ao excluir a compra', err);
+        }
+      });
+  }
   zerarConta(document:string){
     this.isLoading = true;
     this.service.zerarConta(document).subscribe({

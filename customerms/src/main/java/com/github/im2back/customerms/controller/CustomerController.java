@@ -69,6 +69,12 @@ public class CustomerController {
 		return ResponseEntity.ok().build();
 	}
 	
+	@PutMapping("/payment")
+	ResponseEntity<Void> individualPayment(@RequestBody @Valid UndoPurchaseDto dtoRequest) {
+		service.individualPayment(dtoRequest);
+		return ResponseEntity.ok().build();
+	}
+	
 	@PutMapping("/note")
 	ResponseEntity<Void> generatePurchaseNote(@RequestParam String document) {
 		service.generatePurchaseInvoice(document);

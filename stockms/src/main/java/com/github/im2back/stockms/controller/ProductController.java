@@ -2,7 +2,6 @@ package com.github.im2back.stockms.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,8 +35,7 @@ public class ProductController {
 		ProductDto response = service.findProductById(id);
 		return ResponseEntity.ok(response);
 	}
-	
-	@CrossOrigin(origins = "http://localhost:4200") 
+	 
 	@GetMapping("/code")
 	public ResponseEntity<ProductDto> findProductByCode(@RequestParam String code) {
 		Product product = service.findByCode(code);
@@ -57,14 +55,14 @@ public class ProductController {
 		return ResponseEntity.noContent().build();
 	}
 	
-	@CrossOrigin(origins = "http://localhost:4200") 
+
 	@PostMapping("/purchase")
 	public ResponseEntity<PurchaseResponseDto> updateStock(@RequestBody @Valid ProductsPurchaseRequestDto dto) {
 		PurchaseResponseDto response =  service.updateStock(dto);
 		return ResponseEntity.ok(response);
 	}
 	
-	@CrossOrigin(origins = "http://localhost:4200") 
+	
 	@PutMapping("/undopurchase")
 	public ResponseEntity<Void> undoPurchase(@RequestBody @Valid UndoPurchaseDto dto) {
 		service.undoPurchase(dto);

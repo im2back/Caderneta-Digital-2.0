@@ -10,7 +10,7 @@ import { PurchaseResponseDto } from '../interfaces/PurchaseResponseDto';
 })
 export class PurchaseserviceService {
 
- private readonly API =  "http://127.0.1.1:8081/product"
+ private readonly API =  "https://192.168.1.111:8443/product"
   constructor( private http : HttpClient) { }
 
   getProductByCode(code: string): Observable<ProductDto> {

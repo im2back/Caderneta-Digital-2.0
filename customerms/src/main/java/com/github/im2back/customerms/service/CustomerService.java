@@ -2,6 +2,7 @@ package com.github.im2back.customerms.service;
 
 import java.math.BigDecimal;
 import java.nio.file.Paths;
+import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -31,6 +32,8 @@ import com.github.im2back.customerms.service.exeptions.CustomerNotFoundException
 import com.github.im2back.customerms.utils.PdfGenerator;
 import com.github.im2back.customerms.validations.customervalidations.CustomerValidations;
 import com.github.im2back.customerms.validations.purchasevalidations.PurchaseValidations;
+
+import jakarta.validation.Valid;
 
 @Service
 public class CustomerService {
@@ -94,10 +97,23 @@ public class CustomerService {
 	}
 
 	private void addProductsToPurchaseHistory(PurchaseRequestDto dtoRequest, Customer customer) {
-		Instant instant = Instant.now();
-		List<PurchaseRecord> purchaseRecords = dtoRequest.products().stream().map(p -> new PurchaseRecord(p.name(),
-				p.price(), p.code(), instant, p.quantity(), Status.EM_ABERTO, customer)).collect(Collectors.toList());
-		customer.getPurchaseRecord().addAll(purchaseRecords);
+		
+		if(!customer.getDocument().equals("123456789")) {
+			Instant instant = Instant.now();
+			List<PurchaseRecord> purchaseRecords = dtoRequest.products().stream().map(p -> new PurchaseRecord(p.name(),
+					p.price(), p.code(), instant, p.quantity(), Status.PAGO, customer)).collect(Collectors.toList());
+			customer.getPurchaseRecord().addAll(purchaseRecords);
+		}
+		
+		else {
+			
+			Instant instant = Instant.now();
+			List<PurchaseRecord> purchaseRecords = dtoRequest.products().stream().map(p -> new PurchaseRecord(p.name(),
+					p.price(), p.code(), instant, p.quantity(), Status.EM_ABERTO, customer)).collect(Collectors.toList());
+			customer.getPurchaseRecord().addAll(purchaseRecords);
+		}
+			
+		
 	}
 
 	private PurchaseResponseDto assembleResponse(PurchaseRequestDto dtoRequest, Customer customer) {
@@ -179,13 +195,26 @@ public class CustomerService {
 	    List<DailyTotal> dailyTotals = new ArrayList<>();
 
 	    for (Object[] result : results) {
-	        java.sql.Date sqlDate = (java.sql.Date) result[0];
+	        Date sqlDate = (java.sql.Date) result[0];
 	        BigDecimal totalValue = (BigDecimal) result[1];
 	        LocalDate purchaseDate = sqlDate.toLocalDate();
 	        dailyTotals.add(new DailyTotal(purchaseDate, totalValue));
 	    }
 
 	    return dailyTotals;
+	}
+
+	public void individualPayment(@Valid UndoPurchaseDto dtoRequest) {
+		Customer customer = repository.findByPurchase(dtoRequest.purchaseId()).orElseThrow(
+				() -> new CustomerNotFoundException("User not found for purchase id: " + dtoRequest.purchaseId()));
+
+		var list = customer.getPurchaseRecord();
+		list.forEach(t -> {
+			if(t.getId().equals(dtoRequest.purchaseId())){
+				t.setStatus(Status.PAGO);
+			}
+		});
+		repository.save(customer);	
 	}
 
 	

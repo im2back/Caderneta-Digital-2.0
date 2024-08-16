@@ -1,6 +1,6 @@
 .delete-button {
   display: inline-block;
-  padding: 8px 16px;
+  padding: 8px 8px;
   border: none;
   background-color: #f44336;
   color: white;
@@ -8,6 +8,7 @@
   text-align: center;
   border-radius: 4px;
   position: relative;
+  margin-right: 4px;
 }
 
 .delete-button:hover{
@@ -17,6 +18,30 @@
 }
 
 .delete-button i {
+  float: right;
+  margin-left: 8px;
+}
+
+
+.quitar-button {
+  display: inline-block;
+  padding: 8px 10px;
+  border: none;
+  background-color: green;
+  color: white;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 4px;
+  position: relative;
+}
+
+.quitar-button:hover{
+  background-color: white;
+  color: #f44336;
+
+}
+
+.quitar-button i {
   float: right;
   margin-left: 8px;
 }
@@ -63,3 +88,59 @@ h2{
   background-color:  #00646f;
   color: #ffffff;
 }
+
+@media (max-width: 518px){
+
+  .delete-button {
+    text-align: center;
+    margin-right: 0px;
+    font-size: 10px;
+    justify-content: center;
+    margin-bottom: 2px;
+  }
+
+
+  .quitar-button {
+    text-align: center;
+    margin-right: 0px;
+    font-size: 10px;
+  }
+
+  .quitar-button i {
+    float: left;
+    margin-left: 8px;
+    text-align: center;
+  }
+
+  .delete-button i {
+    float: left;
+    margin-left: 11px;
+    margin-top: 2px;
+  }
+
+
+  .iconaction {
+    font-size: 0.8rem;
+  }
+
+}
+
+@media (max-width: 467px){
+  .containerOptions{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .clientOptions{
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 3px;
+    font-size: 20px;
+  }
+}
+
+
+

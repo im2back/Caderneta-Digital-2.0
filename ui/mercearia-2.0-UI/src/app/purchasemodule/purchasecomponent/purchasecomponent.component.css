@@ -11,6 +11,7 @@ h2{
   -webkit-background-clip: text;
   color: transparent;
   text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8);
+  font-size: 30px;
 }
 
 
@@ -44,3 +45,40 @@ p-card {
   text-align: center;
 }
 
+.icon-expansive:hover{
+  color: rgb(208, 208, 208);
+}
+
+.carrinho{
+  background-color: rgba(0, 0, 0, 0.106);
+   border-radius: 5px;
+   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+   background-image: url("../../../assets/buycar.png");
+   background-position: center;
+   background-repeat: no-repeat;
+   background-size: 250px;
+}
+
+.compras{
+   background-image: url("../../../assets/projeto.png");
+
+}
+
+@media (max-width: 1199px){
+  .carrinho{
+    background-image: none;
+  }
+
+  .compras{
+    background-image: none;
+  }
+
+}
+
+
+
+@media (min-width: 1199px) {
+  .container-scanner{
+    width: 300px;
+  }
+}

@@ -11,7 +11,7 @@ import com.github.im2back.stockms.model.dto.outputdata.PurchaseResponseDto;
 
 import jakarta.validation.Valid;
 
-@FeignClient(name = "customerClient", url = "http://localhost:8080", path = "/customer")
+@FeignClient(name = "customerClient", url = "https://192.168.1.111:8080", path = "/customer")
 public interface ClientResourceCustomer {
 
 	
