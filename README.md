@@ -1,5 +1,5 @@
-# Status de Desenvolvimento 29/07/2024 🟢 
-  Em Desenvolvimento do Back-end e Front-end.
+# Status de Desenvolvimento 17/08/2024 🟢 
+ Desenvolvendo a funcionalidade que irá gerenciar o estoque e posteriormente realizar os testes de unidade
   
 <br>
 
@@ -20,6 +20,34 @@ Esse esforço envolve trabalhar eficientemente com branches e pull requests para
 
 <br><br>
 
+# Layout (Desktop e Mobile) Tela de Registro de Usuário
+![usuarios-desktop](https://github.com/user-attachments/assets/71a9ac3e-6603-47da-a355-ff29173f24ca)
+![usuarios-mobile](https://github.com/user-attachments/assets/e3ac2f11-39aa-4c4e-a806-e8ae15d84b42)
+
+<br>
+
+# Layout (Desktop e Mobile) Tela de Gerênciamento de Usuário
+
+![detalhar-desktop](https://github.com/user-attachments/assets/6a46f60e-68a1-4add-8453-46a04e195a8e)
+![detalhar-mobile](https://github.com/user-attachments/assets/61d104e0-2f01-4f89-a3f0-c81f36ca644b)
+
+<br>
+
+# Layout (Desktop e Mobile) Tela de Compras
+
+![compra-desktop](https://github.com/user-attachments/assets/2d7d3363-eff9-4a3d-a38b-91e1a6236576)
+![compra-mobile](https://github.com/user-attachments/assets/5f771a0a-5d35-4c77-b374-095e33fa9cb6)
+
+<br>
+
+# Layout (Desktop e Mobile) Tela de Métricas
+
+![Métricas-desktop](https://github.com/user-attachments/assets/a86208ef-58d4-414e-be90-90eace48889c)
+![Métricas-mobile](https://github.com/user-attachments/assets/c1f82f1d-d0ad-49f5-a149-b4b7394e3741)
+
+
+<br>
+
 # Fluxograma do Ciclo de Compra
 - Este Fluxograma faz uma representação do principal processo da aplicação, a compra de um produto e como a requisição interage/percorre os microsserviços. <br>
   📌OBS: Este fluxograma leva em consideração apenas o caso de sucesso.
@@ -38,7 +66,7 @@ Esse esforço envolve trabalhar eficientemente com branches e pull requests para
 - Spring Cloud OpenFeign
 - H2 Database
 - Docker
-- RabbitMq
+- MySql
 ## Front-end
 - Angular 17
 - Type Script
