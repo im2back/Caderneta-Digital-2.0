@@ -20,9 +20,8 @@ import { StockServiceService } from '../../services/stock-service/stock-service.
   templateUrl: './product-form-editing.component.html',
   styleUrl: './product-form-editing.component.css'
 })
-export class ProductFormEditingComponent implements  OnChanges {
+export class ProductFormEditingComponent  {
 
-  @Input() productCode: string  = '';
   @Output() sucessUpdateEvent = new EventEmitter<string>();
   @Output() errorUpdateEvent = new EventEmitter<string>();
 
@@ -37,21 +36,24 @@ export class ProductFormEditingComponent implements  OnChanges {
 
 constructor (private service : StockServiceService){}
 
-ngOnChanges(changes: SimpleChanges) {
-  if (changes['productCode'] && this.productCode) {
-    this.service.getProductByCode(this.productCode).subscribe((response: ProductDto) => {
-      this.product = response;
-    });
-  }
-}
 
 isVisible = false;
 displayDialogForm :boolean = false;
 
-openForm() {
-  this.isVisible = true;
-  this.displayDialogForm = true;
+openForm(productCode:string) {
+
+  this.service.getProductByCode(productCode).subscribe((response: ProductDto) => {
+    this.product = response;
+    this.isVisible = true;
+    this.displayDialogForm = true;
+  },
+  (error)=>{
+    this.errorUpdateEvent.emit('Erro:'+error.error.message);
+
+  });
 }
+
+
 
 closeForm() {
   this.isVisible = false;

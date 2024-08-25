@@ -26,12 +26,12 @@
 
       <p-footer>
         <button type="button" pButton label="Cadastrar" icon="pi pi-plus"
-          (click)="productForm.openForm()"
+          (click)="productForm.openForm(productCode)"
           (click)="closeGenericDialog()">
         </button>
 
         <button type="button" pButton label="Editar" icon="pi pi-pencil"
-          (click)="productEdit.openForm()"
+          (click)="productEdit.openForm(productCode)"
           (click)="closeGenericDialog()" >
         </button>
       </p-footer>
@@ -41,7 +41,6 @@
       <app-product-form-register
         (sucessRegisterEvent)="sucessMessage($event)"
         (errorRegisterEvent)="errorMessage($event)"
-        [productCode]="productCode"
         #productForm>
       </app-product-form-register>
     </div>
@@ -50,7 +49,6 @@
       <app-product-form-editing
         (sucessUpdateEvent)="sucessMessage($event)"
         (errorUpdateEvent)="errorMessage($event)"
-        [productCode]="productCode"
         #productEdit>
       </app-product-form-editing>
     </div>

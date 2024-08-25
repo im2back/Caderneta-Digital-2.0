@@ -24,18 +24,20 @@ export class ProductFormRegisterComponent {
 
 constructor (private service : StockServiceService){}
 
-@Input() productCode: string  = '';
 @Output() sucessRegisterEvent = new EventEmitter<string>();
 @Output() errorRegisterEvent = new EventEmitter<string>();
 
 isVisible = false;
 displayDialogForm :boolean = false;
 
+productCode : string = "";
 
 
-  openForm() {
+  openForm(productCode:string) {
+    this.productCode = productCode
     this.isVisible = true;
     this.displayDialogForm = true;
+
   }
 
   closeForm() {
