@@ -1,0 +1,26 @@
+<div class="col-12">
+  <p-dialog header="Confirmar Compra" [(visible)]="displayDialogConfirmPurchase" [modal]="true" [closable]="false">
+
+    <div class="p-fluid">
+      <div class="p-field">
+        <label  for="totaValue">Cliente : {{userName}}</label>
+        <label  for="totaValue">Valor Total da Compra</label>
+
+        <p-inputNumber
+        [readonly]="true"
+        [(ngModel)]="totalValuePurchase"
+        inputId="totalValue"
+        mode="currency"
+        currency="BRL"
+        locale="pt-BR">
+        </p-inputNumber>
+
+      </div>
+    </div>
+
+    <p-footer>
+      <button type="button" pButton label="Confirmar" icon="pi pi-check" (click)="onRegisterPurchase()"></button>
+      <button type="button" pButton label="Cancelar" icon="pi pi-times" (click)="onCancelPurchase()"></button>
+    </p-footer>
+  </p-dialog>
+</div>

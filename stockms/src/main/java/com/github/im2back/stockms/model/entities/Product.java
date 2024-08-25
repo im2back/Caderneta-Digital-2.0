@@ -65,7 +65,7 @@ public class Product {
 	        this.code = dto.code();
 	    }
 	    if (dto.quantity() != null) {
-	        this.quantity += dto.quantity();
+	        this.quantity = dto.quantity();
 	    }
 	    if (dto.productUrl().trim() != null) {
 	        this.productUrl = dto.productUrl();

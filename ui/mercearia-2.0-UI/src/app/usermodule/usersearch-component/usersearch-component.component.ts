@@ -1,14 +1,14 @@
+import { UserResponse } from './../../core/interfaces/UserResponse';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessagesModule } from 'primeng/messages';
-import { UserServiceService } from '../service/UserService.service';
 import { FormsModule, NgForm } from '@angular/forms';
-import { UserResponse } from '../interfaces/UserResponse';
 import { ValidMessagesComponent } from '../../share/valid-messages/valid-messages.component';
 import { RouterModule, Routes } from '@angular/router';
+import { CustomerServiceService } from '../../services/customer-service/customer-service.service';
 
 
 @Component({
@@ -17,12 +17,12 @@ import { RouterModule, Routes } from '@angular/router';
   imports: [CommonModule,MessagesModule,ButtonModule,InputTextModule,HttpClientModule,ValidMessagesComponent,FormsModule
     ,RouterModule
   ],
-  providers : [UserServiceService],
+  providers : [CustomerServiceService],
   templateUrl: './usersearch-component.component.html',
   styleUrl: './usersearch-component.component.css'
 })
 export class UsersearchComponentComponent {
-  constructor(private service : UserServiceService) {}
+  constructor(private service : CustomerServiceService) {}
 
   message: string | null = null;
   userResponse: UserResponse | null = null;

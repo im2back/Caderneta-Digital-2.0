@@ -1,0 +1,34 @@
+
+<div class="col-12">
+  <p-dialog header="Adicionar no Carrinho" [(visible)]="displayDialog" [modal]="true" [closable]="false">
+    <div class="p-fluid">
+      <div class="p-field">
+        <label for="productName">Produto</label>
+        <input id="productName" type="text" pInputText [(ngModel)]="producDTO.name" [disabled]="true"/>
+        <label for="productName">Preço</label>
+        <input id="productPrice" type="text" pInputText [(ngModel)]="producDTO.price" [disabled]="true"/>
+      </div>
+
+      <div class="card flex flex-wrap gap-3 p-fluid">
+        <div class="flex-auto">
+            <label class="mb-2 block font-bold" for="minmax-buttons">
+                Quantidade
+                <img [src]="producDTO.productUrl">
+            </label>
+            <p-inputNumber
+            [style]="{'width': '6rem'}"
+                [(ngModel)]="producDTO.quantity"
+                [showButtons]="true"
+                inputId="minmax-buttons"
+                [min]="0"
+                [max]="100" />
+        </div>
+    </div>
+
+    </div>
+    <p-footer>
+      <button type="button" pButton label="Adicionar" icon="pi pi-cart-plus" (click)="addShoppingCart()" ></button>
+      <button type="button" pButton label="Cancelar" icon="pi pi-cart-minus" (click)="onCancel()"  ></button>
+    </p-footer>
+  </p-dialog>
+</div>

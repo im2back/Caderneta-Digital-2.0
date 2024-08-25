@@ -1,35 +1,36 @@
+import { UserData } from './../../core/interfaces/UserData';
+import { UserResponse } from './../../core/interfaces/UserResponse';
 import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ValidMessagesComponent } from '../../share/valid-messages/valid-messages.component';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { UserServiceService } from '../service/UserService.service';
+
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { MessagesModule } from 'primeng/messages';
-import { UserResponse } from '../interfaces/UserResponse';
-import { UserData } from '../interfaces/UserData';
+import { CustomerServiceService } from '../../services/customer-service/customer-service.service';
 
 @Component({
   selector: 'app-userformregister-component',
   standalone: true,
   imports: [CommonModule,FormsModule,InputTextModule,InputNumberModule,ButtonModule,
     MessagesModule,MessagesModule,ValidMessagesComponent,HttpClientModule,],
-  providers : [UserServiceService],
+  providers : [CustomerServiceService],
   templateUrl: './userformregister-component.component.html',
   styleUrl: './userformregister-component.component.css'
 })
 export class UserformregisterComponentComponent {
 
-  constructor(private service : UserServiceService) {}
+  constructor(private service : CustomerServiceService) {}
 
   message: string | null = null;
   userResponse: UserResponse | null = null;
 
 
   cadastrar(form: NgForm) {
-    if (form.valid) {
+
       const clienteCadastro: UserData = {
         name: form.value.name,
         document: form.value.document,
@@ -41,6 +42,7 @@ export class UserformregisterComponentComponent {
           complement: form.value.complement
         }
       };
+      console.log(clienteCadastro)
 
       this.service.cadastrar(clienteCadastro).subscribe(
         (response: UserResponse) => {
@@ -61,8 +63,5 @@ export class UserformregisterComponentComponent {
           }, 8000);
         }
       );
-    } else {
-      this.message = 'Formulário inválido. Por favor, verifique os campos.';
-    }
   }
 }

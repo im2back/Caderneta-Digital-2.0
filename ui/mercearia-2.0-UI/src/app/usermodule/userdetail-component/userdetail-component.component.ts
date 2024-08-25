@@ -1,26 +1,29 @@
+import { UndoPurchase } from './../../core/interfaces/UndoPurchaseDto';
+import { UserResponse } from './../../core/interfaces/UserResponse';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { UserResponse } from '../interfaces/UserResponse';
-import { UserServiceService } from '../service/UserService.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { UndoPurchase } from '../interfaces/UndoPurchaseDto';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { MessagesModule } from 'primeng/messages';
 import { Message } from 'primeng/api';
+import { CustomerServiceService } from '../../services/customer-service/customer-service.service';
+import { StockServiceService } from '../../services/stock-service/stock-service.service';
+
 
 @Component({
   selector: 'app-userdetail-component',
   standalone: true,
   imports: [HttpClientModule,CommonModule,ProgressBarModule,MessagesModule],
-  providers : [UserServiceService],
+  providers : [CustomerServiceService,StockServiceService],
   templateUrl: './userdetail-component.component.html',
   styleUrl: './userdetail-component.component.css'
 })
 export class UserdetailComponentComponent {
 
-  constructor(private route: ActivatedRoute,private service : UserServiceService,private router: Router) {}
+  constructor(private route: ActivatedRoute,private service : CustomerServiceService,
+    private stockService : StockServiceService,private router: Router) {}
 
   userResponse: UserResponse | undefined;
   isLoading = false;
@@ -46,7 +49,7 @@ export class UserdetailComponentComponent {
       quantity: quantity
     };
 
-    this.service.excluirCompra(undoPurchase).subscribe({
+    this.stockService.excluirCompra(undoPurchase).subscribe({
         next: () => {
           console.log('Compra excluída com sucesso!');
           this.ngOnInit();
