@@ -1,0 +1,35 @@
+
+<p-dialog  [(visible)]="displayDialogForm" [modal]="true" [closable]="false">
+  <div class="modal" *ngIf="isVisible">
+    <div class="modal-content">
+      <span class="close" (click)="closeForm()">&times;</span>
+      <h2>Cadastrar Produto</h2>
+
+      <form (ngSubmit)="cadastrar(productForm)" #productForm="ngForm">
+        <div>
+          <label for="name">Nome:</label>
+          <input pInputText type="text" id="name" name="name" ngModel required />
+        </div>
+        <div>
+          <label for="price">Preço:</label>
+          <p-inputNumber [(ngModel)]="productForm.value.price" name="price" inputId="currency-br" mode="currency" currency="BRL" locale="pt-BR" required></p-inputNumber>
+        </div>
+        <div>
+          <label for="code">Código:</label>
+          <input pInputText type="text" id="code" name="code" [(ngModel)]="productCode" required />
+        </div>
+        <div>
+          <label for="quantity">Quantidade:</label>
+          <input pInputText type="number" id="quantity" name="quantity" ngModel required />
+        </div>
+        <div>
+          <label for="productUrl">URL da Imagem:</label>
+          <input pInputText type="url" id="productUrl" name="productUrl" ngModel required />
+        </div>
+        <button pButton type="submit">Cadastrar</button>
+      </form>
+
+
+    </div>
+  </div>
+</p-dialog>

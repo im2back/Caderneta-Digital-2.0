@@ -32,7 +32,7 @@ public class ProductController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<ProductDto> findProductById(@PathVariable Long id) {
-		ProductDto response = service.findProductById(id);
+		ProductDto response =  new ProductDto(service.findProductById(id));
 		return ResponseEntity.ok(response);
 	}
 	 
@@ -55,17 +55,21 @@ public class ProductController {
 		return ResponseEntity.noContent().build();
 	}
 	
-
 	@PostMapping("/purchase")
 	public ResponseEntity<PurchaseResponseDto> updateStock(@RequestBody @Valid ProductsPurchaseRequestDto dto) {
 		PurchaseResponseDto response =  service.updateStock(dto);
 		return ResponseEntity.ok(response);
 	}
 	
-	
 	@PutMapping("/undopurchase")
 	public ResponseEntity<Void> undoPurchase(@RequestBody @Valid UndoPurchaseDto dto) {
 		service.undoPurchase(dto);
+		return ResponseEntity.ok().build();
+	}
+	
+	@PutMapping("/update")
+	public ResponseEntity<Void> updateProduct(@RequestBody @Valid ProductDto dto) {
+		service.updateProduct(dto);
 		return ResponseEntity.ok().build();
 	}
 

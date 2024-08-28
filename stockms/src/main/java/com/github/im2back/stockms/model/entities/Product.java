@@ -2,6 +2,8 @@ package com.github.im2back.stockms.model.entities;
 
 import java.math.BigDecimal;
 
+import com.github.im2back.stockms.model.dto.outputdata.ProductDto;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -42,7 +44,7 @@ public class Product {
 	@Column(name = "product_price")
 	private BigDecimal price;
 	
-	@Column(name = "product_code", unique = true)
+	@Column(name = "product_code",unique = true)
 	private String code;
 	
 	@Column(name = "product_quantity")
@@ -52,4 +54,22 @@ public class Product {
 	private String productUrl;
 	
 	
+	public void updateAttributes(ProductDto dto) {
+	    if (dto.name().trim() != null) {
+	        this.name = dto.name();
+	    }
+	    if (dto.price() != null) {
+	        this.price = dto.price();
+	    }
+	    if (dto.code().trim() != null) {
+	        this.code = dto.code();
+	    }
+	    if (dto.quantity() != null) {
+	        this.quantity = dto.quantity();
+	    }
+	    if (dto.productUrl().trim() != null) {
+	        this.productUrl = dto.productUrl();
+	    }
+	}
+
 }

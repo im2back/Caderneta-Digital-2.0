@@ -1,0 +1,53 @@
+img {
+  width: 100px;
+}
+
+label{
+  font-weight: bold;
+  display: block;
+}
+
+p-inputnumber, .p-inputnumber {
+  width: 50%;
+}
+
+
+.card-header h4 {
+  font-size: 16px; /* Ajuste o tamanho da fonte conforme necessário */
+  margin: 0; /* Ajusta a margem se necessário */
+}
+
+p-card {
+  text-align: center;
+}
+
+.icon-expansive:hover{
+  color: rgb(208, 208, 208);
+}
+
+.carrinho{
+  background-color: rgba(0, 0, 0, 0.106);
+   border-radius: 5px;
+   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+   background-image: url("../../../assets/buycar.png");
+   background-position: center;
+   background-repeat: no-repeat;
+   background-size: 250px;
+}
+
+.compras{
+   background-image: url("../../../assets/projeto.png");
+
+}
+
+@media (max-width: 1199px){
+  .carrinho{
+    background-image: none;
+  }
+
+  .compras{
+    background-image: none;
+  }
+
+}
+

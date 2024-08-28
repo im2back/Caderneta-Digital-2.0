@@ -1,0 +1,23 @@
+h2{
+
+  text-align: center;
+  color: rgb(0, 0, 0);
+  background: linear-gradient(to right, #3498db, #2c3e50);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8);
+  font-size: 30px;
+}
+
+label{
+  font-weight: bold;
+  display: block;
+}
+
+
+@media (min-width: 1200px) {
+  .container-scanner{
+    width: 500px;
+  }
+}

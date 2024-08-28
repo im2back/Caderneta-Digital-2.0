@@ -98,7 +98,8 @@ public class CustomerService {
 
 	private void addProductsToPurchaseHistory(PurchaseRequestDto dtoRequest, Customer customer) {
 		
-		if(!customer.getDocument().equals("123456789")) {
+		if(customer.getDocument().equals("7654321589")) {
+			
 			Instant instant = Instant.now();
 			List<PurchaseRecord> purchaseRecords = dtoRequest.products().stream().map(p -> new PurchaseRecord(p.name(),
 					p.price(), p.code(), instant, p.quantity(), Status.PAGO, customer)).collect(Collectors.toList());
@@ -106,7 +107,7 @@ public class CustomerService {
 		}
 		
 		else {
-			
+	
 			Instant instant = Instant.now();
 			List<PurchaseRecord> purchaseRecords = dtoRequest.products().stream().map(p -> new PurchaseRecord(p.name(),
 					p.price(), p.code(), instant, p.quantity(), Status.EM_ABERTO, customer)).collect(Collectors.toList());
