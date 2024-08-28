@@ -42,7 +42,6 @@ public class CustomerController {
 		return ResponseEntity.ok(response);
 	}
 	
-		
 	@PostMapping
 	ResponseEntity<GetCustomerDto> saveNewCustomer(@RequestBody @Valid CustomerDto customer,
 			UriComponentsBuilder uriBuilder) {
@@ -88,7 +87,7 @@ public class CustomerController {
 	}
 	
 	@GetMapping("/metrics")
-	ResponseEntity<DataForMetricsDto> findCustomerByDocument() {
+	ResponseEntity<DataForMetricsDto> getMetrics() {
 		DataForMetricsDto response = service.metrics();
 		return ResponseEntity.ok(response);
 	}
