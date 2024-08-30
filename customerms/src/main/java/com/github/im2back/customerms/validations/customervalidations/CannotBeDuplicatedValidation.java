@@ -21,7 +21,7 @@ public class CannotBeDuplicatedValidation implements CustomerValidations {
 		 	List<String> errorMessages = new ArrayList<>();
 			var customerEmail = repository.findByEmail(requestDto.email());
 			var customerDocument = repository.findByDocument(requestDto.document());
-			var customerPhone = repository.findByDocument(requestDto.document());
+			var customerPhone = repository.findByPhone(requestDto.phone());
 
 			if(customerEmail.isPresent()) {
 				errorMessages.add("Email Cannot Be Duplicated.");
