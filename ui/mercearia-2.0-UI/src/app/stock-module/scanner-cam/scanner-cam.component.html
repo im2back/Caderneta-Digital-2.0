@@ -1,0 +1,40 @@
+
+<div class="col-12" style="display: flex; justify-content: center; align-items: center;">
+  <h2 style="margin-right: 10px;" >Escaneie Aqui!</h2>
+  <i class="pi pi-camera pi-barcode" style="font-size: 1.5rem;"></i>
+</div>
+
+<div class="col-12" style="display: flex; justify-content: center;   ">
+  <div class="container-scanner" >
+    <zxing-scanner
+    [formats]="allowedFormats"
+    [videoConstraints]="{ width: { ideal: 1920 }, height: { ideal: 1080 } }"
+    (scanSuccess)="onCodeResult($event)">
+    </zxing-scanner>
+  </div>
+</div>
+
+<div class="col-12" style="padding: 10px; text-align: center;">
+  <i
+    class="pi icon-expansive"
+    [ngClass]="isSectionVisible ? 'pi-chevron-up' : '
+    pi-chevron-circle-down'"
+    style="font-size: 1.5rem; cursor: pointer;"
+    (click)="toggleSection()">
+  </i>
+</div>
+
+<div class="col-12">
+  <div *ngIf="isSectionVisible">
+    <div  style="padding: 10px; text-align: center;">
+      <label>Digite o Código</label>
+      <input pInputText type="text" #productCode>
+    </div>
+
+    <div style="padding: 10px; text-align: center;">
+      <button (click)="onCodeResult(productCode.value)" pButton>Escanear</button>
+    </div>
+  </div>
+</div>
+
+

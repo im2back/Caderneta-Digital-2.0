@@ -1,0 +1,57 @@
+<div class="container"  >
+  <div class="grid">
+
+    <div class="card col-12 " *ngIf="messageInterruptor">
+      <p-messages [(value)]="messages!" [enableService]="false" />
+    </div>
+
+    <div class="col-12">
+      <h1>Gerênciamento de Estoque</h1>
+    </div>
+
+    <div class="col-12">
+      <app-scanner-cam
+        (productCodeEvent)="receiveProductCode($event)"
+        (genericDialogEvent)="activeGenericDialog()">
+      </app-scanner-cam>
+    </div>
+
+    <p-dialog header="Oque Deseja Fazer?" [(visible)]="genericDisplayDialog" [modal]="true" [closable]="true">
+      <div class="p-fluid">
+        <div class="p-field">
+          <label for="product">Código</label>
+          <input id="product" type="text" pInputText [(ngModel)]="productCode" [disabled]="true" >
+        </div>
+      </div>
+
+      <p-footer>
+        <button type="button" pButton label="Cadastrar" icon="pi pi-plus"
+          (click)="productForm.openForm(productCode)"
+          (click)="closeGenericDialog()">
+        </button>
+
+        <button type="button" pButton label="Editar" icon="pi pi-pencil"
+          (click)="productEdit.openForm(productCode)"
+          (click)="closeGenericDialog()" >
+        </button>
+      </p-footer>
+    </p-dialog>
+
+    <div class="col-12">
+      <app-product-form-register
+        (sucessRegisterEvent)="sucessMessage($event)"
+        (errorRegisterEvent)="errorMessage($event)"
+        #productForm>
+      </app-product-form-register>
+    </div>
+
+    <div class="col-12">
+      <app-product-form-editing
+        (sucessUpdateEvent)="sucessMessage($event)"
+        (errorUpdateEvent)="errorMessage($event)"
+        #productEdit>
+      </app-product-form-editing>
+    </div>
+
+  </div>
+</div>

@@ -22,6 +22,7 @@ import com.github.im2back.stockms.repositories.ProductRepository;
 import com.github.im2back.stockms.service.exceptions.ProductNotFoundException;
 import com.github.im2back.stockms.validation.purchasevalidations.PurchaseValidations;
 
+
 @Service
 public class ProductService {
 
@@ -35,10 +36,9 @@ public class ProductService {
 	private List<PurchaseValidations> purchaseValidations;
 	
 	@Transactional(readOnly = true)
-	public ProductDto findProductById(Long id) {
-		Product product = repository.findById(id)
+	public Product findProductById(Long id) {
+		return repository.findById(id)
 				.orElseThrow(() -> new ProductNotFoundException("Product Not found for id: " + id));
-		return new ProductDto(product);
 	}
 	
 	@Transactional(readOnly = true)
@@ -55,8 +55,7 @@ public class ProductService {
 			return new ProductDto(product);
 		} catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityViolationException("Error when trying to save product to database");
-		}
-			
+		}	
 	}
 	
 	@Transactional
@@ -101,5 +100,11 @@ public class ProductService {
 		repository.save(product);
 		
 		clientResourceCustomer.undoPurchase(dto);
+	}
+
+	public void updateProduct(ProductDto dto) {
+		Product product = findProductById(dto.id());
+		product.updateAttributes(dto);
+		repository.save(product);
 	}
 }

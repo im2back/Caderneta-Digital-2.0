@@ -1,8 +1,10 @@
-import { MetricspageComponentComponent } from './metricsmodule/metricspage-component/metricspage-component.component';
+
 import {  Routes } from '@angular/router';
 import { UserpageComponentComponent } from './usermodule/userpage-component/userpage-component.component';
 import { UserdetailComponentComponent } from './usermodule/userdetail-component/userdetail-component.component';
-import { PurchasecomponentComponent } from './purchasemodule/purchasecomponent/purchasecomponent.component';
+import { StockMainPageComponent } from './stock-module/stock-main-page/stock-main-page.component';
+import { MetricsMainPageComponent } from './metrics-module/metrics-main-page/metrics-main-page.component';
+import { PurchaseMainPageComponent } from './purchase-module/purchase-main-page/purchase-main-page.component';
 
 
 
@@ -19,15 +21,19 @@ export const routes: Routes = [
   },
   {
     path : 'metrics',
-    component : MetricspageComponentComponent
+    component : MetricsMainPageComponent
   },
   {
     path : 'purchase',
-    component : PurchasecomponentComponent
+    component : PurchaseMainPageComponent
+  },
+  {
+    path : 'stock',
+    component : StockMainPageComponent
   },
   {
     path : '**',
-    component : MetricspageComponentComponent
+    component : MetricsMainPageComponent
   },
 
 ];

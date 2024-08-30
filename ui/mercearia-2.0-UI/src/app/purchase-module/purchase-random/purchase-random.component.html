@@ -1,0 +1,17 @@
+
+  <div class="card flex ">
+    <div class="flex flex-wrap gap-3">
+        <div class="flex align-items-center">
+          <label for="ingredient1" style="margin-right: 6px;">
+            Compra Avulso
+          </label>
+            <p-radioButton
+                name="Compra Avulso"
+                value="7654321589"
+                [(ngModel)]="clientDocument"
+                (ngModelChange)="onRadioButtonChange()"
+                inputId="ingredient1" />
+        </div>
+    </div>
+  </div>
+

@@ -1,0 +1,62 @@
+
+<div class="container">
+  <div class="grid" style="margin-top: 20px;">
+
+
+    <div class="col-12" >
+      <h1>Realizar Compra</h1>
+    </div>
+
+    <div class="card col-12 " *ngIf="messageInterruptor">
+      <p-messages [(value)]="messages!" [enableService]="false" />
+    </div>
+
+    <div class="col-12  md:col-6 xl:col-6 compras"  >
+      <div class="grid" >
+          <app-scanner
+            (addProductDialogEvent)="appAddToCar.openDialog($event)">
+          </app-scanner>
+
+          <div class="col-12" style="padding: 10px; text-align: left; margin-top: 5px;" >
+            <app-purchase-random
+              (compraAvulso)="compraAvulso($event)">
+            </app-purchase-random>
+          </div>
+
+          <app-dialog-add-to-car
+            #appAddToCar
+            (addCar)="appShoppingCart.addCar($event)">
+          </app-dialog-add-to-car>
+
+          <app-dialog-comfirm-purchase
+            #appDialogConfirmPurchase
+            (sucessMessageEvent)="sucessMessage($event)"
+            (errorMessageEvent)="errorMessage($event)"
+            (clearShoppingCart)="appShoppingCart.clearCart()">
+          </app-dialog-comfirm-purchase>
+
+          <div class="col-12" style="padding: 10px; text-align: left; margin-top: 5px;" >
+            <label  >Documento</label>
+            <input pInputText name="documentInput" id="documentInput" [(ngModel)]="clientDocument">
+          </div>
+
+          <div class="col-12" style="padding: 10px; text-align: left;">
+            <button (click)="appDialogConfirmPurchase.iniciarCompra(appShoppingCart.dataPurchaseArray,clientDocument)" pButton >Finalizar Compra</button>
+          </div>
+
+      </div>
+    </div>
+
+    <div class="col-12  md:col-6 xl:col-6 carrinho">
+      <div class="grid">
+        <div class="col-12">
+          <app-shopping-cart
+            #appShoppingCart>
+          </app-shopping-cart>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+

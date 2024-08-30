@@ -1,5 +1,5 @@
-# Status de Desenvolvimento 17/08/2024 🟢 
- Desenvolvendo a funcionalidade que irá gerenciar o estoque e posteriormente realizar os testes de unidade
+# Status de Desenvolvimento 29/08/2024 🟢 
+EM DESENVOLVIMENTO DOS TESTES DE UNIDADES E DOCUMENTAÇÃO
   
 <br>
 
