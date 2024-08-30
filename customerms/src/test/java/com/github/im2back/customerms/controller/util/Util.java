@@ -21,6 +21,7 @@ import com.github.im2back.customerms.model.dto.dataoutput.PurchasedProduct;
 public class Util {
 	
 	public static List<PurchaseRecordDto> purchaseRecordDtoList = new ArrayList<>();
+	
 	public static GetCustomerDto getCustomerDto = new GetCustomerDto(1l, "Jefferson",
 			"123456789", "jeff@gmail.com", "989144501", new AddressDto("Tv e","06","sem complemento"), 
 			purchaseRecordDtoList, new BigDecimal(10));
