@@ -30,15 +30,15 @@
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2023.0.2</spring-cloud.version>
-		    <sonar.exclusions>
-		        **/customerms/utils/EmailService.java,
-		        **/customerms/utils/PdfGenerator.java,
-		        **/com/github/im2back/customerms/exceptions/**,
-		        **/com/github/im2back/customerms/infra/configurations/**,
-		        **/com/github/im2back/customerms/model/**,
-		        **/com/github/im2back/customerms/validations/exceptions/**,
-		        **/com/github/im2back/customerms/service/exeptions/**
-		    </sonar.exclusions>
+		<sonar.exclusions>
+			**/customerms/utils/EmailService.java,
+			**/customerms/utils/PdfGenerator.java,
+			**/com/github/im2back/customerms/exceptions/**,
+			**/com/github/im2back/customerms/infra/configurations/**,
+			**/com/github/im2back/customerms/model/**,
+			**/com/github/im2back/customerms/validations/exceptions/**,
+			**/com/github/im2back/customerms/service/exeptions/**
+		</sonar.exclusions>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -111,6 +111,12 @@
 			<artifactId>flyway-core</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.5.0</version>
+		</dependency>
+
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -160,13 +166,19 @@
 						</goals>
 						<configuration>
 							<excludes>
-	                            <exclude>com/github/im2back/customerms/exceptions/**</exclude>
-	                            <exclude>com/github/im2back/customerms/infra/configurations/**</exclude>
-	                            <exclude>com/github/im2back/customerms/model/**</exclude>
-	                            <exclude>com/github/im2back/customerms/validations/exceptions/**</exclude>
-	                            <exclude>com/github/im2back/customerms/service/exeptions/**</exclude>
-	                            <exclude>com/github/im2back/customerms/utils/EmailService.class</exclude>
-	                            <exclude>com/github/im2back/customerms/utils/PdfGenerator.class</exclude>
+								<exclude>
+									com/github/im2back/customerms/exceptions/**</exclude>
+								<exclude>
+									com/github/im2back/customerms/infra/configurations/**</exclude>
+								<exclude>com/github/im2back/customerms/model/**</exclude>
+								<exclude>
+									com/github/im2back/customerms/validations/exceptions/**</exclude>
+								<exclude>
+									com/github/im2back/customerms/service/exeptions/**</exclude>
+								<exclude>
+									com/github/im2back/customerms/utils/EmailService.class</exclude>
+								<exclude>
+									com/github/im2back/customerms/utils/PdfGenerator.class</exclude>
 							</excludes>
 						</configuration>
 					</execution>
