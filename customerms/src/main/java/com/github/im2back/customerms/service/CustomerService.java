@@ -33,6 +33,7 @@ import com.github.im2back.customerms.utils.PdfGenerator;
 import com.github.im2back.customerms.validations.customervalidations.CustomerValidations;
 import com.github.im2back.customerms.validations.purchasevalidations.PurchaseValidations;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
 
 @Service
@@ -49,6 +50,18 @@ public class CustomerService {
 
 	@Autowired
 	private JavaMailSender javaMailSender;
+	
+    private PdfGenerator pdfGenerator;
+
+    @PostConstruct
+    public void init() {
+        this.pdfGenerator = new PdfGenerator(javaMailSender);
+    }
+	
+	private Customer findByCustomerPerDocument(String document) {
+		return repository.findByDocument(document)
+				.orElseThrow(() -> new CustomerNotFoundException("User not found for document: " + document));
+	}
 
 	@Transactional(readOnly = true)
 	public GetCustomerDto findCustomerById(Long id) {
@@ -113,9 +126,7 @@ public class CustomerService {
 					p.price(), p.code(), instant, p.quantity(), Status.EM_ABERTO, customer)).collect(Collectors.toList());
 			customer.getPurchaseRecord().addAll(purchaseRecords);
 		}
-			
-		
-	}
+			}
 
 	private PurchaseResponseDto assembleResponse(PurchaseRequestDto dtoRequest, Customer customer) {
 		List<PurchasedProduct> purchasedProducts = dtoRequest.products().stream()
@@ -140,13 +151,14 @@ public class CustomerService {
 	public void generatePurchaseInvoice(String document) {
 		Customer customer = findByCustomerPerDocument(document);
 		List<ProductDataToPdf> productDataToPdfList = getProductDataToPdfList(customer);
-
-		new PdfGenerator(javaMailSender).generatePdf(productDataToPdfList, customer, getPath(customer));
+		
+		pdfGenerator.generatePdf(productDataToPdfList, customer, getPath(customer));
+		//new PdfGenerator(javaMailSender).generatePdf(productDataToPdfList, customer, getPath(customer));
 	}
 
 	private List<ProductDataToPdf> getProductDataToPdfList(Customer customer) {
 		List<PurchaseRecord> list1 = customer.getPurchaseRecord();
-		list1.removeIf(t -> t.getStatus() == Status.PAGO);
+		list1.removeIf(t -> t.getStatus().equals(Status.PAGO));
 
 		var ProductDataToPdfList = list1.stream().map(t -> new ProductDataToPdf(t)).collect(Collectors.toList());
 
@@ -171,11 +183,7 @@ public class CustomerService {
 		repository.save(customer);
 	}
 
-	private Customer findByCustomerPerDocument(String document) {
-		return repository.findByDocument(document)
-				.orElseThrow(() -> new CustomerNotFoundException("User not found for document: " + document));
-	}
-	
+
 	private void organizePurchasesByStatus(Customer customer){
 		customer.getPurchaseRecord().removeIf(t -> t.getStatus().equals(Status.PAGO));
 	}

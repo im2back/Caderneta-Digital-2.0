@@ -65,7 +65,7 @@ public class ProductService {
 	
 	@Transactional
 	public PurchaseResponseDto updateStock(ProductsPurchaseRequestDto dto) {
-		System.out.println("teste");
+		
 		purchaseValidations.forEach(t -> t.valid(dto));
 		
 		List<ProductRegister> listPurchaseHistory = new ArrayList<>();

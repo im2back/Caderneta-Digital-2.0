@@ -30,6 +30,15 @@
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2023.0.2</spring-cloud.version>
+		    <sonar.exclusions>
+		        **/customerms/utils/EmailService.java,
+		        **/customerms/utils/PdfGenerator.java,
+		        **/com/github/im2back/customerms/exceptions/**,
+		        **/com/github/im2back/customerms/infra/configurations/**,
+		        **/com/github/im2back/customerms/model/**,
+		        **/com/github/im2back/customerms/validations/exceptions/**,
+		        **/com/github/im2back/customerms/service/exeptions/**
+		    </sonar.exclusions>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -128,6 +137,40 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.7</version> <!-- Use a versão mais recente do JaCoCo -->
+				<executions>
+					<execution>
+						<id>jacoco-init</id> <!-- ID único para a execução -->
+						<goals>
+							<goal>prepare-agent</goal> <!-- Prepara o agente
+							decobertura -->
+						</goals>
+					</execution>
+					<execution>
+						<id>jacoco-report</id> <!-- Outro ID único para esta
+				execução -->
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal> <!-- Gera o relatório de
+					cobertura -->
+						</goals>
+						<configuration>
+							<excludes>
+	                            <exclude>com/github/im2back/customerms/exceptions/**</exclude>
+	                            <exclude>com/github/im2back/customerms/infra/configurations/**</exclude>
+	                            <exclude>com/github/im2back/customerms/model/**</exclude>
+	                            <exclude>com/github/im2back/customerms/validations/exceptions/**</exclude>
+	                            <exclude>com/github/im2back/customerms/service/exeptions/**</exclude>
+	                            <exclude>com/github/im2back/customerms/utils/EmailService.class</exclude>
+	                            <exclude>com/github/im2back/customerms/utils/PdfGenerator.class</exclude>
+							</excludes>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
