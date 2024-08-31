@@ -57,6 +57,19 @@ Esse esforço envolve trabalhar eficientemente com branches e pull requests para
 
 <br>
 
+# Testes Unitários
+- Testes de unidades feitos e integrados com ferramentas como : Jacoco e Sonarqube.
+
+<br>
+  
+## Customer Microservice
+![customer-jacoco](https://github.com/user-attachments/assets/ade08480-be21-4f0e-aae7-f891f66545bf)
+![customer-sonarcube](https://github.com/user-attachments/assets/2f9a4338-d7fb-489b-9e01-756b4aa7a476)
+![tests](https://github.com/user-attachments/assets/9ac97e26-1ff9-479a-865f-50b1a7a47131)
+
+<br>
+
+
 # Tecnologias utilizadas
 ## Back-end
 - Java 17
