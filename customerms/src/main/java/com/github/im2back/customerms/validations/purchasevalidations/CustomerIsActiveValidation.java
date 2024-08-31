@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import com.github.im2back.customerms.model.dto.datainput.PurchaseRequestDto;
 import com.github.im2back.customerms.repositories.CustomerRepository;
+import com.github.im2back.customerms.service.exeptions.CustomerNotFoundException;
 import com.github.im2back.customerms.validations.exceptions.PurchaseValidationException;
 
 @Component
@@ -15,7 +16,8 @@ public class CustomerIsActiveValidation implements PurchaseValidations {
 	
 	@Override
 	public void valid(PurchaseRequestDto dtoRequest) {
-		var customer = repository.findByDocument(dtoRequest.document()).get();
+		var customer = repository.findByDocument(dtoRequest.document())
+				.orElseThrow(() -> new CustomerNotFoundException("Customer not found with document: " + dtoRequest.document()));
 		
 		if(!customer.isActive()) {
 			throw new PurchaseValidationException("Cancelled purchase. The user is inactive.");
