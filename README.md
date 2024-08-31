@@ -69,6 +69,17 @@ Esse esforço envolve trabalhar eficientemente com branches e pull requests para
 
 <br>
 
+# Documentação (Resumo)
+- Resumo da documentação. A documentação completa pode ser acessada rodando a aplicação e acessando : https://localhost:8080/swagger-ui/index.html#/
+
+<br>
+  
+## Customer Microservice
+![customer-doc](https://github.com/user-attachments/assets/41a3d80b-dc09-4a4d-847f-82c1d6103702)
+
+
+<br>
+
 
 # Tecnologias utilizadas
 ## Back-end
