@@ -30,6 +30,13 @@
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2023.0.2</spring-cloud.version>
+		<sonar.exclusions>
+			**/com/github/im2back/stockms/exceptions/**,
+			**/com/github/im2back/stockms/infra/**,
+			**/com/github/im2back/stockms/model/**,		
+			**/com/github/im2back/stockms/validation/exceptions/**,
+			**/com/github/im2back/stockms/service/exeptions/**,
+		</sonar.exclusions>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -111,6 +118,38 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.7</version>
+				<executions>
+					<execution>
+						<id>jacoco-init</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>jacoco-report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<excludes>
+								<exclude>
+									com/github/im2back/stockms/exceptions/**</exclude>
+								<exclude>com/github/im2back/stockms/infra/**</exclude>
+								<exclude>com/github/im2back/stockms/model/**</exclude>
+								<exclude>
+									com/github/im2back/stockms/validation/exceptions/**</exclude>
+								<exclude>
+									com/github/im2back/stockms/service/exeptions/**</exclude>
+							</excludes>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
