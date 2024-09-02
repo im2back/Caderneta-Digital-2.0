@@ -33,7 +33,7 @@
 		<sonar.exclusions>
 			**/com/github/im2back/stockms/exceptions/**,
 			**/com/github/im2back/stockms/infra/**,
-			**/com/github/im2back/stockms/model/**,		
+			**/com/github/im2back/stockms/model/**,
 			**/com/github/im2back/stockms/validation/exceptions/**,
 			**/com/github/im2back/stockms/service/exeptions/**,
 		</sonar.exclusions>
@@ -90,6 +90,11 @@
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.5.0</version>
 		</dependency>
 	</dependencies>
 
