@@ -35,7 +35,7 @@ public class ProductService {
 	@Autowired
 	private List<PurchaseValidations> purchaseValidations;
 	
-	@Transactional(readOnly = true)
+	
 	public Product findProductById(Long id) {
 		return repository.findById(id)
 				.orElseThrow(() -> new ProductNotFoundException("Product Not found for id: " + id));
