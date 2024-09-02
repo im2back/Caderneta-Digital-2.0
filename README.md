@@ -1,5 +1,5 @@
-# Status de Desenvolvimento 29/08/2024 🟢 
-EM DESENVOLVIMENTO DOS TESTES DE UNIDADES E DOCUMENTAÇÃO
+# Status de Desenvolvimento 02/00/2024 🟢 
+Finalizando a documentação e posteriormente dockerizando
   
 <br>
 
@@ -68,6 +68,11 @@ Esse esforço envolve trabalhar eficientemente com branches e pull requests para
 ![tests](https://github.com/user-attachments/assets/9ac97e26-1ff9-479a-865f-50b1a7a47131)
 
 <br>
+  
+## Stock Microservice
+![teststockms](https://github.com/user-attachments/assets/70fa3805-fc65-4f03-98f2-4a2dbe3b000d)
+
+<br>
 
 # Documentação (Resumo)
 - Resumo da documentação. A documentação completa pode ser acessada rodando a aplicação e acessando : https://localhost:8080/swagger-ui/index.html#/
@@ -91,6 +96,8 @@ Esse esforço envolve trabalhar eficientemente com branches e pull requests para
 - H2 Database
 - Docker
 - MySql
+- SonarQube
+- Jacoco
 ## Front-end
 - Angular 17
 - Type Script
