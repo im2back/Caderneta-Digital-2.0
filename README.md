@@ -1,5 +1,5 @@
-# Status de Desenvolvimento 02/00/2024 🟢 
-Finalizando a documentação e posteriormente dockerizando
+# Status de Desenvolvimento 02/09/2024 🟢 
+DOCKERIZANDO A APLICAÇÃO E PRODUZINDO O VÍDEO DE CONSUMO A API
   
 <br>
 
@@ -20,30 +20,33 @@ Esse esforço envolve trabalhar eficientemente com branches e pull requests para
 
 <br><br>
 
-# Layout (Desktop e Mobile) Tela de Registro de Usuário
-![usuarios-desktop](https://github.com/user-attachments/assets/71a9ac3e-6603-47da-a355-ff29173f24ca)
-![usuarios-mobile](https://github.com/user-attachments/assets/e3ac2f11-39aa-4c4e-a806-e8ae15d84b42)
+# Layout's (Desktop e Mobile)
 
 <br>
 
-# Layout (Desktop e Mobile) Tela de Gerênciamento de Usuário
-
-![detalhar-desktop](https://github.com/user-attachments/assets/6a46f60e-68a1-4add-8453-46a04e195a8e)
-![detalhar-mobile](https://github.com/user-attachments/assets/61d104e0-2f01-4f89-a3f0-c81f36ca644b)
+### Tela de Registro/Pesquisa de Usuário
+![usuarios-desktop](https://github.com/user-attachments/assets/e98ed1be-c2db-481b-8f9e-b3c4db12e695)
 
 <br>
 
-# Layout (Desktop e Mobile) Tela de Compras
-
-![compra-desktop](https://github.com/user-attachments/assets/2d7d3363-eff9-4a3d-a38b-91e1a6236576)
-![compra-mobile](https://github.com/user-attachments/assets/5f771a0a-5d35-4c77-b374-095e33fa9cb6)
+### Tela de Gerênciamento de Usuário
+![358869801-6a46f60e-68a1-4add-8453-46a04e195a8e](https://github.com/user-attachments/assets/0e63a6f5-a9db-43fc-88b3-a6d21a43c964)
 
 <br>
 
-# Layout (Desktop e Mobile) Tela de Métricas
+### Tela de Compras 
+![358869897-2d7d3363-eff9-4a3d-a38b-91e1a6236576](https://github.com/user-attachments/assets/57e6d9a1-cda1-4d8d-8bff-7e16e2bf3f19)
 
-![Métricas-desktop](https://github.com/user-attachments/assets/a86208ef-58d4-414e-be90-90eace48889c)
-![Métricas-mobile](https://github.com/user-attachments/assets/c1f82f1d-d0ad-49f5-a149-b4b7394e3741)
+
+<br>
+
+### Tela de Métricas
+![358869927-a86208ef-58d4-414e-be90-90eace48889c](https://github.com/user-attachments/assets/9de5e6c4-c0ab-49ad-9a3e-408ac3f53a4d)
+
+<br>
+
+### Tela de Gerênciamento de Estoque
+![358869897-2d7d3363-eff9-4a3d-a38b-91e1a6236576](https://github.com/user-attachments/assets/2101ea4d-3ae0-49e1-83ef-b07ae1229a97)
 
 
 <br>
@@ -75,12 +78,18 @@ Esse esforço envolve trabalhar eficientemente com branches e pull requests para
 <br>
 
 # Documentação (Resumo)
-- Resumo da documentação. A documentação completa pode ser acessada rodando a aplicação e acessando : https://localhost:8080/swagger-ui/index.html#/
+- Resumo da documentação. A documentação completa pode ser acessada rodando a aplicação e acessando : https://localhost:8080/swagger-ui/index.html#/ para o Customer-MS e https://localhost:8443/swagger-ui/index.html#/ para o Stock-MS
 
 <br>
   
 ## Customer Microservice
 ![customer-doc](https://github.com/user-attachments/assets/41a3d80b-dc09-4a4d-847f-82c1d6103702)
+
+<br>
+  
+## Stock Microservice
+![dopcs-stock](https://github.com/user-attachments/assets/b845fa02-70c1-4a07-93ae-c44ca81a4949)
+
 
 
 <br>
