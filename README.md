@@ -46,7 +46,8 @@ Esse esforço envolve trabalhar eficientemente com branches e pull requests para
 <br>
 
 ### Tela de Gerênciamento de Estoque
-![358869897-2d7d3363-eff9-4a3d-a38b-91e1a6236576](https://github.com/user-attachments/assets/2101ea4d-3ae0-49e1-83ef-b07ae1229a97)
+![STOCKPRINT](https://github.com/user-attachments/assets/55547653-f6aa-40dd-8335-80f626973dcf)
+
 
 
 <br>
