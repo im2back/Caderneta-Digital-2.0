@@ -1,6 +1,7 @@
 # Status de Desenvolvimento 06/09/2024 🟢 
 Projeto finalizado, sujeito a futuras melhorias !
   
+[![NPM](https://img.shields.io/npm/l/react)](https://github.com/im2back/Voll.med/blob/main/LICENSE)  
 <br>
 
 ### Downloads 📥
