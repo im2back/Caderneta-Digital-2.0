@@ -1,6 +1,7 @@
 # Status de Desenvolvimento 06/09/2024 🟢 
 Projeto finalizado, sujeito a futuras melhorias !
-  
+
+## ⚖️ Licença 
 [![NPM](https://img.shields.io/npm/l/react)](https://github.com/im2back/Voll.med/blob/main/LICENSE)  
 <br>
 
@@ -25,7 +26,13 @@ Esse esforço envolve trabalhar eficientemente com branches e pull requests para
 
 <br><br>
 
-# ▶️ Consumindo a API Via Docker e Explicando Funcionalidades
+## 🚀 Funcionalidades
+- Gerenciamento de Estoque
+- Gerenciamento de Usuários
+- Realização e Gestão de Compras
+- Dashboard de Métricas para acompanhamento de desempenho de vendas
+
+# 📽️ Consumindo a API Via Docker e Explicando Funcionalidades
 [![Assista ao meu vídeo no YouTube](https://img.youtube.com/vi/TzxQAzlENJ8/0.jpg)](https://www.youtube.com/watch?v=TzxQAzlENJ8)
 
 <br><br>
@@ -71,7 +78,7 @@ Esse esforço envolve trabalhar eficientemente com branches e pull requests para
 
 <br>
 
-# Testes Unitários
+# 🧩 Testes Unitários
 - Testes de unidades feitos e integrados com ferramentas como : Jacoco e Sonarqube.
 
 <br>
@@ -106,13 +113,11 @@ Esse esforço envolve trabalhar eficientemente com branches e pull requests para
 <br>
 
 
-# 💻 Tecnologias utilizadas
+# 🛠️ Tecnologias Utilizadas
 ## Back-end
 - Java 17
 - Spring Boot
-- JPA 
 - Maven
-- Spring Cloud OpenFeign
 - H2 Database
 - Docker
 - MySql
@@ -120,52 +125,54 @@ Esse esforço envolve trabalhar eficientemente com branches e pull requests para
 - Jacoco
 ## Front-end
 - Angular 17
-- Type Script
-- HTML/CSS/JS
 - PrimeNg
 
 <br><br>
 
-# Como executar o projeto
+# 📦 Como executar o projeto
 
 ## Utilizando dependencias locais
-Pré-requisitos: Java 17, VsCode, IDE de sua preferência
+Pré-requisitos: 
+- **Java 17**: Necessário para rodar o backend.
+- **Git**: Para clonar o repositório.
+- **Node.js**: Inclui o npm, necessário para o frontend.
 
 ```bash
-# Clonar repositório
+# Clonar o repositório
 git clone git@github.com:im2back/Caderneta-Digital-2.0.git
 
-# executar o projeto back-end
-- Entrar na pasta de cada microsserviço :
-👉 ./mvnw spring-boot:run
+# Executar o projeto Back-end
+- Navegue até a pasta do microsserviço:
+Abrir um terminal no diretório 👉 ./mvnw spring-boot:run
 
-# executar o projeto Frontend
-- Entrar na pasta do projeto :
- 👉  npm start
-📢 Para acessar o projeto via rede WIFI, através do celular, basta digitar ipconfig e alterar a url de localhost pelo seu ipv4
-vai ficar algo como : https://192.168.1.111:4200/
+# Executar o projeto Frontend
+- Navegue até a pasta do projeto:
+Abrir um terminal no diretório 👉 npm start
 
-#Observações : ATENTAR-SE PARA AS PORTAS QUE ESTÃO SENDO USADAS NO PROJETO !!! VERIFICAR DISPONIBILIDADE DAS PORTAS !!!
+📢 Para acessar o projeto via rede Wi-Fi pelo celular, basta digitar `ipconfig` e substituir `localhost` pelo seu IPv4. A URL ficará algo como: https://192.168.1.111:4200/
+
+# Observações: ATENTAR-SE PARA AS PORTAS QUE ESTÃO SENDO USADAS NO PROJETO!!! VERIFICAR A DISPONIBILIDADE DAS PORTAS!!!
 ```
 
 ## Utilizando o docker
 Pré-requisitos: Docker
 
 ```bash
-# Baixar o arquivo docker compose disponibilizado na sessão downloads
+# Baixe o arquivo docker-compose disponibilizado na seção Downloads
 
-# Entrar na pasta onde encontra-se o arquivo docker-compose
-- Abrir um terminal e executar o comando.
+# Navegue até a pasta onde se encontra o arquivo docker-compose.yml
+cd caminho/para/docker-compose
+
+# Inicie os containers com o comando:
 👉 docker-compose up -d
-Aguardar o download das imagens.
-Após baixar as imagens automaticamente, também, será inciado os containers, caso os containers do back end não iniciem
-será por conta do atraso da iniciaização do container do Banco de dados. para corrigir isso basta entrar na interface do docker e clicar em "▷ start" ao lado do container.;
 
+# Aguarde o download das imagens e a inicialização dos containers. 
+# Caso os containers do back-end não iniciem, pode ser devido ao atraso na inicialização do container do banco de dados.
+# Para corrigir isso, acesse a interface do Docker e clique em "▷ Start" ao lado do container do banco de dados.
 
-📢 Para acessar o projeto via rede WIFI, através do celular, basta digitar ipconfig e alterar a url de localhost pelo seu ipv4
-vai ficar algo como : https://192.168.1.111:4200/
+📢 Para acessar o projeto via rede Wi-Fi pelo celular, digite `ipconfig` no seu computador para encontrar o IPv4 e substitua `localhost` na URL pelo seu IPv4. A URL ficará algo como: https://192.168.1.111:4200/
 
-#Observações : ATENTAR-SE PARA AS PORTAS QUE ESTÃO SENDO USADAS NO PROJETO !!! VERIFICAR DISPONIBILIDADE DAS PORTAS !!!
+# Observações: ATENTAR-SE PARA AS PORTAS QUE ESTÃO SENDO USADAS NO PROJETO!!! VERIFICAR A DISPONIBILIDADE DAS PORTAS!!!
 ```
 
 # Autor
