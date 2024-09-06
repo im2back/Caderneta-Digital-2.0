@@ -3,6 +3,9 @@ Projeto finalizado, sujeito a futuras melhorias !
   
 <br>
 
+### Downloads 📥
+https://drive.google.com/file/d/11OoiuY3xI_hGuP2o_8TLSRqfWA5b_tef/view?usp=sharing
+
 # Sobre a API 
 Esta aplicação tem como objetivo gerenciar pequenos comércios, abrangendo desde o controle de estoque até a administração das contas dos clientes.
 As compras realizadas pelos clientes serão registradas, permitindo a geração de métricas valiosas a partir dos dados coletados. Com essas informações, 
@@ -147,8 +150,7 @@ vai ficar algo como : https://192.168.1.111:4200/
 Pré-requisitos: Docker
 
 ```bash
-# Baixar o arquivo docker compose 
-link aki
+# Baixar o arquivo docker compose disponibilizado na sessão downloads
 
 # Entrar na pasta onde encontra-se o arquivo docker-compose
 - Abrir um terminal e executar o comando.
