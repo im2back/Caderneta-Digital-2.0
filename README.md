@@ -136,6 +136,7 @@ Pré-requisitos:
 - **Java 17**: Necessário para rodar o backend.
 - **Git**: Para clonar o repositório.
 - **Node.js**: Inclui o npm, necessário para o frontend.
+- - **MySql**: Banco de Dados.
 
 ```bash
 # Clonar o repositório
@@ -144,6 +145,21 @@ git clone git@github.com:im2back/Caderneta-Digital-2.0.git
 # Executar o projeto Back-end
 - Navegue até a pasta do microsserviço:
 Abrir um terminal no diretório 👉 ./mvnw spring-boot:run
+
+🛠️Tutorial: Configuração do Banco de Dados
+1. Acesse o MySQL
+Abra o terminal e execute o comando para acessar o MySQL:
+mysql -u root -p
+
+2. Selecione o Banco de Dados
+Escolha o banco de dados onde você deseja criar a tabela e inserir os dados. Neste caso, use o banco de dados mercearia2:
+USE mercearia2;
+
+3. Insira o Usuário de Teste
+Agora você pode inserir o usuário de teste na tabela tb_customer. Execute o comando SQL abaixo:
+INSERT INTO tb_customer (id, customer_name, document, email, phone, is_active, street_name, house_number, complement)
+VALUES ('1', 'Usuario Fantasia', '7654321589', 'fantasia@gmail.com', '9999999', TRUE, 'tv e', '06', 'sem complemento');
+
 
 # Executar o projeto Frontend
 - Navegue até a pasta do projeto:
@@ -169,6 +185,20 @@ cd caminho/para/docker-compose
 # Aguarde o download das imagens e a inicialização dos containers. 
 # Caso os containers do back-end não iniciem, pode ser devido ao atraso na inicialização do container do banco de dados.
 # Para corrigir isso, acesse a interface do Docker e clique em "▷ Start" ao lado do container do banco de dados.
+
+🛠️Tutorial: Configuração do Banco de Dados
+1. Acesse o MySQL
+Abra o terminal e execute o comando para acessar o MySQL:
+mysql -u root -p
+
+2. Selecione o Banco de Dados
+Escolha o banco de dados onde você deseja criar a tabela e inserir os dados. Neste caso, use o banco de dados mercearia2:
+USE mercearia2;
+
+3. Insira o Usuário de Teste
+Agora você pode inserir o usuário de teste na tabela tb_customer. Execute o comando SQL abaixo:
+INSERT INTO tb_customer (id, customer_name, document, email, phone, is_active, street_name, house_number, complement)
+VALUES ('1', 'Usuario Fantasia', '7654321589', 'fantasia@gmail.com', '9999999', TRUE, 'tv e', '06', 'sem complemento');
 
 📢 Para acessar o projeto via rede Wi-Fi pelo celular, digite `ipconfig` no seu computador para encontrar o IPv4 e substitua `localhost` na URL pelo seu IPv4. A URL ficará algo como: https://192.168.1.111:4200/
 
