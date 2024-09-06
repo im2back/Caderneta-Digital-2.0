@@ -1,5 +1,5 @@
-# Status de Desenvolvimento 02/09/2024 🟢 
-DOCKERIZANDO A APLICAÇÃO E PRODUZINDO O VÍDEO DE CONSUMO A API
+# Status de Desenvolvimento 06/09/2024 🟢 
+Projeto finalizado, sujeito a futuras melhorias !
   
 <br>
 
@@ -17,6 +17,11 @@ Meu objetivo principal é aplicar meus conhecimentos em arquitetura e incorporar
 Estou igualmente empenhado em aprimorar minhas habilidades em gerenciamento de versionamento de código, utilizando Git - GitHub.
 Esse esforço envolve trabalhar eficientemente com branches e pull requests para assegurar uma organização eficaz do código.<BR>
 📌OBS: Alguns comentários foram mantidos para fins de estudo e consultas futuras.Os comentários são discretos e não comprometem a visibilidade.
+
+<br><br>
+
+# ▶️ Consumindo a API Via Docker e Explicando Funcionalidades
+[![Assista ao meu vídeo no YouTube](https://img.youtube.com/vi/TzxQAzlENJ8/0.jpg)](https://www.youtube.com/watch?v=TzxQAzlENJ8)
 
 <br><br>
 
@@ -96,7 +101,7 @@ Esse esforço envolve trabalhar eficientemente com branches e pull requests para
 <br>
 
 
-# Tecnologias utilizadas
+# 💻 Tecnologias utilizadas
 ## Back-end
 - Java 17
 - Spring Boot
@@ -119,15 +124,42 @@ Esse esforço envolve trabalhar eficientemente com branches e pull requests para
 # Como executar o projeto
 
 ## Utilizando dependencias locais
-Pré-requisitos: Java 17
+Pré-requisitos: Java 17, VsCode, IDE de sua preferência
 
 ```bash
 # Clonar repositório
 git clone git@github.com:im2back/Caderneta-Digital-2.0.git
 
-# executar o projeto
+# executar o projeto back-end
 - Entrar na pasta de cada microsserviço :
-./mvnw spring-boot:run
+👉 ./mvnw spring-boot:run
+
+# executar o projeto Frontend
+- Entrar na pasta do projeto :
+ 👉  npm start
+📢 Para acessar o projeto via rede WIFI, através do celular, basta digitar ipconfig e alterar a url de localhost pelo seu ipv4
+vai ficar algo como : https://192.168.1.111:4200/
+
+#Observações : ATENTAR-SE PARA AS PORTAS QUE ESTÃO SENDO USADAS NO PROJETO !!! VERIFICAR DISPONIBILIDADE DAS PORTAS !!!
+```
+
+## Utilizando o docker
+Pré-requisitos: Docker
+
+```bash
+# Baixar o arquivo docker compose 
+link aki
+
+# Entrar na pasta onde encontra-se o arquivo docker-compose
+- Abrir um terminal e executar o comando.
+👉 docker-compose up -d
+Aguardar o download das imagens.
+Após baixar as imagens automaticamente, também, será inciado os containers, caso os containers do back end não iniciem
+será por conta do atraso da iniciaização do container do Banco de dados. para corrigir isso basta entrar na interface do docker e clicar em "▷ start" ao lado do container.;
+
+
+📢 Para acessar o projeto via rede WIFI, através do celular, basta digitar ipconfig e alterar a url de localhost pelo seu ipv4
+vai ficar algo como : https://192.168.1.111:4200/
 
 #Observações : ATENTAR-SE PARA AS PORTAS QUE ESTÃO SENDO USADAS NO PROJETO !!! VERIFICAR DISPONIBILIDADE DAS PORTAS !!!
 ```
