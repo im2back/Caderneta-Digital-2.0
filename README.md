@@ -4,6 +4,7 @@ Projeto finalizado, sujeito a futuras melhorias !
 <br>
 
 ### Downloads 📥
+-Docker Compose :
 https://drive.google.com/file/d/11OoiuY3xI_hGuP2o_8TLSRqfWA5b_tef/view?usp=sharing
 
 # Sobre a API 
