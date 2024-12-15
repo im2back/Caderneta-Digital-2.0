@@ -65,6 +65,7 @@ public class CustomerService {
 
 	@Transactional
 	public GetCustomerDto saveNewCustomer(CustomerDto dto) {
+
 		customerValidations.forEach(t -> t.valid(dto));
 
 		Customer customer = repository.save(new Customer(dto.name(), dto.document(), dto.email(), dto.phone(), true,
@@ -81,16 +82,16 @@ public class CustomerService {
 
 	@Transactional
 	public PurchaseResponseDto purchase(PurchaseRequestDto dtoRequest) {
-		purchaseValidations.forEach(t -> t.valid(dtoRequest));
-
 		Customer customer = findByCustomerPerDocument(dtoRequest.document());
+		purchaseValidations.forEach(t -> t.valid(dtoRequest,customer));
 
 		// Adiciona os produtos ao historico de compras do usuario
 		addProductsToPurchaseHistory(dtoRequest, customer);
-
+		
+		
 		// Persiste o histórico
 		repository.save(customer);
-
+		
 		// montando a resposta
 		return assembleResponse(dtoRequest, customer);
 	}

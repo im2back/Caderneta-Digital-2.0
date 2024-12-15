@@ -137,6 +137,7 @@ public class CustomerController {
 		return ResponseEntity.ok(response);
 	}
 	
+	//REFATORACAO PAROU AKI
 	@Operation(summary = "Exclui do banco de dados uma compra com base no objeto recebido como parametro UndoPurchaseDto")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200",description = "Exclui a compra, retorna Status 200 e um corpo vazio",

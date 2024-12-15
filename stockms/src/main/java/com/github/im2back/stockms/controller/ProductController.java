@@ -1,6 +1,5 @@
 package com.github.im2back.stockms.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,13 +29,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("product")
+@RequiredArgsConstructor
 public class ProductController { 
 
-	@Autowired
-	private ProductService service;
+	
+	private final ProductService service;
 	
 	@Operation(summary = ("Retorna um DTO de Product com base no ID recebido no path"))
 	@ApiResponses(value = {
