@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,29 +34,23 @@ import com.github.im2back.customerms.validations.purchasevalidations.PurchaseVal
 
 import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class CustomerService {
 
-	@Autowired
-	private CustomerRepository repository;
+	private final CustomerRepository repository;
+	private final List<CustomerValidations> customerValidations;
+	private final List<PurchaseValidations> purchaseValidations;
+	private final JavaMailSender javaMailSender;
+	private PdfGenerator pdfGenerator;
 
-	@Autowired
-	private List<CustomerValidations> customerValidations;
+	@PostConstruct
+	public void init() {
+		this.pdfGenerator = new PdfGenerator(javaMailSender);
+	}
 
-	@Autowired
-	private List<PurchaseValidations> purchaseValidations;
-
-	@Autowired
-	private JavaMailSender javaMailSender;
-	
-    private PdfGenerator pdfGenerator;
-
-    @PostConstruct
-    public void init() {
-        this.pdfGenerator = new PdfGenerator(javaMailSender);
-    }
-	
 	private Customer findByCustomerPerDocument(String document) {
 		return repository.findByDocument(document)
 				.orElseThrow(() -> new CustomerNotFoundException("User not found for document: " + document));
@@ -66,7 +59,7 @@ public class CustomerService {
 	@Transactional(readOnly = true)
 	public GetCustomerDto findCustomerById(Long id) {
 		Customer customer = repository.findById(id)
-				.orElseThrow(() -> new CustomerNotFoundException("User not found for id: " + id));	
+				.orElseThrow(() -> new CustomerNotFoundException("User not found for id: " + id));
 		return new GetCustomerDto(customer);
 	}
 
@@ -110,23 +103,24 @@ public class CustomerService {
 	}
 
 	private void addProductsToPurchaseHistory(PurchaseRequestDto dtoRequest, Customer customer) {
-		
-		if(customer.getDocument().equals("7654321589")) {
-			
+
+		if (customer.getDocument().equals("7654321589")) {
+
 			Instant instant = Instant.now();
 			List<PurchaseRecord> purchaseRecords = dtoRequest.products().stream().map(p -> new PurchaseRecord(p.name(),
 					p.price(), p.code(), instant, p.quantity(), Status.PAGO, customer)).collect(Collectors.toList());
 			customer.getPurchaseRecord().addAll(purchaseRecords);
 		}
-		
+
 		else {
-	
+
 			Instant instant = Instant.now();
 			List<PurchaseRecord> purchaseRecords = dtoRequest.products().stream().map(p -> new PurchaseRecord(p.name(),
-					p.price(), p.code(), instant, p.quantity(), Status.EM_ABERTO, customer)).collect(Collectors.toList());
+					p.price(), p.code(), instant, p.quantity(), Status.EM_ABERTO, customer))
+					.collect(Collectors.toList());
 			customer.getPurchaseRecord().addAll(purchaseRecords);
 		}
-			}
+	}
 
 	private PurchaseResponseDto assembleResponse(PurchaseRequestDto dtoRequest, Customer customer) {
 		List<PurchasedProduct> purchasedProducts = dtoRequest.products().stream()
@@ -151,9 +145,10 @@ public class CustomerService {
 	public void generatePurchaseInvoice(String document) {
 		Customer customer = findByCustomerPerDocument(document);
 		List<ProductDataToPdf> productDataToPdfList = getProductDataToPdfList(customer);
-		
+
 		pdfGenerator.generatePdf(productDataToPdfList, customer, getPath(customer));
-		//new PdfGenerator(javaMailSender).generatePdf(productDataToPdfList, customer, getPath(customer));
+		// new PdfGenerator(javaMailSender).generatePdf(productDataToPdfList, customer,
+		// getPath(customer));
 	}
 
 	private List<ProductDataToPdf> getProductDataToPdfList(Customer customer) {
@@ -171,7 +166,7 @@ public class CustomerService {
 		var path = Paths.get(desktopDirectory, customer.getName() + "_nota_fiscal_" + ".pdf").toString();
 		return path;
 	}
-	
+
 	@Transactional
 	public void clearDebt(String document) {
 		Customer customer = findByCustomerPerDocument(document);
@@ -183,34 +178,30 @@ public class CustomerService {
 		repository.save(customer);
 	}
 
-
-	private void organizePurchasesByStatus(Customer customer){
+	private void organizePurchasesByStatus(Customer customer) {
 		customer.getPurchaseRecord().removeIf(t -> t.getStatus().equals(Status.PAGO));
 	}
-	
+
 	@Transactional(readOnly = true)
 	public DataForMetricsDto metrics() {
-	        return new DataForMetricsDto(			
-					repository.totalValueForLastMonth(),
-					repository.partialValueOfTheCurrentMonth(),
-					repository.partialVAlueForCurrentDay(),
-					repository.totalOutstandingAmount(),
-					getTotalValuesForLast7Days());
-			}
-	
+		return new DataForMetricsDto(repository.totalValueForLastMonth(), repository.partialValueOfTheCurrentMonth(),
+				repository.partialVAlueForCurrentDay(), repository.totalOutstandingAmount(),
+				getTotalValuesForLast7Days());
+	}
+
 	@Transactional(readOnly = true)
 	public List<DailyTotal> getTotalValuesForLast7Days() {
-	    List<Object[]> results = repository.findTotalValueForLast7DaysExcludingToday();
-	    List<DailyTotal> dailyTotals = new ArrayList<>();
+		List<Object[]> results = repository.findTotalValueForLast7DaysExcludingToday();
+		List<DailyTotal> dailyTotals = new ArrayList<>();
 
-	    for (Object[] result : results) {
-	        Date sqlDate = (java.sql.Date) result[0];
-	        BigDecimal totalValue = (BigDecimal) result[1];
-	        LocalDate purchaseDate = sqlDate.toLocalDate();
-	        dailyTotals.add(new DailyTotal(purchaseDate, totalValue));
-	    }
+		for (Object[] result : results) {
+			Date sqlDate = (java.sql.Date) result[0];
+			BigDecimal totalValue = (BigDecimal) result[1];
+			LocalDate purchaseDate = sqlDate.toLocalDate();
+			dailyTotals.add(new DailyTotal(purchaseDate, totalValue));
+		}
 
-	    return dailyTotals;
+		return dailyTotals;
 	}
 
 	public void individualPayment(@Valid UndoPurchaseDto dtoRequest) {
@@ -219,12 +210,11 @@ public class CustomerService {
 
 		var list = customer.getPurchaseRecord();
 		list.forEach(t -> {
-			if(t.getId().equals(dtoRequest.purchaseId())){
+			if (t.getId().equals(dtoRequest.purchaseId())) {
 				t.setStatus(Status.PAGO);
 			}
 		});
-		repository.save(customer);	
+		repository.save(customer);
 	}
 
-	
 }

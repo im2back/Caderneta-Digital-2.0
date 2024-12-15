@@ -1,6 +1,5 @@
 package com.github.im2back.customerms.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,13 +29,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("customer")
+@RequiredArgsConstructor
 public class CustomerController {
 
-	@Autowired
-	private CustomerService service;
+	
+	private final CustomerService service;
 
 	@Operation(summary = "Retorna um GetCustomerDto apartir do ID informado no path")
 	@ApiResponses(value = {

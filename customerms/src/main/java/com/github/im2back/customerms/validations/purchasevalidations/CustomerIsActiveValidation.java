@@ -1,6 +1,5 @@
 package com.github.im2back.customerms.validations.purchasevalidations;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.github.im2back.customerms.model.dto.datainput.PurchaseRequestDto;
@@ -8,11 +7,13 @@ import com.github.im2back.customerms.repositories.CustomerRepository;
 import com.github.im2back.customerms.service.exeptions.CustomerNotFoundException;
 import com.github.im2back.customerms.validations.exceptions.PurchaseValidationException;
 
+import lombok.RequiredArgsConstructor;
+
 @Component
+@RequiredArgsConstructor
 public class CustomerIsActiveValidation implements PurchaseValidations {
 
-	@Autowired
-	private CustomerRepository repository;
+	private final CustomerRepository repository;
 	
 	@Override
 	public void valid(PurchaseRequestDto dtoRequest) {

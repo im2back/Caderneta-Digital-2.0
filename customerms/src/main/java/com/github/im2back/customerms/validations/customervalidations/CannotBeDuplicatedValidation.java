@@ -3,18 +3,19 @@ package com.github.im2back.customerms.validations.customervalidations;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.github.im2back.customerms.model.dto.datainput.CustomerDto;
 import com.github.im2back.customerms.repositories.CustomerRepository;
 import com.github.im2back.customerms.validations.exceptions.CustomerRegisterValidationException;
 
+import lombok.RequiredArgsConstructor;
+
 @Component
+@RequiredArgsConstructor
 public class CannotBeDuplicatedValidation implements CustomerValidations {
 
-	@Autowired
-	private CustomerRepository repository;
+	private final CustomerRepository repository;
 	
 	@Override
 	public void valid(CustomerDto requestDto) {
