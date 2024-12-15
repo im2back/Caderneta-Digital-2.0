@@ -10,6 +10,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -60,7 +61,7 @@ public class Customer {
 	@Embedded
 	private Address address;
 	
-	@OneToMany(mappedBy = "customer",cascade = CascadeType.ALL,orphanRemoval = true)
+	@OneToMany(mappedBy = "customer",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.EAGER)
 	private List<PurchaseRecord> purchaseRecord = new ArrayList<>();
 	
 	public BigDecimal getTotal() {

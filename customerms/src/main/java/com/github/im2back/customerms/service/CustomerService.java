@@ -43,7 +43,7 @@ public class CustomerService {
 	private final List<PurchaseValidations> purchaseValidations;
 	private final PdfGenerator pdfGenerator;
 
-
+	@Transactional(readOnly = true)
 	private Customer findByCustomerPerDocument(String document) {
 		return repository.findByDocument(document)
 				.orElseThrow(() -> new CustomerNotFoundException("User not found for document: " + document));

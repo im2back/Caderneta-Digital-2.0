@@ -115,7 +115,7 @@ public class CustomerController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@Operation(summary = "Faz uma registro de uma compra apartir de um PurchaseRequestDto recebido e retorna o dto dessa compra PurchaseResponseDto")
+	@Operation(summary = "Cria um registro na DATABASE de uma compra apartir de um PurchaseRequestDto recebido e retorna o dto dessa compra PurchaseResponseDto")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200",description = "Retorna Status 200 e um Dto do objeto criado em caso de sucesso",
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,

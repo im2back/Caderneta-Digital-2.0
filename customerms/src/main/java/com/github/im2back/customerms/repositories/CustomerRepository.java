@@ -10,8 +10,16 @@ import org.springframework.data.repository.query.Param;
 import com.github.im2back.customerms.model.entities.customer.Customer;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
+	
+	@Query("SELECT c FROM Customer c WHERE c.email = :email OR c.document = :document OR c.phone = :phone")
+	List<Customer> findByEmailOrDocumentOrPhone(@Param("email") String email, 
+	                                            @Param("document") String document, 
+	                                            @Param("phone") String phone);
 
-	Optional<Customer> findByDocument(String document);
+
+	@Query("SELECT c FROM Customer c LEFT JOIN FETCH c.purchaseRecord WHERE c.document = :document")
+	Optional<Customer> findByDocument(@Param("document") String document);
+
 
 	Optional<Customer> findByEmail(String email);
 
