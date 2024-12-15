@@ -142,9 +142,15 @@ Pré-requisitos:
 # Clonar o repositório
 git clone git@github.com:im2back/Caderneta-Digital-2.0.git
 
+# Ajustar o valor da propriedade " server.ssl.trust-store= " para que ela aponte para o seu diretório local, caso necessário instale o certificado.
+
+# Ajustar os valores de PORTA, SENHA e Usuário do banco de dados no arquivo application.properties
+
 # Executar o projeto Back-end
 - Navegue até a pasta do microsserviço:
 Abrir um terminal no diretório 👉 ./mvnw spring-boot:run
+- Após executar o projeto o banco de dados será criado automaticamente, desde que a conexão esteje correta
+
 
 🛠️Tutorial: Configuração do Banco de Dados
 1. Acesse o MySQL
@@ -175,6 +181,7 @@ Pré-requisitos: Docker
 
 ```bash
 # Baixe o arquivo docker-compose disponibilizado na seção Downloads
+# Ajuste os parametros do docker compose para refletir no seu ambiente local
 
 # Navegue até a pasta onde se encontra o arquivo docker-compose.yml
 cd caminho/para/docker-compose
