@@ -1,4 +1,4 @@
-# Status de Desenvolvimento 06/09/2024 🟢 
+# Status de Desenvolvimento 15/12/2024 🟢 
 Projeto finalizado, sujeito a futuras melhorias !
 
 ## ⚖️ Licença 
@@ -188,7 +188,7 @@ cd caminho/para/docker-compose
 
 # Inicie os containers com o comando:
 👉 docker-compose up -d
-
+🚨🗣📢 NO MOMENTO A DISPONIBILIDADE VIA DOCKER ESTA COM ERRO, POIS FALTA PARAMETRIZAR UM ATRIBUTO, LOGO SERÁ CORRIGIDO E DISPONIBILIZADA AS IMAGENS CORRETAS
 # Aguarde o download das imagens e a inicialização dos containers. 
 # Caso os containers do back-end não iniciem, pode ser devido ao atraso na inicialização do container do banco de dados.
 # Para corrigir isso, acesse a interface do Docker e clique em "▷ Start" ao lado do container do banco de dados.
