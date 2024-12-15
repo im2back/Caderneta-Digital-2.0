@@ -10,10 +10,12 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Component;
 
 import com.github.im2back.customerms.model.dto.dataoutput.ProductDataToPdf;
 import com.github.im2back.customerms.model.entities.customer.Customer;
 
+@Component
 public class PdfGenerator {
 
 	private final EmailService emailService;

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +31,6 @@ import com.github.im2back.customerms.utils.PdfGenerator;
 import com.github.im2back.customerms.validations.customervalidations.CustomerValidations;
 import com.github.im2back.customerms.validations.purchasevalidations.PurchaseValidations;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -43,13 +41,8 @@ public class CustomerService {
 	private final CustomerRepository repository;
 	private final List<CustomerValidations> customerValidations;
 	private final List<PurchaseValidations> purchaseValidations;
-	private final JavaMailSender javaMailSender;
-	private PdfGenerator pdfGenerator;
+	private final PdfGenerator pdfGenerator;
 
-	@PostConstruct
-	public void init() {
-		this.pdfGenerator = new PdfGenerator(javaMailSender);
-	}
 
 	private Customer findByCustomerPerDocument(String document) {
 		return repository.findByDocument(document)
