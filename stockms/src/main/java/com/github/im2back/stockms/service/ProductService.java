@@ -22,8 +22,6 @@ import com.github.im2back.stockms.repositories.ProductRepository;
 import com.github.im2back.stockms.service.exceptions.ProductNotFoundException;
 import com.github.im2back.stockms.validation.purchasevalidations.PurchaseValidations;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -33,9 +31,6 @@ public class ProductService {
 	private final ProductRepository repository;
 	private final ClientResourceCustomer clientResourceCustomer;
 	private final List<PurchaseValidations> purchaseValidations;
-
-	@PersistenceContext
-	private EntityManager entityManager;
 
 	public Product findProductById(Long id) {
 		return repository.findById(id)
@@ -88,8 +83,6 @@ public class ProductService {
 			});
 		}
 		repository.saveAll(products);
-		 // Sincronizar com o banco imediatamente
-        entityManager.flush();
 	}
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
@@ -117,7 +110,9 @@ public class ProductService {
 
 		// salva
 		repository.save(product);
-
+		System.out.println();
+		System.out.println(" =====> SALVOU NO BANCO <=====");
+		System.out.println();
 		clientResourceCustomer.undoPurchase(dto);
 	}
 

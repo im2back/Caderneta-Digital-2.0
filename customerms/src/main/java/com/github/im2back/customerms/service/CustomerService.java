@@ -131,9 +131,11 @@ public class CustomerService {
 		Customer customer = repository.findByPurchase(dtoRequest.purchaseId()).orElseThrow(
 				() -> new CustomerNotFoundException("User not found for purchase id: " + dtoRequest.purchaseId()));
 
-		var list = customer.getPurchaseRecord();
+		//remove o registro de compra da lista de registros de um determinado cliente e utilizando do cascadeALL ele salvo no banco
+		List<PurchaseRecord> list = customer.getPurchaseRecord();
 		list.removeIf(t -> t.getId().equals(dtoRequest.purchaseId()));
-		repository.save(customer);
+		
+		// não precisa de save pois o orphanRemoval se encarrega disso, desde que estejamos dentro de um transactional
 	}
 
 	public void generatePurchaseInvoice(String document) {
@@ -163,13 +165,7 @@ public class CustomerService {
 
 	@Transactional
 	public void clearDebt(String document) {
-		Customer customer = findByCustomerPerDocument(document);
-		customer.getPurchaseRecord().forEach(t -> {
-			if (t.getStatus().equals(Status.EM_ABERTO)) {
-				t.setStatus(Status.PAGO);
-			}
-		});
-		repository.save(customer);
+	    repository.updateStatusByCustomerDocumentNative("PAGO", document, "EM_ABERTO");
 	}
 
 	private void organizePurchasesByStatus(Customer customer) {

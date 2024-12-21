@@ -32,7 +32,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("customer")
+@RequestMapping("customers")
 @RequiredArgsConstructor
 public class CustomerController {
 
@@ -137,7 +137,6 @@ public class CustomerController {
 		return ResponseEntity.ok(response);
 	}
 	
-	//REFATORACAO PAROU AKI
 	@Operation(summary = "Exclui do banco de dados uma compra com base no objeto recebido como parametro UndoPurchaseDto")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200",description = "Exclui a compra, retorna Status 200 e um corpo vazio",
@@ -207,11 +206,29 @@ public class CustomerController {
 	})
 	@DeleteMapping("/cleardebt")
 	ResponseEntity<Void> clearDebt(@RequestParam String document) {
-		service.clearDebt(document);
+		System.out.println();		
+	System.out.println(" ======> MEDIÇÃO <======");
+	System.out.println();	
+        // Início da medição
+        long inicio = System.nanoTime();
+
+        // Método ou operação a ser medida
+        service.clearDebt(document);
+
+        // Fim da medição
+        long fim = System.nanoTime();
+
+        // Calculando o tempo de execução
+        long duracao = fim - inicio;
+        System.out.println("Tempo de execução: " + (duracao / 1_000_000_000.0) + " segundos");
+        System.out.println();
+    	System.out.println(" ======> MEDIÇÃO <======");
+        System.out.println();
+		
 		return ResponseEntity.ok().build();
 	}
 	
-	@Operation(summary = "FAz consultas personalizadas no bando de dados e retornas dados para aferição de métricas")
+	@Operation(summary = "Faz consultas personalizadas no bando de dados e retornas dados para aferição de métricas")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200",description = "Retorna as métricas encapsulados pelo objeto DataForMetricsDto",
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
