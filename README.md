@@ -1,5 +1,9 @@
-# Status de Desenvolvimento 06/09/2024 🟢 
-Projeto finalizado, sujeito a futuras melhorias !
+# Status de Desenvolvimento 25/12/2024 🟢 
+Projeto passando por refatoração visando :
+ - Melhora de performance
+ - Melhorar arquitetura e comunicação entre os microsserviços
+ - Melhorar documentação
+ - Aumentar coesão do código
 
 ## ⚖️ Licença 
 [![NPM](https://img.shields.io/npm/l/react)](https://github.com/im2back/Voll.med/blob/main/LICENSE)  
@@ -142,9 +146,15 @@ Pré-requisitos:
 # Clonar o repositório
 git clone git@github.com:im2back/Caderneta-Digital-2.0.git
 
+# Ajustar o valor da propriedade " server.ssl.trust-store= " para que ela aponte para o seu diretório local, caso necessário instale o certificado.
+
+# Ajustar os valores de PORTA, SENHA e Usuário do banco de dados no arquivo application.properties
+
 # Executar o projeto Back-end
 - Navegue até a pasta do microsserviço:
 Abrir um terminal no diretório 👉 ./mvnw spring-boot:run
+- Após executar o projeto o banco de dados será criado automaticamente, desde que a conexão esteje correta
+
 
 🛠️Tutorial: Configuração do Banco de Dados
 1. Acesse o MySQL
@@ -175,13 +185,14 @@ Pré-requisitos: Docker
 
 ```bash
 # Baixe o arquivo docker-compose disponibilizado na seção Downloads
+# Ajuste os parametros do docker compose para refletir no seu ambiente local
 
 # Navegue até a pasta onde se encontra o arquivo docker-compose.yml
 cd caminho/para/docker-compose
 
 # Inicie os containers com o comando:
 👉 docker-compose up -d
-
+🚨🗣📢 NO MOMENTO A DISPONIBILIDADE VIA DOCKER ESTA COM ERRO, POIS FALTA PARAMETRIZAR UM ATRIBUTO, LOGO SERÁ CORRIGIDO E DISPONIBILIZADA AS IMAGENS CORRETAS
 # Aguarde o download das imagens e a inicialização dos containers. 
 # Caso os containers do back-end não iniciem, pode ser devido ao atraso na inicialização do container do banco de dados.
 # Para corrigir isso, acesse a interface do Docker e clique em "▷ Start" ao lado do container do banco de dados.
