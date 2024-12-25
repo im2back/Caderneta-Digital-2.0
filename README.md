@@ -1,9 +1,17 @@
-# Status de Desenvolvimento 25/12/2024 🟢 
-Projeto passando por refatoração visando :
+# Status de Desenvolvimento 25/12/2024 EM REFATORAÇÃO, API QUEBRADA ATÉ O TÉRMINO 🟢 
+### Projeto passando por refatoração visando :
+ - Desacoplar os microsserviços, melhorando sua coesão e modificando o funcionamento das comunicações
  - Melhora de performance
- - Melhorar arquitetura e comunicação entre os microsserviços
  - Melhorar documentação
- - Aumentar coesão do código
+ - Aumentar coesão do código de modo geral
+ - Melhorar os testes
+ - Atualmente, a comunicação entre os microsserviços está altamente acoplada e carece de coesão, o que resulta em operações complexas e pouco transparentes. O uso predominante de comunicação síncrona foi priorizado em detrimento da comunicação assíncrona, devido às restrições impostas pelas regras de negócio, que não permitem a implementação de fluxos tardios. Com a introdução do novo orquestrador, a necessidade de comunicação direta entre os microsserviços será eliminada, tornando o fluxo mais claro, eficiente e desacoplado.
+### Prévias da refatoração, novos fluxos :
+![Nova Arquitetura, Caderneta de Mercearia drawio](https://github.com/user-attachments/assets/f88bd70c-60e8-4a77-9396-4fa3b8e545bf)
+
+
+
+
 
 ## ⚖️ Licença 
 [![NPM](https://img.shields.io/npm/l/react)](https://github.com/im2back/Voll.med/blob/main/LICENSE)  
