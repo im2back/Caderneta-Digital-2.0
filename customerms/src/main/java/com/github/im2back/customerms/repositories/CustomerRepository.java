@@ -4,14 +4,22 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.github.im2back.customerms.model.entities.customer.Customer;
+import com.github.im2back.customerms.model.entities.purchase.Status;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
+	
+	@Query("SELECT c FROM Customer c WHERE c.email = :email OR c.document = :document OR c.phone = :phone")
+	List<Customer> findByEmailOrDocumentOrPhone(@Param("email") String email, 
+	                                            @Param("document") String document, 
+	                                            @Param("phone") String phone);
 
-	Optional<Customer> findByDocument(String document);
+	@Query("SELECT c FROM Customer c LEFT JOIN FETCH c.purchaseRecord WHERE c.document = :document")
+	Optional<Customer> findByDocument(@Param("document") String document);
 
 	Optional<Customer> findByEmail(String email);
 
@@ -44,4 +52,23 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	@Query("SELECT SUM(pr.productprice * pr.quantity) FROM PurchaseRecord pr WHERE pr.status = EM_ABERTO")
 	Double totalOutstandingAmount();
 
+	
+	@Modifying
+	@Query(value = "UPDATE tb_purchase p " +
+	               "SET p.payment_status = :newStatus " +
+	               "WHERE p.customer_id = (SELECT c.id FROM tb_customer c WHERE c.document = :document) " +
+	               "AND p.payment_status = :currentStatus", 
+	       nativeQuery = true)
+	void updateStatusByCustomerDocumentNative(@Param("newStatus") String newStatus, 
+	                                          @Param("document") String document, 
+	                                          @Param("currentStatus") String currentStatus);
+	
+	@Modifying
+	@Query(value = "DELETE FROM tb_purchase WHERE id = :idPurchase", nativeQuery = true)
+	void undoPurchase(@Param("idPurchase") Long idPurchase);
+	
+	@Modifying
+	@Query(value = "UPDATE tb_purchase p SET p.payment_status = :paid WHERE p.id = :idPurchase ", nativeQuery = true)
+	void individualPayment(@Param("paid")Status status, @Param("idPurchase") Long idPurchase);
+		
 }

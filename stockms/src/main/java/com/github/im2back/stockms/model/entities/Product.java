@@ -2,6 +2,7 @@ package com.github.im2back.stockms.model.entities;
 
 import java.math.BigDecimal;
 
+import com.github.im2back.stockms.model.dto.inputdata.ProductRegister;
 import com.github.im2back.stockms.model.dto.outputdata.ProductDto;
 
 import jakarta.persistence.Column;
@@ -33,6 +34,16 @@ public class Product {
 		this.quantity = quantity;
 		this.productUrl = productUrl;
 	}
+	
+	public Product(ProductRegister p) {
+		super();
+		this.name = p.name();
+		this.price = p.price();
+		this.code = p.code();
+		this.quantity = p.quantity();
+		this.productUrl = p.productUrl();
+	}
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,6 +1,5 @@
 package com.github.im2back.customerms.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.github.im2back.customerms.exceptions.StandardError;
 import com.github.im2back.customerms.exceptions.StandardErrorBeanValidation;
 import com.github.im2back.customerms.model.dto.datainput.CustomerDto;
+import com.github.im2back.customerms.model.dto.datainput.IndividualPaymentDto;
 import com.github.im2back.customerms.model.dto.datainput.PurchaseRequestDto;
 import com.github.im2back.customerms.model.dto.datainput.UndoPurchaseDto;
 import com.github.im2back.customerms.model.dto.dataoutput.DataForMetricsDto;
@@ -30,13 +30,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("customer")
+@RequestMapping("customers")
+@RequiredArgsConstructor
 public class CustomerController {
 
-	@Autowired
-	private CustomerService service;
+	
+	private final CustomerService service;
 
 	@Operation(summary = "Retorna um GetCustomerDto apartir do ID informado no path")
 	@ApiResponses(value = {
@@ -67,7 +69,7 @@ public class CustomerController {
 				    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 				    schema = @Schema(implementation = StandardError.class))),
 	})
-	@GetMapping("/findDocument")
+	@GetMapping("/find-document")
 	ResponseEntity<GetCustomerDto> findCustomerByDocument(@RequestParam String document) {
 		GetCustomerDto response = service.findCustomerByDocumentOrganizedPurchase(document);
 		return ResponseEntity.ok(response);
@@ -114,7 +116,7 @@ public class CustomerController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@Operation(summary = "Faz uma registro de uma compra apartir de um PurchaseRequestDto recebido e retorna o dto dessa compra PurchaseResponseDto")
+	@Operation(summary = "Cria um registro na DATABASE de uma compra apartir de um PurchaseRequestDto recebido e retorna o dto dessa compra PurchaseResponseDto")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200",description = "Retorna Status 200 e um Dto do objeto criado em caso de sucesso",
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -170,7 +172,7 @@ public class CustomerController {
 				    schema = @Schema(implementation = StandardErrorBeanValidation.class))),
 	})
 	@PutMapping("/payment")
-	ResponseEntity<Void> individualPayment(@RequestBody @Valid UndoPurchaseDto dtoRequest) {
+	ResponseEntity<Void> individualPayment(@RequestBody @Valid IndividualPaymentDto dtoRequest) {
 		service.individualPayment(dtoRequest);
 		return ResponseEntity.ok().build();
 	}
@@ -205,11 +207,11 @@ public class CustomerController {
 	})
 	@DeleteMapping("/cleardebt")
 	ResponseEntity<Void> clearDebt(@RequestParam String document) {
-		service.clearDebt(document);
+        service.clearDebt(document);	
 		return ResponseEntity.ok().build();
 	}
 	
-	@Operation(summary = "FAz consultas personalizadas no bando de dados e retornas dados para aferição de métricas")
+	@Operation(summary = "Faz consultas personalizadas no bando de dados e retornas dados para aferição de métricas")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200",description = "Retorna as métricas encapsulados pelo objeto DataForMetricsDto",
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -217,7 +219,19 @@ public class CustomerController {
 	})
 	@GetMapping("/metrics")
 	ResponseEntity<DataForMetricsDto> getMetrics() {
-		DataForMetricsDto response = service.metrics();
+        // Início da medição
+        long inicio = System.nanoTime();
+
+        // Método ou operação a ser medida
+        DataForMetricsDto response = service.metrics();
+
+        // Fim da medição
+        long fim = System.nanoTime();
+
+        // Calculando o tempo de execução
+        long duracao = fim - inicio;
+        System.out.println("Tempo de execução: " + (duracao / 1_000_000) + " milissegundos");
+		
 		return ResponseEntity.ok(response);
 	}
 	

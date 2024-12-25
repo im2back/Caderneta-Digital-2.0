@@ -14,13 +14,13 @@ import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.BDDMockito;
 import org.mockito.Captor;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -41,7 +41,7 @@ class CustomerServiceTest {
 	@Mock
 	private CustomerRepository repository;
 
-	@InjectMocks
+
 	private CustomerService customerService;
 
 	@Captor
@@ -74,10 +74,14 @@ class CustomerServiceTest {
 	@Captor
 	private ArgumentCaptor<String> stringCaptor;
 		
+	@BeforeEach
+	void setUp() {
+	    purchaseValidations = new ArrayList<>();
+	    purchaseValidations.add(validador3);
+	    purchaseValidations.add(validador4);
 
-//	
-//	@Mock
-//	private List<PurchaseValidations> purchaseValidations;
+	    customerService = new CustomerService(repository, customerValidations, purchaseValidations, pdfGenerator);
+	}
 
 	@Test
 	@DisplayName("deveria retorna um usuário com base no id informado")
@@ -171,8 +175,6 @@ class CustomerServiceTest {
 	void purchase() {
 
 		// ARRANGE
-		purchaseValidations.add(validador3);
-		purchaseValidations.add(validador4);
 		BDDMockito.when(repository.findByDocument(Util.purchaseRequestDto.document()))
 		.thenReturn(Util.customerListaVaziaOptional);
 				

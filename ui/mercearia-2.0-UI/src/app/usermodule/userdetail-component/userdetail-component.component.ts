@@ -10,6 +10,8 @@ import { MessagesModule } from 'primeng/messages';
 import { Message } from 'primeng/api';
 import { CustomerServiceService } from '../../services/customer-service/customer-service.service';
 import { StockServiceService } from '../../services/stock-service/stock-service.service';
+import { IndividualPaymentDto } from '../../core/interfaces/IndividualPaymentDto';
+
 
 
 @Component({
@@ -46,7 +48,7 @@ export class UserdetailComponentComponent {
     const undoPurchase: UndoPurchase = {
       purchaseId: Number(id),
       productCode: code,
-      quantity: quantity
+      quantity: quantity,
     };
 
     this.stockService.excluirCompra(undoPurchase).subscribe({
@@ -60,14 +62,12 @@ export class UserdetailComponentComponent {
       });
   }
 
-  quitarProduto(id: string, code: string, quantity: number): void {
-    const undoPurchase: UndoPurchase = {
+  quitarProduto(id: string): void {
+    const individualPayment: IndividualPaymentDto = {
       purchaseId: Number(id),
-      productCode: code,
-      quantity: quantity
     };
 
-    this.service.quitarCompra(undoPurchase).subscribe({
+    this.service.quitarCompra(individualPayment).subscribe({
         next: () => {
           console.log('Compra excluída com sucesso!');
           this.ngOnInit();

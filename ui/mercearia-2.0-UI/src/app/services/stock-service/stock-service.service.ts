@@ -13,7 +13,7 @@ import { ProductDto } from '../../core/interfaces/ProductDto';
 })
 export class StockServiceService {
 
-  private readonly API =  "https://192.168.1.111:8443/product"
+  private readonly API =  "https://192.168.1.111:8443/products"
 
   constructor(private http : HttpClient) { }
 

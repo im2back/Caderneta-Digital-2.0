@@ -6,13 +6,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { FinanceData } from '../../core/interfaces/FinanceData';
+import { IndividualPaymentDto } from '../../core/interfaces/IndividualPaymentDto';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class CustomerServiceService {
-  private readonly API =  "https://192.168.1.111:8080/customer"
+  private readonly API =  "https://192.168.1.111:8080/customers"
 
   constructor( private http : HttpClient) { }
 
@@ -25,11 +26,11 @@ export class CustomerServiceService {
   }
 
   buscar(document: string) : Observable<UserResponse>{
-    return this.http.get<UserResponse> (`${this.API}/findDocument?document=${document}`);
+    return this.http.get<UserResponse> (`${this.API}/find-document?document=${document}`);
   }
 
 
-  quitarCompra(undo: UndoPurchase) : Observable<void>{
+  quitarCompra(undo: IndividualPaymentDto) : Observable<void>{
     return this.http.put<void> (`${this.API}/payment`,undo);
   }
 

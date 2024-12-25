@@ -127,16 +127,19 @@ class ProductServiceTest {
 		//arrange
 		this.purchaseValidations.add(valid1);
 		this.purchaseValidations.add(valid2);
-		BDDMockito.when(repository.findByCode("001")).thenReturn(Util.productOptional);
+		List<String> codesList = List.of("001");
+		List<Product> productList = new ArrayList<>();
+		productList.add(Util.productOptional.get());
+		BDDMockito.when(repository.findByCodes(codesList)).thenReturn(productList);
 		ResponseEntity<PurchaseResponseDto> responseMethod = ResponseEntity.ok(Util.PurchaseResponseDto);
 		BDDMockito.when(clientResourceCustomer.purchase(Util.purchaseRegister)).thenReturn(responseMethod);
 		
 		//act
-		var response = service.updateStock(Util.productsPurchaseRequestDto);
+		var response = service.updateQuantityProductsAfterPurchase(Util.productsPurchaseRequestDto);
 		
 		//assert
-		BDDMockito.then(valid1).should().valid(Util.productsPurchaseRequestDto);
-		BDDMockito.then(valid2).should().valid(Util.productsPurchaseRequestDto);
+		BDDMockito.then(valid1).should().valid(Util.productsPurchaseRequestDto,productList);
+		BDDMockito.then(valid2).should().valid(Util.productsPurchaseRequestDto,productList);
 		
 		verify(repository,times(1)).findByCode("001");
 		
@@ -158,7 +161,7 @@ class ProductServiceTest {
 		BDDMockito.when(repository.findByCode("001")).thenReturn(Util.productUndoPurchaseOptional);
 		
 		//act
-		service.undoPurchase(Util.undoPurchaseDto);
+		service.undoIndividualPurchase(Util.undoPurchaseDto);
 		
 		//assert
 		BDDMockito.then(repository).should().save(productCaptor.capture());
