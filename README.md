@@ -1,5 +1,9 @@
-# Status de Desenvolvimento 15/12/2024 🟢 
-Projeto finalizado, sujeito a futuras melhorias !
+# Status de Desenvolvimento 25/12/2024 🟢 
+Projeto passando por refatoração visando :
+ - Melhora de performance
+ - Melhorar arquitetura e comunicação entre os microsserviços
+ - Melhorar documentação
+ - Aumentar coesão do código
 
 ## ⚖️ Licença 
 [![NPM](https://img.shields.io/npm/l/react)](https://github.com/im2back/Voll.med/blob/main/LICENSE)  
