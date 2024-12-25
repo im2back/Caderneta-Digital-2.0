@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.im2back.customerms.model.dto.datainput.CustomerDto;
+import com.github.im2back.customerms.model.dto.datainput.IndividualPaymentDto;
 import com.github.im2back.customerms.model.dto.datainput.PurchaseRequestDto;
 import com.github.im2back.customerms.model.dto.datainput.UndoPurchaseDto;
 import com.github.im2back.customerms.model.dto.dataoutput.DailyTotal;
@@ -59,7 +60,7 @@ public class CustomerService {
 	@Transactional(readOnly = true)
 	public GetCustomerDto findCustomerByDocumentOrganizedPurchase(String document) {
 		Customer customer = findByCustomerPerDocument(document);
-		organizePurchasesByStatus(customer);
+		customer.getPurchaseRecord().removeIf(t -> t.getStatus() == Status.PAGO);
 		return new GetCustomerDto(customer);
 	}
 
@@ -127,15 +128,8 @@ public class CustomerService {
 	}
 
 	@Transactional
-	public void undoPurchase(UndoPurchaseDto dtoRequest) {
-		Customer customer = repository.findByPurchase(dtoRequest.purchaseId()).orElseThrow(
-				() -> new CustomerNotFoundException("User not found for purchase id: " + dtoRequest.purchaseId()));
-
-		//remove o registro de compra da lista de registros de um determinado cliente e utilizando do cascadeALL ele salvo no banco
-		List<PurchaseRecord> list = customer.getPurchaseRecord();
-		list.removeIf(t -> t.getId().equals(dtoRequest.purchaseId()));
-		
-		// não precisa de save pois o orphanRemoval se encarrega disso, desde que estejamos dentro de um transactional
+	public void undoPurchase(UndoPurchaseDto dtoRequest) {	
+		repository.undoPurchase(dtoRequest.purchaseId());
 	}
 
 	public void generatePurchaseInvoice(String document) {
@@ -167,15 +161,14 @@ public class CustomerService {
 	public void clearDebt(String document) {
 	    repository.updateStatusByCustomerDocumentNative("PAGO", document, "EM_ABERTO");
 	}
-
-	private void organizePurchasesByStatus(Customer customer) {
-		customer.getPurchaseRecord().removeIf(t -> t.getStatus().equals(Status.PAGO));
-	}
-
-	@Transactional(readOnly = true)
+	
+	
 	public DataForMetricsDto metrics() {
-		return new DataForMetricsDto(repository.totalValueForLastMonth(), repository.partialValueOfTheCurrentMonth(),
-				repository.partialVAlueForCurrentDay(), repository.totalOutstandingAmount(),
+		return new DataForMetricsDto(
+				repository.totalValueForLastMonth(),
+				repository.partialValueOfTheCurrentMonth(),
+				repository.partialVAlueForCurrentDay(),
+				repository.totalOutstandingAmount(),
 				getTotalValuesForLast7Days());
 	}
 
@@ -193,18 +186,11 @@ public class CustomerService {
 
 		return dailyTotals;
 	}
-
-	public void individualPayment(@Valid UndoPurchaseDto dtoRequest) {
-		Customer customer = repository.findByPurchase(dtoRequest.purchaseId()).orElseThrow(
-				() -> new CustomerNotFoundException("User not found for purchase id: " + dtoRequest.purchaseId()));
-
-		var list = customer.getPurchaseRecord();
-		list.forEach(t -> {
-			if (t.getId().equals(dtoRequest.purchaseId())) {
-				t.setStatus(Status.PAGO);
-			}
-		});
-		repository.save(customer);
+	
+	@Transactional
+	public void individualPayment(@Valid IndividualPaymentDto dtoRequest) {
+		repository.individualPayment(Status.PAGO, dtoRequest.purchaseId());
 	}
+	
 
 }

@@ -140,7 +140,7 @@ class ProductControllerTest {
 	void updateStock() throws Exception {
 		//ARRANGE
 		String jsonRequest = this.productsPurchaseRequestDtoJackson.write(Util.productsPurchaseRequestDto).getJson();
-		BDDMockito.when(service.updateStock(Util.productsPurchaseRequestDto)).thenReturn(Util.purchaseResponseDto);
+		BDDMockito.when(service.updateQuantityProductsAfterPurchase(Util.productsPurchaseRequestDto)).thenReturn(Util.purchaseResponseDto);
 		
 		//ACT
 		var response = mvc.perform(post("/product/purchase").contentType(MediaType.APPLICATION_JSON).content(jsonRequest))
@@ -150,7 +150,7 @@ class ProductControllerTest {
 		var responseBody = this.purchaseResponseDtoJackson.parseObject(response.getContentAsString());
 		
 		//ASSERT
-		verify(service,times(1)).updateStock(Util.productsPurchaseRequestDto);
+		verify(service,times(1)).updateQuantityProductsAfterPurchase(Util.productsPurchaseRequestDto);
 		Assertions.assertEquals(new BigDecimal(1000), responseBody.total(),
 				"O dto de resposta deveria conter o mesmo total retornado pela classe de serviço");				
 	}
@@ -161,7 +161,7 @@ class ProductControllerTest {
 	void undoPurchase() throws Exception {
 		//ARRANGE
 		String jsonRequest = this.undoPurchaseDtoJackson.write(Util.undoPurchaseDto).getJson();
-		BDDMockito.doNothing().when(service).undoPurchase(Util.undoPurchaseDto);
+		BDDMockito.doNothing().when(service).undoIndividualPurchase(Util.undoPurchaseDto);
 		
 		//ACT
 		 mvc.perform(put("/product/undopurchase").contentType(MediaType.APPLICATION_JSON).content(jsonRequest))
@@ -169,7 +169,7 @@ class ProductControllerTest {
 				.andReturn().getResponse();
 				
 		//ASSERT
-		verify(service,times(1)).undoPurchase(Util.undoPurchaseDto);
+		verify(service,times(1)).undoIndividualPurchase(Util.undoPurchaseDto);
 	}
 
 	

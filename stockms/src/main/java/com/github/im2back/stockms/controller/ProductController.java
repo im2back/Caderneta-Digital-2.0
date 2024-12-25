@@ -136,7 +136,7 @@ public class ProductController {
 	})
 	@PostMapping("/purchase")
 	public ResponseEntity<PurchaseResponseDto> updateStock(@RequestBody @Valid ProductsPurchaseRequestDto dto) {
-		PurchaseResponseDto response =  service.updateStock(dto);
+		PurchaseResponseDto response =  service.updateQuantityProductsAfterPurchase(dto);
 		return ResponseEntity.ok(response);
 	}
 	
@@ -160,7 +160,7 @@ public class ProductController {
 	})
 	@PutMapping("/undopurchase")
 	public ResponseEntity<Void> undoPurchase(@RequestBody @Valid UndoPurchaseDto dto) {
-		service.undoPurchase(dto);
+		service.undoIndividualPurchase(dto);
 		return ResponseEntity.ok().build();
 	}
 	

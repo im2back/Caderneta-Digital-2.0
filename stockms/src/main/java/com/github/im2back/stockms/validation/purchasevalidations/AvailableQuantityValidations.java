@@ -20,7 +20,6 @@ public class AvailableQuantityValidations implements PurchaseValidations {
 
 		List<String> errorMessages = new ArrayList<>();
 		List<PurchasedItem> purchasedItem = requestDto.purchasedItems();
-
 		List<String> productsCodeList = new ArrayList<>();
 		requestDto.purchasedItems().forEach(t -> productsCodeList.add(t.code()));
 
@@ -30,6 +29,8 @@ public class AvailableQuantityValidations implements PurchaseValidations {
 		}
 		productsCodeList.forEach(t -> errorMessages.add("Product Not found for code:" + t));
 
+		
+		
 		// Verifica se os produtos tem quantidade disponivel em estoque
 		for (Product p : produtosEncontrados) {
 

@@ -25,6 +25,13 @@ public class Util {
 	
 	public static ProductRegister productRegister = new ProductRegister(product, 100);
 	
+	public static List<Product> productList = new ArrayList<>();
+	
+	static {
+		productList.add(new Product(1l, "Nescau", new BigDecimal(10), "001", 100, "url.com"));
+	}
+	
+	
 	public static List<PurchasedItem> purchasedItems = new ArrayList<>();
 	public static ProductsPurchaseRequestDto productsPurchaseRequestDto = new ProductsPurchaseRequestDto("123456789",
 			purchasedItems);

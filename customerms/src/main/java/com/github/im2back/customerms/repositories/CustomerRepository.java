@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.github.im2back.customerms.model.entities.customer.Customer;
+import com.github.im2back.customerms.model.entities.purchase.Status;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	
@@ -17,10 +18,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	                                            @Param("document") String document, 
 	                                            @Param("phone") String phone);
 
-
 	@Query("SELECT c FROM Customer c LEFT JOIN FETCH c.purchaseRecord WHERE c.document = :document")
 	Optional<Customer> findByDocument(@Param("document") String document);
-
 
 	Optional<Customer> findByEmail(String email);
 
@@ -63,6 +62,13 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	void updateStatusByCustomerDocumentNative(@Param("newStatus") String newStatus, 
 	                                          @Param("document") String document, 
 	                                          @Param("currentStatus") String currentStatus);
-
 	
+	@Modifying
+	@Query(value = "DELETE FROM tb_purchase WHERE id = :idPurchase", nativeQuery = true)
+	void undoPurchase(@Param("idPurchase") Long idPurchase);
+	
+	@Modifying
+	@Query(value = "UPDATE tb_purchase p SET p.payment_status = :paid WHERE p.id = :idPurchase ", nativeQuery = true)
+	void individualPayment(@Param("paid")Status status, @Param("idPurchase") Long idPurchase);
+		
 }

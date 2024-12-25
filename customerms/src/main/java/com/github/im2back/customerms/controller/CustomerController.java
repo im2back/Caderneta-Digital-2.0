@@ -16,6 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.github.im2back.customerms.exceptions.StandardError;
 import com.github.im2back.customerms.exceptions.StandardErrorBeanValidation;
 import com.github.im2back.customerms.model.dto.datainput.CustomerDto;
+import com.github.im2back.customerms.model.dto.datainput.IndividualPaymentDto;
 import com.github.im2back.customerms.model.dto.datainput.PurchaseRequestDto;
 import com.github.im2back.customerms.model.dto.datainput.UndoPurchaseDto;
 import com.github.im2back.customerms.model.dto.dataoutput.DataForMetricsDto;
@@ -68,7 +69,7 @@ public class CustomerController {
 				    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 				    schema = @Schema(implementation = StandardError.class))),
 	})
-	@GetMapping("/findDocument")
+	@GetMapping("/find-document")
 	ResponseEntity<GetCustomerDto> findCustomerByDocument(@RequestParam String document) {
 		GetCustomerDto response = service.findCustomerByDocumentOrganizedPurchase(document);
 		return ResponseEntity.ok(response);
@@ -171,7 +172,7 @@ public class CustomerController {
 				    schema = @Schema(implementation = StandardErrorBeanValidation.class))),
 	})
 	@PutMapping("/payment")
-	ResponseEntity<Void> individualPayment(@RequestBody @Valid UndoPurchaseDto dtoRequest) {
+	ResponseEntity<Void> individualPayment(@RequestBody @Valid IndividualPaymentDto dtoRequest) {
 		service.individualPayment(dtoRequest);
 		return ResponseEntity.ok().build();
 	}
@@ -206,25 +207,7 @@ public class CustomerController {
 	})
 	@DeleteMapping("/cleardebt")
 	ResponseEntity<Void> clearDebt(@RequestParam String document) {
-		System.out.println();		
-	System.out.println(" ======> MEDIÇÃO <======");
-	System.out.println();	
-        // Início da medição
-        long inicio = System.nanoTime();
-
-        // Método ou operação a ser medida
-        service.clearDebt(document);
-
-        // Fim da medição
-        long fim = System.nanoTime();
-
-        // Calculando o tempo de execução
-        long duracao = fim - inicio;
-        System.out.println("Tempo de execução: " + (duracao / 1_000_000_000.0) + " segundos");
-        System.out.println();
-    	System.out.println(" ======> MEDIÇÃO <======");
-        System.out.println();
-		
+        service.clearDebt(document);	
 		return ResponseEntity.ok().build();
 	}
 	
@@ -236,7 +219,19 @@ public class CustomerController {
 	})
 	@GetMapping("/metrics")
 	ResponseEntity<DataForMetricsDto> getMetrics() {
-		DataForMetricsDto response = service.metrics();
+        // Início da medição
+        long inicio = System.nanoTime();
+
+        // Método ou operação a ser medida
+        DataForMetricsDto response = service.metrics();
+
+        // Fim da medição
+        long fim = System.nanoTime();
+
+        // Calculando o tempo de execução
+        long duracao = fim - inicio;
+        System.out.println("Tempo de execução: " + (duracao / 1_000_000) + " milissegundos");
+		
 		return ResponseEntity.ok(response);
 	}
 	

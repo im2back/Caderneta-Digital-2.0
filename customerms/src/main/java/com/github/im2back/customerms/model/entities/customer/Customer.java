@@ -61,7 +61,7 @@ public class Customer {
 	@Embedded
 	private Address address;
 	
-	@OneToMany(mappedBy = "customer",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "customer",cascade = CascadeType.ALL,orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<PurchaseRecord> purchaseRecord = new ArrayList<>();
 	
 	public BigDecimal getTotal() {

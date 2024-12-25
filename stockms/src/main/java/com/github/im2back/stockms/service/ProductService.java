@@ -1,7 +1,9 @@
 package com.github.im2back.stockms.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +49,7 @@ public class ProductService {
 	@Transactional
 	public ProductDto saveNewProduct(ProductRegister p) {
 		try {
-			Product product = repository.save(new Product(p.name(), p.price(), p.code(), p.quantity(), p.productUrl()));
+			Product product = repository.save(new Product(p));
 			return new ProductDto(product);
 		} catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityViolationException("Error when trying to save product to database");
@@ -59,60 +61,61 @@ public class ProductService {
 		repository.deleteById(id);
 	}
 
+	//REFAC:  recebe a lista de produtos comprados, atualiza o estoque envia para processamento no cliente e aguarda resposta para continuar
 	@Transactional
-	public PurchaseResponseDto updateStock(ProductsPurchaseRequestDto dto) {
-		List<PurchasedItem> productsList = dto.purchasedItems();
-		List<Product> products = findByCodes(productsList);
-		purchaseValidations.forEach(t -> t.valid(dto,products));
-
-		List<ProductRegister> listPurchaseHistory = new ArrayList<>();
+	public PurchaseResponseDto updateQuantityProductsAfterPurchase(ProductsPurchaseRequestDto dto) {
 		
-		saveAllProducts(listPurchaseHistory, productsList, products);
-
-		return saveUserPurchaseHistory(listPurchaseHistory, dto.document());
+		List<Product> products = findByCodes(dto.purchasedItems());
+		purchaseValidations.forEach(t -> t.valid(dto,products));  
+		
+		// deduz do estoque a quantidade comprada e persiste a mudança
+		List<ProductRegister> listPurchaseHistory = persistChangesInStockQuantityAndBuildHistory(dto.purchasedItems(), products);
+		
+		// envia para o microsserviço de cliente processar a compra também e devolve a resposta para o controller
+		PurchaseResponseDto response = sendingDataForProcessingByTheCientMicroservice(listPurchaseHistory, dto.document());
+		return response;
 	}
 
-	private void saveAllProducts(List<ProductRegister> listPurchaseHistory, List<PurchasedItem> productsList,
-			List<Product> products) {
+	private List<ProductRegister> persistChangesInStockQuantityAndBuildHistory(List<PurchasedItem> productsList,List<Product> products) {
+		//lista enviada para processada pelo microsserviço de cliente. Dados irão ser persistidos no historico de compra
+		List<ProductRegister> listPurchaseHistory = new ArrayList<>();
+	
+		HashMap<String, Product> productHashMap = new HashMap<>(products.stream().collect(Collectors.toMap(Product::getCode, p -> p)));
+		
 		for (PurchasedItem p : productsList) {
-			products.forEach(product -> {
-				if (product.getCode().equals(p.code())) {
-					product.setQuantity(product.getQuantity() - p.quantity());
-					listPurchaseHistory.add(new ProductRegister(product, p.quantity()));
-				}
-			});
+			Product product = productHashMap.get(p.code());
+			product.setQuantity(product.getQuantity() - p.quantity());
+			listPurchaseHistory.add(new ProductRegister(product, p.quantity()));
 		}
-		repository.saveAll(products);
+		
+		List<Product> productListupdate = new ArrayList<>(productHashMap.values());
+		repository.saveAll(productListupdate);
+		
+		return listPurchaseHistory;
 	}
 
-	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-	protected List<Product> findByCodes(List<PurchasedItem> productsList) {
-		List<String> productCodesList = new ArrayList<>();
-		productsList.forEach(t -> productCodesList.add(t.code()));
-		List<Product> products = repository.findByCodes(productCodesList);
-		return products;
-	}
-
-	private PurchaseResponseDto saveUserPurchaseHistory(List<ProductRegister> products, String document) {
+	private PurchaseResponseDto sendingDataForProcessingByTheCientMicroservice(List<ProductRegister> products, String document) {
 		PurchaseRegister purchaseRegister = new PurchaseRegister(document, products);
 		ResponseEntity<PurchaseResponseDto> responseRequest = clientResourceCustomer.purchase(purchaseRegister);
 		return responseRequest.getBody();
 	}
 
+	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
+	protected List<Product> findByCodes(List<PurchasedItem> productsList) {	
+		List<String> productCodesList = new ArrayList<>();
+		productsList.forEach(t -> productCodesList.add(t.code()));		
+		List<Product> products = repository.findByCodes(productCodesList);
+		return products;
+	}
+	
+	//RAFAC : Desfazer uma compra e acionar microsserviço de cliente
 	@Transactional
-	public void undoPurchase(UndoPurchaseDto dto) {
-		// encontra o produto
-		Product product = repository.findByCode(dto.productCode())
-				.orElseThrow(() -> new ProductNotFoundException("Product Not found for code: " + dto.productCode()));
+	public void undoIndividualPurchase(UndoPurchaseDto dto) {
+		Product product = findByCode(dto.productCode());
 
-		// adiciona a quantidade de volta ao banco de dados
 		product.setQuantity(product.getQuantity() + dto.quantity());
 
-		// salva
 		repository.save(product);
-		System.out.println();
-		System.out.println(" =====> SALVOU NO BANCO <=====");
-		System.out.println();
 		clientResourceCustomer.undoPurchase(dto);
 	}
 
