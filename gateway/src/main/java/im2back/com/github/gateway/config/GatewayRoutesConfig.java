@@ -12,7 +12,7 @@ public class GatewayRoutesConfig {
 	RouteLocator routes(RouteLocatorBuilder builder) {
 		return builder
 				.routes()
-				.route(r -> r.path("/NOME_DO_ENDPOINT_PADRÃO/**").uri("lb://NOME_DO_MICROSSERVIÇO"))
+				.route(r -> r.path("/products/**").uri("lb://stockms"))
 				.build();
 	}
 

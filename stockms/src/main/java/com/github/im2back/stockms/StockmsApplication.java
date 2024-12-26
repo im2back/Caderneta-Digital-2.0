@@ -7,7 +7,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @EnableFeignClients
 @SpringBootApplication
-@EnableDiscoveryClient
+
 public class StockmsApplication {
 
 	public static void main(String[] args) {
