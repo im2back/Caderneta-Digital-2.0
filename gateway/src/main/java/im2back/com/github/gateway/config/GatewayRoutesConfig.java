@@ -13,6 +13,7 @@ public class GatewayRoutesConfig {
 		return builder
 				.routes()
 				.route(r -> r.path("/products/**").uri("lb://stockms"))
+				.route(r -> r.path("/customers/**").uri("lb://customerms"))
 				.build();
 	}
 
