@@ -32,7 +32,7 @@ public class ProductService {
 
 	private final ProductRepository repository;
 	private final ClientResourceCustomer clientResourceCustomer;
-	private final List<PurchaseValidations> purchaseValidations;
+//	private final List<PurchaseValidations> purchaseValidations;
 
 	public Product findProductById(Long id) {
 		return repository.findById(id)
@@ -67,7 +67,6 @@ public class ProductService {
 		
 		//Validações serão transferidas para o validation
 		//purchaseValidations.forEach(t -> t.valid(dto,products));  
-		
 		
 		List<Product> products = findByCodes(dto);
 		List<ProductRegister> listPurchaseHistory = persistChangesInStockQuantityAndBuildHistory(dto, products);

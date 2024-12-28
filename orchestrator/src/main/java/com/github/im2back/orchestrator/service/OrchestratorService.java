@@ -14,7 +14,6 @@ public class OrchestratorService {
 	private final StockClient  stockClient;
 	
 	public void orchestratePurchase(PurchaseRequestDTO dto) {
-		
 		//Etapa 1 - Atualizar estoque e deduzir a quantidade de produtos comprados
 			stockClient.updateStock(dto.purchasedItems());
 

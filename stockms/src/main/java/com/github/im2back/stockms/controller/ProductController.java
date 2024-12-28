@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.github.im2back.stockms.exceptions.StandardError;
-import com.github.im2back.stockms.exceptions.StandardErrorBeanValidation;
 import com.github.im2back.stockms.model.dto.inputdata.ProductRegister;
 import com.github.im2back.stockms.model.dto.inputdata.PurchasedItem;
 import com.github.im2back.stockms.model.dto.inputdata.UndoPurchaseDto;
@@ -31,11 +31,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("products")
 @RequiredArgsConstructor
+@Validated
 public class ProductController { 
 
 	
@@ -90,7 +92,7 @@ public class ProductController {
 					responseCode = "400",
 					description = "retorna um StandardErrorBeanValidation em caso de erro capturado pelo BeanValidation",
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-					schema = @Schema(implementation = StandardErrorBeanValidation.class))),
+					schema = @Schema(implementation = StandardError.class))),
 			@ApiResponse(
 					responseCode = "409",
 					description = "Retorna um StandardError em caso de código duplicado/conflito na DB",
@@ -129,7 +131,7 @@ public class ProductController {
 					responseCode = "400",
 					description = "Retorna um StandardErrorBeanValidation em caso de exeção durante as validações de compra",
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-					schema = @Schema(implementation = StandardErrorBeanValidation.class))),
+					schema = @Schema(implementation = StandardError.class))),
 			@ApiResponse(
 					responseCode = "404",
 					description = "Retorna um StandardError caso um dos produtos contido na lista de compras, não seja localizado no BD",
@@ -137,7 +139,8 @@ public class ProductController {
 					schema = @Schema(implementation = StandardError.class))),
 	})
 	@PostMapping("/update-after-purchase")
-	public ResponseEntity<PurchaseResponseDto> updateStock(@RequestBody @Valid List<PurchasedItem> dto) {
+	public ResponseEntity<PurchaseResponseDto> updateStock(@RequestBody @NotEmpty(message = "Input movie list cannot be empty.") @Valid List<PurchasedItem> dto) {
+	
 		service.updateQuantityProductsAfterPurchase(dto);
 		return ResponseEntity.ok().build();
 	}
@@ -153,7 +156,7 @@ public class ProductController {
 					responseCode = "400",
 					description = "Retorna um StandardErrorBeanValidation em caso de exeção durante as validações do BeanValidation",
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-					schema = @Schema(implementation = StandardErrorBeanValidation.class))),
+					schema = @Schema(implementation = StandardError.class))),
 			@ApiResponse(
 					responseCode = "404",
 					description = "Retorna um StandardError caso um dos produto não seja localizado no BD",
@@ -177,7 +180,7 @@ public class ProductController {
 					responseCode = "400",
 					description = "Retorna um StandardErrorBeanValidation em caso de exeção durante as validações do BeanValidation",
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-					schema = @Schema(implementation = StandardErrorBeanValidation.class))),
+					schema = @Schema(implementation = StandardError.class))),
 			@ApiResponse(
 					responseCode = "404",
 					description = "Retorna um StandardError caso um dos produto não seja localizado no BD",
