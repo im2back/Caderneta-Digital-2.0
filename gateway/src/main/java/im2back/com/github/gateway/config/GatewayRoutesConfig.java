@@ -14,6 +14,7 @@ public class GatewayRoutesConfig {
 				.routes()
 				.route(r -> r.path("/products/**").uri("lb://stockms"))
 				.route(r -> r.path("/customers/**").uri("lb://customerms"))
+				.route(r -> r.path("/orchestrator/**").uri("lb://orchestratorms"))
 				.build();
 	}
 

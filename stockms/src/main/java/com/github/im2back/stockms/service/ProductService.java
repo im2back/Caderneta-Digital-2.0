@@ -63,17 +63,17 @@ public class ProductService {
 
 	//REFAC:  recebe a lista de produtos comprados, atualiza o estoque envia para processamento no cliente e aguarda resposta para continuar
 	@Transactional
-	public PurchaseResponseDto updateQuantityProductsAfterPurchase(ProductsPurchaseRequestDto dto) {
+	public void updateQuantityProductsAfterPurchase(List<PurchasedItem> dto) {
 		
-		List<Product> products = findByCodes(dto.purchasedItems());
-		purchaseValidations.forEach(t -> t.valid(dto,products));  
+		//Validações serão transferidas para o validation
+		//purchaseValidations.forEach(t -> t.valid(dto,products));  
 		
-		// deduz do estoque a quantidade comprada e persiste a mudança
-		List<ProductRegister> listPurchaseHistory = persistChangesInStockQuantityAndBuildHistory(dto.purchasedItems(), products);
 		
-		// envia para o microsserviço de cliente processar a compra também e devolve a resposta para o controller
-		PurchaseResponseDto response = sendingDataForProcessingByTheCientMicroservice(listPurchaseHistory, dto.document());
-		return response;
+		List<Product> products = findByCodes(dto);
+		List<ProductRegister> listPurchaseHistory = persistChangesInStockQuantityAndBuildHistory(dto, products);
+		
+		//orquestrador será responsavel por esta ação
+		//PurchaseResponseDto response = sendingDataForProcessingByTheCientMicroservice(listPurchaseHistory, dto.document());
 	}
 
 	private List<ProductRegister> persistChangesInStockQuantityAndBuildHistory(List<PurchasedItem> productsList,List<Product> products) {

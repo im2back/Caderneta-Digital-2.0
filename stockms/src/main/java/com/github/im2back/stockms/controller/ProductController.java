@@ -1,5 +1,7 @@
 package com.github.im2back.stockms.controller;
 
+import java.util.List;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,7 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.github.im2back.stockms.exceptions.StandardError;
 import com.github.im2back.stockms.exceptions.StandardErrorBeanValidation;
 import com.github.im2back.stockms.model.dto.inputdata.ProductRegister;
-import com.github.im2back.stockms.model.dto.inputdata.ProductsPurchaseRequestDto;
+import com.github.im2back.stockms.model.dto.inputdata.PurchasedItem;
 import com.github.im2back.stockms.model.dto.inputdata.UndoPurchaseDto;
 import com.github.im2back.stockms.model.dto.outputdata.ProductDto;
 import com.github.im2back.stockms.model.dto.outputdata.PurchaseResponseDto;
@@ -134,10 +136,10 @@ public class ProductController {
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					schema = @Schema(implementation = StandardError.class))),
 	})
-	@PostMapping("/purchase")
-	public ResponseEntity<PurchaseResponseDto> updateStock(@RequestBody @Valid ProductsPurchaseRequestDto dto) {
-		PurchaseResponseDto response =  service.updateQuantityProductsAfterPurchase(dto);
-		return ResponseEntity.ok(response);
+	@PostMapping("/update-after-purchase")
+	public ResponseEntity<PurchaseResponseDto> updateStock(@RequestBody @Valid List<PurchasedItem> dto) {
+		service.updateQuantityProductsAfterPurchase(dto);
+		return ResponseEntity.ok().build();
 	}
 	
 	@Operation(summary = ("Retorna um corpo vazio e status 200 após desfazer uma compra"))
