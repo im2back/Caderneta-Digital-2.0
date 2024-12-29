@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.github.im2back.orchestrator.config.FeignConfig;
 import com.github.im2back.orchestrator.dto.in.PurchasedItem;
+import com.github.im2back.orchestrator.dto.in.StockUpdateResponseDTO;
 
 import jakarta.validation.Valid;
 
@@ -16,5 +17,5 @@ import jakarta.validation.Valid;
 public interface StockClient {
 	
 	@PostMapping("products/update-after-purchase")
-	public ResponseEntity<Void> updateStock(@RequestBody @Valid List<PurchasedItem> dto);
+	public ResponseEntity<List<StockUpdateResponseDTO>> updateStock(@RequestBody @Valid List<PurchasedItem> dto);
 }

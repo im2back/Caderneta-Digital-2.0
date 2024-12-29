@@ -22,6 +22,7 @@ import com.github.im2back.stockms.model.dto.inputdata.PurchasedItem;
 import com.github.im2back.stockms.model.dto.inputdata.UndoPurchaseDto;
 import com.github.im2back.stockms.model.dto.outputdata.ProductDto;
 import com.github.im2back.stockms.model.dto.outputdata.PurchaseResponseDto;
+import com.github.im2back.stockms.model.dto.outputdata.StockUpdateResponseDTO;
 import com.github.im2back.stockms.model.entities.Product;
 import com.github.im2back.stockms.service.ProductService;
 
@@ -139,10 +140,10 @@ public class ProductController {
 					schema = @Schema(implementation = StandardError.class))),
 	})
 	@PostMapping("/update-after-purchase")
-	public ResponseEntity<PurchaseResponseDto> updateStock(@RequestBody @NotEmpty(message = "Input movie list cannot be empty.") @Valid List<PurchasedItem> dto) {
+	public ResponseEntity<List<StockUpdateResponseDTO>> updateStock(@RequestBody @NotEmpty(message = "Input movie list cannot be empty.") @Valid List<PurchasedItem> dto) {
 	
-		service.updateQuantityProductsAfterPurchase(dto);
-		return ResponseEntity.ok().build();
+		List<StockUpdateResponseDTO> stockUpdateResponseDTOList = service.updateQuantityProductsAfterPurchase(dto);
+		return ResponseEntity.ok().body(stockUpdateResponseDTOList);
 	}
 	
 	@Operation(summary = ("Retorna um corpo vazio e status 200 após desfazer uma compra"))

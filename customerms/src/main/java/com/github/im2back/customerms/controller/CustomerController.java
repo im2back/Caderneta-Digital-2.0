@@ -33,7 +33,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("customers")
+@RequestMapping("/customers")
 @RequiredArgsConstructor
 public class CustomerController {
 
@@ -133,7 +133,7 @@ public class CustomerController {
 				    schema = @Schema(implementation = StandardError.class))),
 			})
 	@PutMapping
-	ResponseEntity<PurchaseResponseDto> purchase(@RequestBody @Valid PurchaseRequestDto dtoRequest) {
+	ResponseEntity<PurchaseResponseDto> persistPurchaseHistory(@RequestBody @Valid PurchaseRequestDto dtoRequest) {
 		PurchaseResponseDto response = service.purchase(dtoRequest);
 		return ResponseEntity.ok(response);
 	}

@@ -19,6 +19,7 @@ import com.github.im2back.stockms.model.dto.inputdata.UndoPurchaseDto;
 import com.github.im2back.stockms.model.dto.outputdata.ProductDto;
 import com.github.im2back.stockms.model.dto.outputdata.PurchaseRegister;
 import com.github.im2back.stockms.model.dto.outputdata.PurchaseResponseDto;
+import com.github.im2back.stockms.model.dto.outputdata.StockUpdateResponseDTO;
 import com.github.im2back.stockms.model.entities.Product;
 import com.github.im2back.stockms.repositories.ProductRepository;
 import com.github.im2back.stockms.service.exceptions.ProductNotFoundException;
@@ -63,41 +64,42 @@ public class ProductService {
 
 	//REFAC:  recebe a lista de produtos comprados, atualiza o estoque envia para processamento no cliente e aguarda resposta para continuar
 	@Transactional
-	public void updateQuantityProductsAfterPurchase(List<PurchasedItem> dto) {
+	public List<StockUpdateResponseDTO> updateQuantityProductsAfterPurchase(List<PurchasedItem> dto) {
 		
 		//Validações serão transferidas para o validation
 		//purchaseValidations.forEach(t -> t.valid(dto,products));  
 		
 		List<Product> products = findByCodes(dto);
-		List<ProductRegister> listPurchaseHistory = persistChangesInStockQuantityAndBuildHistory(dto, products);
+		List<StockUpdateResponseDTO> listOfProductsThatHaveBeenUpdated = persistChangesInStockQuantityAndBuildHistory(dto, products);
 		
 		//orquestrador será responsavel por esta ação
 		//PurchaseResponseDto response = sendingDataForProcessingByTheCientMicroservice(listPurchaseHistory, dto.document());
+		return  listOfProductsThatHaveBeenUpdated;
 	}
 
-	private List<ProductRegister> persistChangesInStockQuantityAndBuildHistory(List<PurchasedItem> productsList,List<Product> products) {
+	private List<StockUpdateResponseDTO> persistChangesInStockQuantityAndBuildHistory(List<PurchasedItem> productsList,List<Product> products) {
 		//lista enviada para processada pelo microsserviço de cliente. Dados irão ser persistidos no historico de compra
-		List<ProductRegister> listPurchaseHistory = new ArrayList<>();
+		List<StockUpdateResponseDTO> stockUpdateResponseDTOList = new ArrayList<>();
 	
 		HashMap<String, Product> productHashMap = new HashMap<>(products.stream().collect(Collectors.toMap(Product::getCode, p -> p)));
 		
 		for (PurchasedItem p : productsList) {
 			Product product = productHashMap.get(p.code());
 			product.setQuantity(product.getQuantity() - p.quantity());
-			listPurchaseHistory.add(new ProductRegister(product, p.quantity()));
+			stockUpdateResponseDTOList.add(new StockUpdateResponseDTO(product,p.quantity()));
 		}
 		
 		List<Product> productListupdate = new ArrayList<>(productHashMap.values());
 		repository.saveAll(productListupdate);
 		
-		return listPurchaseHistory;
+		return stockUpdateResponseDTOList;
 	}
 
-	private PurchaseResponseDto sendingDataForProcessingByTheCientMicroservice(List<ProductRegister> products, String document) {
-		PurchaseRegister purchaseRegister = new PurchaseRegister(document, products);
-		ResponseEntity<PurchaseResponseDto> responseRequest = clientResourceCustomer.purchase(purchaseRegister);
-		return responseRequest.getBody();
-	}
+//	private PurchaseResponseDto sendingDataForProcessingByTheCientMicroservice(List<ProductRegister> products, String document) {
+//		PurchaseRegister purchaseRegister = new PurchaseRegister(document, products);
+//		ResponseEntity<PurchaseResponseDto> responseRequest = clientResourceCustomer.purchase(purchaseRegister);
+//		return responseRequest.getBody();
+//	}
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
 	protected List<Product> findByCodes(List<PurchasedItem> productsList) {	

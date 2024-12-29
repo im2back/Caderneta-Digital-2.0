@@ -3,11 +3,13 @@ package com.github.im2back.orchestrator.exception;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.github.im2back.orchestrator.clients.exception.FeignClientCustomException;
+import com.github.im2back.orchestrator.clients.exception.ServiceUnavailableCustomException;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -32,5 +34,23 @@ public class GlobalHandlerException {
 
 		return ResponseEntity.status(exception.getStatus()).body(body);
 	}
+	
+	@ExceptionHandler(ServiceUnavailableCustomException.class)
+	public ResponseEntity<StandardError> serviceUnavailableCustomException(ServiceUnavailableCustomException exception,
+			HttpServletRequest request) {
+
+		List<String> messages = new ArrayList<>();
+		messages.add(exception.getMessage());
+
+		StandardError body = new StandardError();
+		body.setError("Service Unavailable");
+		body.setStatus(exception.getStatus());
+		body.setPath(request.getRequestURI());
+		body.setMessages(messages);
+
+		return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(body);
+	}
+	
+	
 
 }

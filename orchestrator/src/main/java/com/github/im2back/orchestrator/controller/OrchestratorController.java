@@ -3,6 +3,7 @@ package com.github.im2back.orchestrator.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.im2back.orchestrator.dto.in.PurchaseHistoryResponseDTO;
 import com.github.im2back.orchestrator.dto.in.PurchaseRequestDTO;
 import com.github.im2back.orchestrator.service.OrchestratorService;
 
@@ -21,9 +22,9 @@ public class OrchestratorController {
 	private final OrchestratorService orchestratorService;
 	
 	@PostMapping("/purchase")
-	public ResponseEntity<Void> orchestratePurchase(@RequestBody PurchaseRequestDTO dto) {
-		orchestratorService.orchestratePurchase(dto);
-		return ResponseEntity.ok().build();
+	public ResponseEntity<PurchaseHistoryResponseDTO> orchestratePurchase(@RequestBody PurchaseRequestDTO dto) {
+		PurchaseHistoryResponseDTO response =orchestratorService.orchestratePurchase(dto);
+		return ResponseEntity.ok(response);
 	}
 	
 }
