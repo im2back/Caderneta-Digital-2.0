@@ -12,9 +12,7 @@ Acoplamento elevado e baixa coesão: A comunicação atual entre os microsservi�
   De acordo com as necessidades/demandas do local onde a aplicação será utiilizada é inviavel o uso de comunicação assincrona por isso uso predominante de comunicação síncrona foi priorizado em detrimento da comunicação assíncrona, devido às restrições impostas pelas regras de negócio, que não permitem a implementação de fluxos tardios. Com a introdução do novo orquestrador, a necessidade de comunicação direta entre os microsserviços será eliminada, tornando o fluxo mais claro, eficiente e desacoplado. Houve necessidade de adicionar outros dois microsserviços : RELATORIOS-MS e VALIDATION-MS, estes por sua vez preenchem demandas afim de desafogar os outros microsserviços e preencher necessidades impostas pela comunicação sincrona.
    
 ### Prévias da refatoração, novos fluxos :
-![Nova Arquitetura, Caderneta de Mercearia drawio](https://github.com/user-attachments/assets/bb448c37-91b3-4e13-9940-0cce55689305)
-
-
+![Nova Arquitetura, Caderneta de Mercearia drawio](https://github.com/user-attachments/assets/ba39d837-bcfc-42be-8671-2fb2bc629aa7)
 
 
 
