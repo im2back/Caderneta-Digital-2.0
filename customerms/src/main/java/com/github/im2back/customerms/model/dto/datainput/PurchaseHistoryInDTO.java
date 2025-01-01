@@ -4,10 +4,10 @@ import java.util.List;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record PurchaseRequestDto(
+public record PurchaseHistoryInDTO(
 		@NotBlank
 		String document,	
-		List<ProductRequestDto> products
+		List<PurchasedProductsDTO> products
 		) {
 
 }

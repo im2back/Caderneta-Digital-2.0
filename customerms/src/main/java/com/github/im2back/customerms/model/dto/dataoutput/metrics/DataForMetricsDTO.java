@@ -1,13 +1,13 @@
-package com.github.im2back.customerms.model.dto.dataoutput;
+package com.github.im2back.customerms.model.dto.dataoutput.metrics;
 
 import java.util.List;
 
-public record DataForMetricsDto(
+public record DataForMetricsDTO(
 		Double totalValueForLastMonth,
 		Double partialValueForCurrentMonth,
 		Double partialValueForCurrentDay,
 		Double totalOutstandingAmount,
-		List<DailyTotal> dataGraphicSevenDays 
+		List<DailyTotalDTO> dataGraphicSevenDays 
 		
 		) {
 

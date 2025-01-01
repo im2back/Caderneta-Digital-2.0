@@ -8,31 +8,31 @@ import com.github.im2back.customerms.model.entities.customer.Customer;
 import com.github.im2back.customerms.model.entities.purchase.PurchaseRecord;
 import com.github.im2back.customerms.utils.Util;
 
-public record GetCustomerDto(
+public record CustomerDTO(
 		Long id, 
 		String name,
 		String document,
 		String email,
 		String phone, 
-		AddressDto address,
-		List<PurchaseRecordDto> purchaseRecord,
+		AddressDTO address,
+		List<PurchaseRecordDTO> purchaseRecord,
 		BigDecimal totalDaConta
 		)
 		
 {
 	
-	public GetCustomerDto (Customer c) {
+	public CustomerDTO (Customer c) {
 		    this(c.getId(),c.getName(),c.getDocument(),c.getEmail(),c.getPhone(),
-				new AddressDto(c.getAddress()),
+				new AddressDTO(c.getAddress()),
 				assembleList(c.getPurchaseRecord()),c.getTotal()
 				);
 	}
 
-	private static List<PurchaseRecordDto> assembleList(List<PurchaseRecord> list) {
-		List<PurchaseRecordDto> response = new ArrayList<>();
+	private static List<PurchaseRecordDTO> assembleList(List<PurchaseRecord> list) {
+		List<PurchaseRecordDTO> response = new ArrayList<>();
 
 		for (PurchaseRecord p : list) {
-			response.add(new PurchaseRecordDto(p.getId(),p.getProductName(), p.getProductprice(), p.getProductCode(),
+			response.add(new PurchaseRecordDTO(p.getId(),p.getProductName(), p.getProductprice(), p.getProductCode(),
 					Util.convertDate(p.getPurchaseDate()), p.getQuantity(), p.getStatus()));
 		}
 		return response;

@@ -1,20 +1,14 @@
 package com.github.im2back.customerms.model.dto.datainput;
 
-import java.math.BigDecimal;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record ProductRequestDto(
-		
-		@NotBlank
-		String name,
-		
+public record UndoPurchaseDTO(
 		@NotNull
-		BigDecimal price,
+		Long purchaseId,
 		
 		@NotBlank
-		String code,
+		String productCode,
 		
 		@NotNull
 		Integer quantity

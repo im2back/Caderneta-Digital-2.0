@@ -1,4 +1,4 @@
-package com.github.im2back.customerms.utils;
+package com.github.im2back.customerms.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -35,9 +35,8 @@ public class EmailService {
 	            helper.setSubject("Conta Detalhada");
 	            helper.setText("Caro cliente, segue em anexo um PDF contendo sua conta detalhada.");
 
-	         // Converte o PDDocument para ByteArrayDataSource
+	            //Converte o PDDocument para ByteArrayDataSource
 	            DataSource dataSource = new ByteArrayDataSource(getBytesFromPDDocument(anexo), "application/pdf");
-
 	            
 	            // anexando o PDF ao e-mail
 	            helper.addAttachment("NotaDetalhada.pdf", dataSource);
@@ -47,6 +46,7 @@ public class EmailService {
 	            e.printStackTrace();
 	        }
 	    }
+	    
 	    private byte[] getBytesFromPDDocument(PDDocument document) throws IOException {
 	        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
 	            document.save(byteArrayOutputStream);

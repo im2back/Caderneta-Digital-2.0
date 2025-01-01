@@ -1,10 +1,10 @@
 package com.github.im2back.customerms.model.dto.datainput;
 
-import com.github.im2back.customerms.model.dto.dataoutput.AddressDto;
+import com.github.im2back.customerms.model.dto.dataoutput.AddressDTO;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record CustomerDto(
+public record NewCustomerDTO(
 		
 		@NotBlank
 		String name,
@@ -18,7 +18,7 @@ public record CustomerDto(
 		@NotBlank
 		String phone,
 			
-		AddressDto address
+		AddressDTO address
 
 ) {
 

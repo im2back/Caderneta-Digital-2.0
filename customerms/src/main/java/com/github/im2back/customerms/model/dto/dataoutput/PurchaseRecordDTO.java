@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 import com.github.im2back.customerms.model.entities.purchase.Status;
 
-public record PurchaseRecordDto(
+public record PurchaseRecordDTO(
 		Long purchaseId,
 		
 		String productName,
