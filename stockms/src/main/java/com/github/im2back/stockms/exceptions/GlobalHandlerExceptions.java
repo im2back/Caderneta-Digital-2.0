@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpClientErrorException;
 
 import com.github.im2back.stockms.service.exceptions.ProductNotFoundException;
-import com.github.im2back.stockms.validation.exceptions.PurchaseValidationException;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
@@ -65,24 +64,12 @@ public class GlobalHandlerExceptions {
 		
 		return ResponseEntity.status(ex.getStatusCode()).body(response);
 	}
-	
-	@ExceptionHandler(PurchaseValidationException.class)
-	public ResponseEntity<StandardError> purchaseValidationException(PurchaseValidationException ex,HttpServletRequest request) {
-				
-		StandardError response = new StandardError(
-				HttpStatus.BAD_REQUEST.value(), 
-				"Purchase Error",
-				ex.getErrorMessages(),
-				request.getRequestURI());
-
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-	}
-	
+		
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<StandardError> dataIntegrityViolationException(DataIntegrityViolationException ex,HttpServletRequest request) {
 		
 		List<String> messages = new ArrayList<>();
-		messages.add(ex.getMessage());
+		messages.add(ex.getRootCause().getMessage());
 		
 		StandardError response = new StandardError(
 				HttpStatus.CONFLICT.value(), 

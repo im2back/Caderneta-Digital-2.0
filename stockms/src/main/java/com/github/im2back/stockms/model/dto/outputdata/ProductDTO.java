@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 import com.github.im2back.stockms.model.entities.Product;
 
-public record ProductDto(
+public record ProductDTO(
 
 		Long id,
 
@@ -19,7 +19,7 @@ public record ProductDto(
 		String productUrl
 
 ) {
-	public ProductDto(Product p) {
+	public ProductDTO(Product p) {
 		this(p.getId(),p.getName(),p.getPrice(),p.getCode(),p.getQuantity(),p.getProductUrl());
 	}
 }
