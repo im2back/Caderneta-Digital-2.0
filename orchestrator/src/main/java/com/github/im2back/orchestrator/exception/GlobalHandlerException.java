@@ -27,7 +27,7 @@ public class GlobalHandlerException {
 						+ ". Causa: " + t));
 
 		StandardError body = new StandardError();
-		body.setError("Erro na requisição open feign: " + exception.getResponseBodyParsed().getError());
+		body.setError("Erro Na Requisição Feign: " + exception.getResponseBodyParsed().getError());
 		body.setStatus(exception.getStatus());
 		body.setPath(request.getRequestURI());
 		body.setMessages(messages);

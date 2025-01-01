@@ -5,5 +5,5 @@ import com.github.im2back.customerms.model.entities.customer.Customer;
 
 public interface PurchaseValidations {
 
-	void valid(PurchaseRequestDto dtoRequest,Customer customer);
+	void valid(PurchaseRequestDto dto,Customer customer);
 }

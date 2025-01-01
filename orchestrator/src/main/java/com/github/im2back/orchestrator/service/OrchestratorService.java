@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.github.im2back.orchestrator.clients.CustomerClient;
 import com.github.im2back.orchestrator.clients.StockClient;
+import com.github.im2back.orchestrator.clients.ValidationClient;
 import com.github.im2back.orchestrator.dto.in.PurchaseHistoryResponseDTO;
 import com.github.im2back.orchestrator.dto.in.PurchaseRequestDTO;
 import com.github.im2back.orchestrator.dto.in.StockUpdateResponseDTO;
@@ -22,10 +23,12 @@ public class OrchestratorService {
 
 	private final StockClient  stockClient;
 	private final CustomerClient customerClient;
+	private final ValidationClient validationClient;
 	
 	public PurchaseHistoryResponseDTO orchestratePurchase(PurchaseRequestDTO dto) {
 		
 		//Etapa 1 - Validar compra antes de processar
+		ResponseEntity<Void> responseRequestValidation = validationClient.valid(dto);
 		
 		
 		//Etapa 2 - Atualizar estoque e deduzir a quantidade de produtos comprados
