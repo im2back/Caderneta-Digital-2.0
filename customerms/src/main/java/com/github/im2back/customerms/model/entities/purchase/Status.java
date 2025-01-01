@@ -15,5 +15,6 @@ public enum Status {
 
     private static Status getStatusByDocument(String document) {
         return document.equals("7654321589") ? Status.PAGO : Status.EM_ABERTO;
+
     }
 }

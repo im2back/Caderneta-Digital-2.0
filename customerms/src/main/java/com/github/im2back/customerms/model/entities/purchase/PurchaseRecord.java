@@ -53,8 +53,6 @@ public class PurchaseRecord {
 		this.status = status;
 	}
 	
-	
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

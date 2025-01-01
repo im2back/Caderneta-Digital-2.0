@@ -22,8 +22,8 @@ public class OrchestratorController {
 	private final OrchestratorService orchestratorService;
 	
 	@PostMapping("/purchase")
-	public ResponseEntity<PurchaseHistoryResponseDTO> orchestratePurchase(@RequestBody PurchaseRequestDTO dto) {
-		PurchaseHistoryResponseDTO response =orchestratorService.orchestratePurchase(dto);
+	public ResponseEntity<PurchaseHistoryResponseDTO> orchestratePurchase(@RequestBody PurchaseRequestDTO dtoIn) {
+		PurchaseHistoryResponseDTO response =orchestratorService.orchestratePurchase(dtoIn);
 		return ResponseEntity.ok(response);
 	}
 	

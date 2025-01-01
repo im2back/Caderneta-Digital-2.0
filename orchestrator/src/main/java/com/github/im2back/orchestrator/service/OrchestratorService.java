@@ -25,16 +25,17 @@ public class OrchestratorService {
 	private final CustomerClient customerClient;
 	private final ValidationClient validationClient;
 	
+	@SuppressWarnings("unused")
 	public PurchaseHistoryResponseDTO orchestratePurchase(PurchaseRequestDTO dto) {
-		
+		System.out.println("ETAPA1");
 		//Etapa 1 - Validar compra antes de processar
 		ResponseEntity<Void> responseRequestValidation = validationClient.valid(dto);
-		
-		
+		System.out.println("fim ETAPA1");
+		System.out.println("ETAPA2");
 		//Etapa 2 - Atualizar estoque e deduzir a quantidade de produtos comprados
 			ResponseEntity<List<StockUpdateResponseDTO>> responseStockClient = stockClient.updateStock(dto.purchasedItems());
 			List<StockUpdateResponseDTO> stockUpdateResponseDTOList = responseStockClient.getBody();
-			
+			System.out.println("fim ETAPA2");
 		//Etapa 3 - Receber a resposta da etapa 1, montar um purchaseHistoryDTO e envialo para o customer-ms persistir um historico da compra.
 			List<UpdatedProducts> products = new ArrayList<>();
 			PurchaseHistoryDTO purchaseHistoryDTO = new PurchaseHistoryDTO(dto.document(), products);
@@ -42,7 +43,7 @@ public class OrchestratorService {
 			stockUpdateResponseDTOList.forEach(t -> {
 				products.add(new UpdatedProducts(t.name(), t.price(), t.code(), t.quantity()));
 			});
-			
+			System.out.println("fim ETAPA2");
 			ResponseEntity<PurchaseHistoryResponseDTO> responseCustomerClient = customerClient.persistPurchaseHistory(purchaseHistoryDTO);
 			return responseCustomerClient.getBody();
 	}

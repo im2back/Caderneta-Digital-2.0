@@ -22,7 +22,6 @@ import com.github.im2back.customerms.model.dto.dataoutput.PurchaseHistoryOutDTO;
 import com.github.im2back.customerms.model.dto.dataoutput.PurchasedProductDTO;
 import com.github.im2back.customerms.model.dto.dataoutput.metrics.DailyTotalDTO;
 import com.github.im2back.customerms.model.dto.dataoutput.metrics.DataForMetricsDTO;
-import com.github.im2back.customerms.model.entities.customer.Address;
 import com.github.im2back.customerms.model.entities.customer.Customer;
 import com.github.im2back.customerms.model.entities.purchase.PurchaseRecord;
 import com.github.im2back.customerms.model.entities.purchase.Status;
@@ -31,7 +30,6 @@ import com.github.im2back.customerms.service.exeptions.CustomerNotFoundException
 import com.github.im2back.customerms.utils.PdfGenerator;
 import com.github.im2back.customerms.validations.customervalidations.CustomerValidations;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -63,12 +61,12 @@ public class CustomerService {
 	}
 
 	@Transactional
-	public CustomerDTO saveNewCustomer(NewCustomerDTO dto) {
+	public CustomerDTO saveNewCustomer(NewCustomerDTO dtoIn) {
 
-		customerValidations.forEach(t -> t.valid(dto));
+		customerValidations.forEach(t -> t.valid(dtoIn));
 
-		Customer customer = repository.save(new Customer(dto.name(), dto.document(), dto.email(), dto.phone(), true,
-				new Address(dto.address().streetName(), dto.address().houseNumber(), dto.address().complement())));
+		Customer customer = repository.save(new Customer(dtoIn));
+		
 		return new CustomerDTO(customer);
 	}
 
@@ -163,8 +161,9 @@ public class CustomerService {
 	}
 
 	@Transactional
-	public void individualPayment(@Valid IndividualPaymentDTO dtoRequest) {
-		repository.individualPayment(Status.PAGO, dtoRequest.purchaseId());
+	public void individualPayment(IndividualPaymentDTO dtoRequest) {
+		repository.individualPayment(Status.PAGO.toString(), dtoRequest.purchaseId());
+			
 	}
 
 }

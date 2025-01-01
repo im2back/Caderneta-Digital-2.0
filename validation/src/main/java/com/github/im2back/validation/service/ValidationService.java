@@ -1,6 +1,7 @@
 package com.github.im2back.validation.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -12,8 +13,8 @@ import com.github.im2back.validation.entities.customer.Customer;
 import com.github.im2back.validation.entities.product.Product;
 import com.github.im2back.validation.repository.customer.CustomerRepository;
 import com.github.im2back.validation.repository.stock.ProductRepository;
-import com.github.im2back.validation.service.exceptions.CustomerNotFoundException;
 import com.github.im2back.validation.validations.customer.PurchaseValidationsCustomer;
+import com.github.im2back.validation.validations.exceptions.PurchaseValidationException;
 import com.github.im2back.validation.validations.stock.PurchaseValidationsStock;
 
 import lombok.RequiredArgsConstructor;
@@ -48,6 +49,6 @@ public class ValidationService {
 	@Transactional(readOnly = true)
 	private Customer findByCustomerPerDocument(String document) {
 		return customerRepository.findByDocument(document)
-				.orElseThrow(() -> new CustomerNotFoundException("User not found for document: " + document));
+				.orElseThrow(() -> new PurchaseValidationException(new ArrayList<>(Arrays.asList("User not found for document: " + document))));
 	}
 }

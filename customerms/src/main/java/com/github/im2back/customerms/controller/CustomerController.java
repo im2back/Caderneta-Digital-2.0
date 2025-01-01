@@ -89,7 +89,7 @@ public class CustomerController {
 				    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 				    schema = @Schema(implementation = StandardError.class))),
 	})
-	@PostMapping
+	@PostMapping("/create-customer")
 	ResponseEntity<CustomerDTO> saveNewCustomer(@RequestBody @Valid NewCustomerDTO customer,
 			UriComponentsBuilder uriBuilder) {
 		CustomerDTO response = service.saveNewCustomer(customer);
@@ -166,13 +166,18 @@ public class CustomerController {
 				    schema = @Schema(implementation = StandardError.class))),
 			@ApiResponse(
 				    responseCode = "400",
-				    description = "Em caso de validações do beanvalidation retorna status 400 e uma menssagem personalizada do tip oStandardError",
+				    description = "Em caso de validações do beanvalidation retorna status 400 e uma menssagem personalizada do tipo StandardError",
 				    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 				    schema = @Schema(implementation = StandardError.class))),
 	})
 	@PutMapping("/individual-payment")
 	ResponseEntity<Void> individualPayment(@RequestBody @Valid IndividualPaymentDTO dtoIn) {
 		service.individualPayment(dtoIn);
+		System.out.println();
+		System.out.println();
+		System.out.println("Dto de entrada: "+dtoIn.purchaseId());
+		System.out.println();
+		System.out.println();
 		return ResponseEntity.ok().build();
 	}
 	

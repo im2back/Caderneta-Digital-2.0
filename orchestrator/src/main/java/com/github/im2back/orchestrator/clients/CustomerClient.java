@@ -15,7 +15,7 @@ import jakarta.validation.Valid;
 @FeignClient(name = "customerms",configuration = FeignConfig.class)
 public interface CustomerClient {
 
-	@PutMapping("/customers")
+	@PutMapping("/customers/create-history")
 	ResponseEntity<PurchaseHistoryResponseDTO> persistPurchaseHistory(@RequestBody @Valid PurchaseHistoryDTO dtoRequest);
 	
 }

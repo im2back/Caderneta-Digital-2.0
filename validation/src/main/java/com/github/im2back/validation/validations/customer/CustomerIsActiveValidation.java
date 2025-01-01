@@ -17,11 +17,9 @@ public class CustomerIsActiveValidation implements PurchaseValidationsCustomer {
 	@Override
 	public void valid(Customer customer) {
 		List<String> errorMessages = new ArrayList<>();
-
-		if (!customer.isActive()) {
+		if (customer.isActive() == false) {
 			errorMessages.add("Cancelled purchase. The user is inactive.");
 		}
-
 		if (!errorMessages.isEmpty()) {
 			throw new PurchaseValidationException(errorMessages);
 		}

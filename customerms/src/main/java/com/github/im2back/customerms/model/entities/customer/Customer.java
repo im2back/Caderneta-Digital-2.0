@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.im2back.customerms.model.dto.datainput.NewCustomerDTO;
 import com.github.im2back.customerms.model.entities.purchase.PurchaseRecord;
 
 import jakarta.persistence.CascadeType;
@@ -38,9 +39,20 @@ public class Customer {
 		this.email = email;
 		this.phone = phone;
 		this.isActive = isActive;
-		this.address = address;
+		this.address = address;	
+	}
+	
+	public Customer(NewCustomerDTO dtoIn) {
+		super();
+		this.name = dtoIn.name();
+		this.document = dtoIn.document();
+		this.email = dtoIn.email();
+		this.phone = dtoIn.phone();
+		this.isActive = true;
+		this.address = new Address(dtoIn.address().streetName(),dtoIn.address().houseNumber(), dtoIn.address().complement());
 		
 	}
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,10 +68,12 @@ public class Customer {
 	@Column(unique = true)
 	private String phone;
 	
+	@Column(name = "is_active", nullable = true)
 	private boolean isActive;
 	
 	@Embedded
 	private Address address;
+	
 	
 	@OneToMany(mappedBy = "customer",cascade = CascadeType.ALL,orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<PurchaseRecord> purchaseRecord = new ArrayList<>();

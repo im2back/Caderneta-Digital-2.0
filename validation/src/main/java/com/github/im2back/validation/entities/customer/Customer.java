@@ -54,6 +54,7 @@ public class Customer {
 	@Column(unique = true)
 	private String phone;
 	
+	@Column(name = "is_active", nullable = true)
 	private boolean isActive;
 	
 	@Embedded
