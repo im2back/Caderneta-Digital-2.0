@@ -18,7 +18,7 @@ public class ValidationController {
 
 	private final ValidationService validationService;
 	
-	@PostMapping
+	@PostMapping("/purchase")
 	public ResponseEntity<Void> valid(@RequestBody ProductsPurchaseRequestDto dto){
 		validationService.validPurchase(dto);
 		

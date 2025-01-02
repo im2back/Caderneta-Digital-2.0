@@ -87,13 +87,11 @@ public class ProductService {
 		return products;
 	}
 	
-	//RAFAC : Desfazer uma compra e acionar microsserviço de cliente
 	@Transactional
-	public void undoIndividualPurchase(UndoPurchaseDTO dto) {
-		Product product = findByCode(dto.productCode());
+	public void undoIndividualPurchase(UndoPurchaseDTO dto, String code) {
+		Product product = findByCode(code);
 		product.setQuantity(product.getQuantity() + dto.quantity());
 		repository.save(product);
-		//clientResourceCustomer.undoPurchase(dto);
 	}
 	
 	@Transactional

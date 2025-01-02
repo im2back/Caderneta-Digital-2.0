@@ -1,15 +1,8 @@
 package com.github.im2back.stockms.model.dto.inputdata;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record UndoPurchaseDTO(
-		@NotNull
-		Long purchaseId,
-		
-		@NotBlank
-		String productCode,
-		
+public record UndoPurchaseDTO(	
 		@NotNull
 		Integer quantity
 		) {

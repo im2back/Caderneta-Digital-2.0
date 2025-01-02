@@ -73,7 +73,7 @@ public class GlobalHandlerExceptions {
 		
 		StandardError response = new StandardError(
 				HttpStatus.CONFLICT.value(), 
-				"Data Integrity Violation ",
+				"Data Integrity Violation",
 				messages,
 				request.getRequestURI());
 

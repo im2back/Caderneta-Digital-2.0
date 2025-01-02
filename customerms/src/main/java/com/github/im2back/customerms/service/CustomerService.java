@@ -12,10 +12,8 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.im2back.customerms.model.dto.datainput.IndividualPaymentDTO;
 import com.github.im2back.customerms.model.dto.datainput.NewCustomerDTO;
 import com.github.im2back.customerms.model.dto.datainput.PurchaseHistoryInDTO;
-import com.github.im2back.customerms.model.dto.datainput.UndoPurchaseDTO;
 import com.github.im2back.customerms.model.dto.dataoutput.CustomerDTO;
 import com.github.im2back.customerms.model.dto.dataoutput.ProductDataToPdf;
 import com.github.im2back.customerms.model.dto.dataoutput.PurchaseHistoryOutDTO;
@@ -107,8 +105,8 @@ public class CustomerService {
 	}
 
 	@Transactional
-	public void undoPurchase(UndoPurchaseDTO dtoRequest) {
-		repository.undoPurchase(dtoRequest.purchaseId());
+	public void undoPurchase(Long id) {
+		repository.undoPurchase(id);
 	}
 
 	public void generatePurchaseInvoice(String document) {
@@ -161,8 +159,8 @@ public class CustomerService {
 	}
 
 	@Transactional
-	public void individualPayment(IndividualPaymentDTO dtoRequest) {
-		repository.individualPayment(Status.PAGO.toString(), dtoRequest.purchaseId());
+	public void individualPayment(Long purchaseId) {
+		repository.individualPayment(Status.PAGO.toString(), purchaseId);
 			
 	}
 

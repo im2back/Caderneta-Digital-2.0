@@ -2,11 +2,10 @@ package com.github.im2back.customerms.controller;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,10 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.github.im2back.customerms.exceptions.StandardError;
-import com.github.im2back.customerms.model.dto.datainput.IndividualPaymentDTO;
 import com.github.im2back.customerms.model.dto.datainput.NewCustomerDTO;
 import com.github.im2back.customerms.model.dto.datainput.PurchaseHistoryInDTO;
-import com.github.im2back.customerms.model.dto.datainput.UndoPurchaseDTO;
 import com.github.im2back.customerms.model.dto.dataoutput.CustomerDTO;
 import com.github.im2back.customerms.model.dto.dataoutput.PurchaseHistoryOutDTO;
 import com.github.im2back.customerms.model.dto.dataoutput.metrics.DataForMetricsDTO;
@@ -56,7 +53,7 @@ public class CustomerController {
 		return ResponseEntity.ok(response);
 	}
 	
-	@Operation(summary = "Busca um customer no banco e retorna um CustomerDTO apartir do documento informado como parametro")
+	@Operation(summary = "Busca um customer no banco e retorna um CustomerDTO apartir do documento informado no path")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200",description = "Retorna Status 200ok e um Dto em caso de sucesso",
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -67,8 +64,8 @@ public class CustomerController {
 				    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 				    schema = @Schema(implementation = StandardError.class))),
 	})
-	@GetMapping("/find-document")
-	ResponseEntity<CustomerDTO> findCustomerByDocument(@RequestParam String document) {
+	@GetMapping("/document/{document}")
+	ResponseEntity<CustomerDTO> findCustomerByDocument(@PathVariable String document) {
 		CustomerDTO response = service.findCustomerByDocumentOrganizedPurchase(document);
 		return ResponseEntity.ok(response);
 	}
@@ -89,7 +86,7 @@ public class CustomerController {
 				    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 				    schema = @Schema(implementation = StandardError.class))),
 	})
-	@PostMapping("/create-customer")
+	@PostMapping
 	ResponseEntity<CustomerDTO> saveNewCustomer(@RequestBody @Valid NewCustomerDTO customer,
 			UriComponentsBuilder uriBuilder) {
 		CustomerDTO response = service.saveNewCustomer(customer);
@@ -97,7 +94,7 @@ public class CustomerController {
 		return ResponseEntity.created(uri).body(response);
 	}
 	
-	@Operation(summary = "Faz a exclusão lógica de um Customer apartir documento informado como parametro '?document'")
+	@Operation(summary = "Faz a exclusão lógica de um Customer apartir documento informado no path")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "204",description = "Retorna Status 204 e um body vazio, após excluir o customer",
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -108,8 +105,8 @@ public class CustomerController {
 				    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 				    schema = @Schema(implementation = StandardError.class))),
 	})
-	@DeleteMapping("/delete-customer")
-	ResponseEntity<Void> deleteCustomerById(@RequestParam String document) {
+	@PatchMapping("/{document}")
+	ResponseEntity<Void> deleteCustomerByDocument(@PathVariable String document) {
 		service.logicalCustomerDeletion(document);
 		return ResponseEntity.noContent().build();
 	}
@@ -131,13 +128,13 @@ public class CustomerController {
 				    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 				    schema = @Schema(implementation = StandardError.class))),
 			})
-	@PutMapping("/create-history")
+	@PostMapping("/purchase-history")
 	ResponseEntity<PurchaseHistoryOutDTO> persistPurchaseHistory(@RequestBody @Valid PurchaseHistoryInDTO dtoIn) {
 		PurchaseHistoryOutDTO response = service.purchase(dtoIn);
 		return ResponseEntity.ok(response);
 	}
 	
-	@Operation(summary = "Exclui do banco de dados uma compra registrada incorretamente, com base no objeto recebido no body UndoPurchaseDto")
+	@Operation(summary = "Exclui do banco de dados uma compra registrada incorretamente, com base no purchaseId informado no path")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200",description = "Exclui a compra, retorna Status 200 e um corpo vazio",
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -148,13 +145,13 @@ public class CustomerController {
 				    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 				    schema = @Schema(implementation = StandardError.class))),
 	})
-	@DeleteMapping("/undo-purchase")
-	ResponseEntity<Void> undoPurchase(@RequestBody @Valid UndoPurchaseDTO dtoIn) {
-		service.undoPurchase(dtoIn);
+	@PostMapping("/purchase/{purchaseId}/undo")
+	ResponseEntity<Void> undoPurchase(@PathVariable Long purchaseId) {
+		service.undoPurchase(purchaseId);
 		return ResponseEntity.ok().build();
 	}
 	
-	@Operation(summary = "Quita uma compra mudando seu status de EM_ABERTO para PAGO com base no objeto recebido no body IndividualPaymentDTO")
+	@Operation(summary = "Quita uma compra mudando seu status de EM_ABERTO para PAGO com base no purchaseId recebido no path ")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200",description = "quita a compra, retorna Status 200 e um corpo vazio",
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -170,14 +167,9 @@ public class CustomerController {
 				    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 				    schema = @Schema(implementation = StandardError.class))),
 	})
-	@PutMapping("/individual-payment")
-	ResponseEntity<Void> individualPayment(@RequestBody @Valid IndividualPaymentDTO dtoIn) {
-		service.individualPayment(dtoIn);
-		System.out.println();
-		System.out.println();
-		System.out.println("Dto de entrada: "+dtoIn.purchaseId());
-		System.out.println();
-		System.out.println();
+	@PatchMapping("/purchase/payment/{purchaseId}")
+	ResponseEntity<Void> individualPayment(@PathVariable Long purchaseId) {
+		service.individualPayment(purchaseId);
 		return ResponseEntity.ok().build();
 	}
 	
@@ -192,7 +184,7 @@ public class CustomerController {
 				    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 				    schema = @Schema(implementation = StandardError.class))),
 	})
-	@PutMapping("/note")
+	@GetMapping("/note")
 	ResponseEntity<Void> generatePurchaseNote(@RequestParam String document) {
 		service.generatePurchaseInvoice(document);
 		return ResponseEntity.ok().build();
@@ -209,8 +201,8 @@ public class CustomerController {
 				    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 				    schema = @Schema(implementation = StandardError.class))),
 	})
-	@DeleteMapping("/clear-debt")
-	ResponseEntity<Void> clearDebt(@RequestParam String document) {
+	@PatchMapping("{document}/payments")
+	ResponseEntity<Void> clearDebt(@PathVariable String document) {
         service.clearDebt(document);	
 		return ResponseEntity.ok().build();
 	}

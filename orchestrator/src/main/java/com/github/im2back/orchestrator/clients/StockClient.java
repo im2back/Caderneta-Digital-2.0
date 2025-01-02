@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.github.im2back.orchestrator.config.FeignConfig;
@@ -16,6 +16,6 @@ import jakarta.validation.Valid;
 @FeignClient(name = "stockms", configuration = FeignConfig.class)
 public interface StockClient {
 	
-	@PostMapping("products/update-after-purchase")
+	@PutMapping("products/update/stock")
 	public ResponseEntity<List<StockUpdateResponseDTO>> updateStock(@RequestBody @Valid List<PurchasedItem> dto);
 }

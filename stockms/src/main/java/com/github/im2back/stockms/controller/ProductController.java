@@ -7,12 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -74,8 +74,8 @@ public class ProductController {
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					schema = @Schema(implementation = StandardError.class))),
 	})
-	@GetMapping("/find-code")
-	public ResponseEntity<ProductDTO> findProductByCode(@RequestParam String code) {
+	@GetMapping("/{code}")
+	public ResponseEntity<ProductDTO> findProductByCode(@PathVariable String code) {
 		Product product = service.findByCode(code);
 		return ResponseEntity.ok(new ProductDTO(product));
 	}
@@ -138,7 +138,7 @@ public class ProductController {
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					schema = @Schema(implementation = StandardError.class))),
 	})
-	@PostMapping("/update-after-purchase")
+	@PutMapping("/update/stock")
 	public ResponseEntity<List<StockUpdateAfterPurchaseResponseDTO>> updateStock(
 			@RequestBody @NotEmpty(message = "Input movie list cannot be empty.") @Valid List<PurchasedItemDTO> dtoIn) {
 	
@@ -146,7 +146,7 @@ public class ProductController {
 		return ResponseEntity.ok().body(stockUpdateResponseDTOList);
 	}
 	
-	@Operation(summary = ("Retorna um corpo vazio e status 200 após desfazer uma compra"))
+	@Operation(summary = ("Repõe itens no estoque com base no codigo do produto fornecido no path e na quandidade vinda no body"))
 	@ApiResponses(value = {
 			@ApiResponse(
 					responseCode = "200",
@@ -164,9 +164,9 @@ public class ProductController {
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					schema = @Schema(implementation = StandardError.class))),
 	})
-	@PutMapping("/undo-purchase")
-	public ResponseEntity<Void> undoPurchase(@RequestBody @Valid UndoPurchaseDTO dtoIn) {
-		service.undoIndividualPurchase(dtoIn);
+	@PatchMapping("/{productCode}/undo")
+	public ResponseEntity<Void> undoPurchase(@PathVariable String productCode  , @RequestBody @Valid UndoPurchaseDTO dtoIn) {
+		service.undoIndividualPurchase(dtoIn,productCode);
 		return ResponseEntity.ok().build();
 	}
 	
@@ -188,8 +188,8 @@ public class ProductController {
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					schema = @Schema(implementation = StandardError.class))),
 	})
-	@PutMapping("/update")
-	public ResponseEntity<Void> updateProduct(@RequestBody @Valid ProductDTO dtoIn) {
+	@PatchMapping("/{id}/update")
+	public ResponseEntity<Void> updateProduct(@PathVariable Long id ,@RequestBody @Valid ProductDTO dtoIn) {
 		service.updateProduct(dtoIn);
 		return ResponseEntity.ok().build();
 	}
