@@ -3,13 +3,16 @@
  - Desacoplar os microsserviços, melhorando sua coesão e modificando o funcionamento das comunicações
  - Melhora de performance
  - Melhorar documentação
- - Aumentar coesão do código de modo geral
- - Melhorar os testes
- - Atualmente, a comunicação entre os microsserviços está altamente acoplada e carece de coesão, o que resulta em operações complexas e pouco transparentes. O uso predominante de comunicação síncrona foi priorizado em detrimento da comunicação assíncrona, devido às restrições impostas pelas regras de negócio, que não permitem a implementação de fluxos tardios. Com a introdução do novo orquestrador, a necessidade de comunicação direta entre os microsserviços será eliminada, tornando o fluxo mais claro, eficiente e desacoplado.
+ - Melhorar a escrita dos testes e ampliar sua cobertura
+   
+### Situação atual :
+Acoplamento elevado e baixa coesão: A comunicação atual entre os microsserviços é altamente acoplada e apresenta pouca coesão. Muitos microsserviços realizam tarefas além de seu propósito original, esse comportamento aumenta complexidade e reduz a transparência das operações. Além disso, a falta de um orquestrador torna o fluxo de comunicação desorganizado e difícil de gerenciar. Outro ponto crítico é a ausência de um gateway, que seria fundamental para centralizar as requisições, gerenciar certificados HTTPS e, futuramente, implementar medidas de segurança.
+
+ ### Desafios da nova arquitetura :
+  De acordo com as necessidades/demandas do local onde a aplicação será utiilizada é inviavel o uso de comunicação assincrona por isso uso predominante de comunicação síncrona foi priorizado em detrimento da comunicação assíncrona, devido às restrições impostas pelas regras de negócio, que não permitem a implementação de fluxos tardios. Com a introdução do novo orquestrador, a necessidade de comunicação direta entre os microsserviços será eliminada, tornando o fluxo mais claro, eficiente e desacoplado. Houve necessidade de adicionar outros dois microsserviços : RELATORIOS-MS e VALIDATION-MS, estes por sua vez preenchem demandas afim de desafogar os outros microsserviços e preencher necessidades impostas pela comunicação sincrona.
+   
 ### Prévias da refatoração, novos fluxos :
-![Nova Arquitetura, Caderneta de Mercearia drawio](https://github.com/user-attachments/assets/f88bd70c-60e8-4a77-9396-4fa3b8e545bf)
-
-
+![Nova Arquitetura, Caderneta de Mercearia drawio](https://github.com/user-attachments/assets/ba39d837-bcfc-42be-8671-2fb2bc629aa7)
 
 
 
