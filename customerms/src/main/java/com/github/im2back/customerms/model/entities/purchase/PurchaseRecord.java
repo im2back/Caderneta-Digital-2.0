@@ -3,6 +3,7 @@ package com.github.im2back.customerms.model.entities.purchase;
 import java.math.BigDecimal;
 import java.time.Instant;
 
+import com.github.im2back.customerms.model.dto.datainput.PurchasedProductsDTO;
 import com.github.im2back.customerms.model.entities.customer.Customer;
 
 import jakarta.persistence.Column;
@@ -40,7 +41,18 @@ public class PurchaseRecord {
 		this.quantity = quantity;
 		this.status = status;
 	}
-
+	
+	public PurchaseRecord(PurchasedProductsDTO dto, Instant instant, Customer customer,Status status) {
+		super();
+		this.productName = dto.name();
+		this.productprice = dto.price();
+		this.productCode = dto.code();
+		this.purchaseDate = instant;
+		this.customer = customer;
+		this.quantity = dto.quantity();
+		this.status = status;
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

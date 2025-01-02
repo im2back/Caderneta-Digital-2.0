@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.github.im2back.customerms.model.entities.customer.Customer;
-import com.github.im2back.customerms.model.entities.purchase.Status;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	
@@ -69,6 +68,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	
 	@Modifying
 	@Query(value = "UPDATE tb_purchase p SET p.payment_status = :paid WHERE p.id = :idPurchase ", nativeQuery = true)
-	void individualPayment(@Param("paid")Status status, @Param("idPurchase") Long idPurchase);
+	void individualPayment(@Param("paid")String status, @Param("idPurchase") Long idPurchase);
+
+
 		
 }

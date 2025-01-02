@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.github.im2back.customerms.model.dto.dataoutput.ProductDataToPdf;
 import com.github.im2back.customerms.model.entities.customer.Customer;
+import com.github.im2back.customerms.service.EmailService;
 
 @Component
 public class PdfGenerator {
@@ -24,7 +25,6 @@ public class PdfGenerator {
         this.emailService = new EmailService(javaMailSender);
     }
 	
-
 	public void generatePdf(List<ProductDataToPdf> productsList, Customer customer, String nomeArquivo) {
         try {
             // Criar um novo documento PDF
