@@ -52,7 +52,7 @@ public class CustomerService {
 	}
 
 	@Transactional(readOnly = true)
-	public CustomerDTO findCustomerByDocumentOrganizedPurchase(String document) {
+	public CustomerDTO findCustomerWithUnpaidPurchases(String document) {
 		Customer customer = findCustomerByDocument(document);
 		customer.getPurchaseRecord().removeIf(t -> t.getStatus() == Status.PAGO);
 		return new CustomerDTO(customer);
@@ -76,7 +76,7 @@ public class CustomerService {
 	}
 
 	@Transactional
-	public PurchaseHistoryOutDTO purchase(PurchaseHistoryInDTO dtoRequest) {
+	public PurchaseHistoryOutDTO registerPurchase(PurchaseHistoryInDTO dtoRequest) {
 
 		Customer customer = findCustomerByDocument(dtoRequest.document());
 		addPurchaseToCustomerHistory(dtoRequest, customer);

@@ -35,7 +35,7 @@ public class OrchestratorService {
 			ResponseEntity<List<StockUpdateResponseDTO>> responseStockClient = stockClient.updateStock(dto.purchasedItems());
 			List<StockUpdateResponseDTO> stockUpdateResponseDTOList = responseStockClient.getBody();
 	
-		//Etapa 3 - Receber a resposta da etapa 1, montar um purchaseHistoryDTO e envialo para o customer-ms persistir um historico da compra.
+		//Etapa 3 - Receber a resposta da etapa 2, montar um purchaseHistoryDTO e envialo para o customer-ms persistir um historico da compra.
 			List<UpdatedProducts> products = new ArrayList<>();
 			PurchaseHistoryDTO purchaseHistoryDTO = new PurchaseHistoryDTO(dto.document(), products);
 			
@@ -44,9 +44,7 @@ public class OrchestratorService {
 			});
 
 			ResponseEntity<PurchaseHistoryResponseDTO> responseCustomerClient = customerClient.persistPurchaseHistory(purchaseHistoryDTO);
+			
 			return responseCustomerClient.getBody();
-	}
-
-	
-	
+	}	
 }

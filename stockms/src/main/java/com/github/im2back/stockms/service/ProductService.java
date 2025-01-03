@@ -32,7 +32,7 @@ public class ProductService {
 	}
 
 	@Transactional(readOnly = true)
-	public Product findByCode(String code) {
+	public Product findProductByCode(String code) {
 		Product product = repository.findByCode(code)
 				.orElseThrow(() -> new ProductNotFoundException("Product Not found for code: " + code));
 		return product;
@@ -52,7 +52,7 @@ public class ProductService {
 	@Transactional
 	public List<StockUpdateAfterPurchaseResponseDTO> updateQuantityProductsAfterPurchase(List<PurchasedItemDTO> dto) {
 			
-		List<Product> products = findByCodes(dto);
+		List<Product> products = findProductsByCodes(dto);
 		List<Product> listOfProductsThatHaveBeenUpdated = persistChangesInTheQuantityOfProducts(dto, products);
 		List<StockUpdateAfterPurchaseResponseDTO> response = buildUpdateResponse(dto, listOfProductsThatHaveBeenUpdated);
 		
@@ -80,7 +80,7 @@ public class ProductService {
 		return response; 
 	}
 	
-	private List<Product> findByCodes(List<PurchasedItemDTO> productsList) {	
+	private List<Product> findProductsByCodes(List<PurchasedItemDTO> productsList) {	
 		List<String> productCodesList = new ArrayList<>();
 		productsList.forEach(t -> productCodesList.add(t.code()));		
 		List<Product> products = repository.findByCodes(productCodesList);
@@ -89,7 +89,7 @@ public class ProductService {
 	
 	@Transactional
 	public void undoIndividualPurchase(UndoPurchaseDTO dto, String code) {
-		Product product = findByCode(code);
+		Product product = findProductByCode(code);
 		product.setQuantity(product.getQuantity() + dto.quantity());
 		repository.save(product);
 	}

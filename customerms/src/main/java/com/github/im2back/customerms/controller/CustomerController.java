@@ -66,7 +66,7 @@ public class CustomerController {
 	})
 	@GetMapping("/document/{document}")
 	ResponseEntity<CustomerDTO> findCustomerByDocument(@PathVariable String document) {
-		CustomerDTO response = service.findCustomerByDocumentOrganizedPurchase(document);
+		CustomerDTO response = service.findCustomerWithUnpaidPurchases(document);
 		return ResponseEntity.ok(response);
 	}
 	
@@ -130,7 +130,7 @@ public class CustomerController {
 			})
 	@PostMapping("/purchase-history")
 	ResponseEntity<PurchaseHistoryOutDTO> persistPurchaseHistory(@RequestBody @Valid PurchaseHistoryInDTO dtoIn) {
-		PurchaseHistoryOutDTO response = service.purchase(dtoIn);
+		PurchaseHistoryOutDTO response = service.registerPurchase(dtoIn);
 		return ResponseEntity.ok(response);
 	}
 	

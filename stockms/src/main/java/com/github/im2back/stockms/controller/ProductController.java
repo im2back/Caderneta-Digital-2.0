@@ -22,7 +22,6 @@ import com.github.im2back.stockms.model.dto.inputdata.PurchasedItemDTO;
 import com.github.im2back.stockms.model.dto.inputdata.UndoPurchaseDTO;
 import com.github.im2back.stockms.model.dto.outputdata.ProductDTO;
 import com.github.im2back.stockms.model.dto.outputdata.StockUpdateAfterPurchaseResponseDTO;
-import com.github.im2back.stockms.model.entities.Product;
 import com.github.im2back.stockms.service.ProductService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -60,7 +59,7 @@ public class ProductController {
 		ProductDTO response =  new ProductDTO(service.findProductById(id));
 		return ResponseEntity.ok(response);
 	}
-	 
+	
 	@Operation(summary = ("Busca no banco e retorna um ProductDTO de Product com base no code recebido no parametro"))
 	@ApiResponses(value = {
 			@ApiResponse(
@@ -76,8 +75,8 @@ public class ProductController {
 	})
 	@GetMapping("/{code}")
 	public ResponseEntity<ProductDTO> findProductByCode(@PathVariable String code) {
-		Product product = service.findByCode(code);
-		return ResponseEntity.ok(new ProductDTO(product));
+		ProductDTO response =  new ProductDTO(service.findProductByCode(code));
+		return ResponseEntity.ok(response);
 	}
 	
 	@Operation(summary = ("Salva no um novo Product no banco apartir de um NewProductToSaveDTO recebido no body  e retorna um ProductDTO"))
