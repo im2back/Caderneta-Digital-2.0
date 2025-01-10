@@ -12,8 +12,8 @@ import com.github.im2back.orchestrator.dto.in.PurchaseRequestDTO;
 @FeignClient(name = "validation", configuration = FeignConfig.class)
 public interface ValidationClient {
 
-	@PostMapping("/validations/purchase")
-	public ResponseEntity<Void> valid(@RequestBody PurchaseRequestDTO dto);
-
-	
+    @PostMapping("/validations/purchase")
+    ResponseEntity<Void> valid(@RequestBody PurchaseRequestDTO dto);   
 }
+
+

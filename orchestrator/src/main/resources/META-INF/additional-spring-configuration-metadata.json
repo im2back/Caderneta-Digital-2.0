@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "resilience4j.retry.instances.validationClient.max-attempts",
+    "type": "java.lang.String",
+    "description": "A description for 'resilience4j.retry.instances.validationClient.max-attempts'"
+  },
+  {
+    "name": "resilience4j.retry.instances.validationClient.wait-duration",
+    "type": "java.lang.String",
+    "description": "A description for 'resilience4j.retry.instances.validationClient.wait-duration'"
+  },
+  {
+    "name": "resilience4j.retry.instances.validationClient.wait-duration",
+    "type": "java.lang.String",
+    "description": "A description for 'resilience4j.retry.instances.validationClient.wait-duration'"
+  }
+]}
