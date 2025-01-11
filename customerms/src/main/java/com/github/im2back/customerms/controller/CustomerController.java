@@ -66,7 +66,7 @@ public class CustomerController {
 	})
 	@GetMapping("/document/{document}")
 	ResponseEntity<CustomerDTO> findCustomerByDocument(@PathVariable String document) {
-		CustomerDTO response = service.findCustomerByDocumentOrganizedPurchase(document);
+		CustomerDTO response = service.findCustomerWithUnpaidPurchases(document);
 		return ResponseEntity.ok(response);
 	}
 	
@@ -130,7 +130,7 @@ public class CustomerController {
 			})
 	@PostMapping("/purchase-history")
 	ResponseEntity<PurchaseHistoryOutDTO> persistPurchaseHistory(@RequestBody @Valid PurchaseHistoryInDTO dtoIn) {
-		PurchaseHistoryOutDTO response = service.purchase(dtoIn);
+		PurchaseHistoryOutDTO response = service.registerPurchase(dtoIn);
 		return ResponseEntity.ok(response);
 	}
 	
@@ -145,7 +145,7 @@ public class CustomerController {
 				    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 				    schema = @Schema(implementation = StandardError.class))),
 	})
-	@PostMapping("/purchase/{purchaseId}/undo")
+	@PatchMapping("/purchase-history/{purchaseId}/undo")
 	ResponseEntity<Void> undoPurchase(@PathVariable Long purchaseId) {
 		service.undoPurchase(purchaseId);
 		return ResponseEntity.ok().build();
@@ -167,7 +167,7 @@ public class CustomerController {
 				    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 				    schema = @Schema(implementation = StandardError.class))),
 	})
-	@PatchMapping("/purchase/payment/{purchaseId}")
+	@PatchMapping("/purchase-history/{purchaseId}/payment")
 	ResponseEntity<Void> individualPayment(@PathVariable Long purchaseId) {
 		service.individualPayment(purchaseId);
 		return ResponseEntity.ok().build();
@@ -201,7 +201,7 @@ public class CustomerController {
 				    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 				    schema = @Schema(implementation = StandardError.class))),
 	})
-	@PatchMapping("{document}/payments")
+	@PatchMapping("/purchase-history/{document}")
 	ResponseEntity<Void> clearDebt(@PathVariable String document) {
         service.clearDebt(document);	
 		return ResponseEntity.ok().build();

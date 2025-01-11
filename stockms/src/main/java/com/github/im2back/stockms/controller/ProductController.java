@@ -20,9 +20,9 @@ import com.github.im2back.stockms.exceptions.StandardError;
 import com.github.im2back.stockms.model.dto.inputdata.NewProductToSaveDTO;
 import com.github.im2back.stockms.model.dto.inputdata.PurchasedItemDTO;
 import com.github.im2back.stockms.model.dto.inputdata.UndoPurchaseDTO;
+import com.github.im2back.stockms.model.dto.outputdata.MassiveReplenishmentResponseDTO;
 import com.github.im2back.stockms.model.dto.outputdata.ProductDTO;
 import com.github.im2back.stockms.model.dto.outputdata.StockUpdateAfterPurchaseResponseDTO;
-import com.github.im2back.stockms.model.entities.Product;
 import com.github.im2back.stockms.service.ProductService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -60,7 +60,7 @@ public class ProductController {
 		ProductDTO response =  new ProductDTO(service.findProductById(id));
 		return ResponseEntity.ok(response);
 	}
-	 
+	
 	@Operation(summary = ("Busca no banco e retorna um ProductDTO de Product com base no code recebido no parametro"))
 	@ApiResponses(value = {
 			@ApiResponse(
@@ -76,8 +76,8 @@ public class ProductController {
 	})
 	@GetMapping("/{code}")
 	public ResponseEntity<ProductDTO> findProductByCode(@PathVariable String code) {
-		Product product = service.findByCode(code);
-		return ResponseEntity.ok(new ProductDTO(product));
+		ProductDTO response =  new ProductDTO(service.findProductByCode(code));
+		return ResponseEntity.ok(response);
 	}
 	
 	@Operation(summary = ("Salva no um novo Product no banco apartir de um NewProductToSaveDTO recebido no body  e retorna um ProductDTO"))
@@ -138,8 +138,8 @@ public class ProductController {
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					schema = @Schema(implementation = StandardError.class))),
 	})
-	@PutMapping("/update/stock")
-	public ResponseEntity<List<StockUpdateAfterPurchaseResponseDTO>> updateStock(
+	@PutMapping
+	public ResponseEntity<List<StockUpdateAfterPurchaseResponseDTO>> updateStockAfterPurchase(
 			@RequestBody @NotEmpty(message = "Input movie list cannot be empty.") @Valid List<PurchasedItemDTO> dtoIn) {
 	
 		List<StockUpdateAfterPurchaseResponseDTO> stockUpdateResponseDTOList = service.updateQuantityProductsAfterPurchase(dtoIn);
@@ -165,9 +165,15 @@ public class ProductController {
 					schema = @Schema(implementation = StandardError.class))),
 	})
 	@PatchMapping("/{productCode}/undo")
-	public ResponseEntity<Void> undoPurchase(@PathVariable String productCode  , @RequestBody @Valid UndoPurchaseDTO dtoIn) {
+	public ResponseEntity<Void> restockIndividualProduct(@PathVariable String productCode  , @RequestBody @Valid UndoPurchaseDTO dtoIn) {
 		service.undoIndividualPurchase(dtoIn,productCode);
 		return ResponseEntity.ok().build();
+	}
+	
+	@PutMapping("/restock")
+	public ResponseEntity<List<MassiveReplenishmentResponseDTO>> massiveReplenishmentInStock(@RequestBody @NotEmpty(message = "Input movie list cannot be empty.") @Valid List<StockUpdateAfterPurchaseResponseDTO> dtoIn) {
+		var response = service.massiveReplenishment(dtoIn);
+		return ResponseEntity.ok(response);
 	}
 	
 	@Operation(summary = ("Recebe um ProductDTO e atualiza os dados de um produto apartir deste"))
@@ -188,7 +194,7 @@ public class ProductController {
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					schema = @Schema(implementation = StandardError.class))),
 	})
-	@PatchMapping("/{id}/update")
+	@PatchMapping("/{id}")
 	public ResponseEntity<Void> updateProduct(@PathVariable Long id ,@RequestBody @Valid ProductDTO dtoIn) {
 		service.updateProduct(dtoIn);
 		return ResponseEntity.ok().build();

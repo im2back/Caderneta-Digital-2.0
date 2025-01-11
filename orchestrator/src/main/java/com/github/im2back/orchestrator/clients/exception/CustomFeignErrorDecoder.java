@@ -15,12 +15,12 @@ public class CustomFeignErrorDecoder implements ErrorDecoder {
 	@Override
 	public Exception decode(String methodKey, Response response) {
 		String responseBody = extractTheBodyInJsonFormat(response);
-
+		 		
 		switch (response.status()) {
 		case 503:
-		throw new ServiceUnavailableCustomException(
-			"Service unavailable for: " + methodKey + "Cause: " + responseBody, 503, methodKey);
-
+			throw new ServiceUnavailableCustomException(
+				"Service unavailable for: " + methodKey + "Cause: " + responseBody, 503, methodKey);
+		
 		default:
 			StandardError responseBodyParsed = parseResponse(responseBody);
 			throw new FeignClientCustomException(response.status(), responseBodyParsed, methodKey);

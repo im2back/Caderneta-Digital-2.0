@@ -11,10 +11,10 @@ import com.github.im2back.orchestrator.dto.out.PurchaseHistoryDTO;
 
 import jakarta.validation.Valid;
 
-@FeignClient(name = "customerms",configuration = FeignConfig.class)
+@FeignClient(name = "customerms",configuration = FeignConfig.class, path = "/customers")
 public interface CustomerClient {
 
-	@PostMapping("/customers/purchase-history")
+	@PostMapping("/purchase-history")
 	ResponseEntity<PurchaseHistoryResponseDTO> persistPurchaseHistory(@RequestBody @Valid PurchaseHistoryDTO dtoRequest);
 	
 }
