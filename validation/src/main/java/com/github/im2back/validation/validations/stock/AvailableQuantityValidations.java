@@ -22,6 +22,7 @@ public class AvailableQuantityValidations implements PurchaseValidationsStock {
 		List<String> errorMessages = new ArrayList<>();
 		List<PurchasedItem> purchasedItem = requestDto.purchasedItems();
 		List<String> productsCodeList = new ArrayList<>();
+
 		requestDto.purchasedItems().forEach(t -> productsCodeList.add(t.code()));
 
 		// Verifica se os produtos comprados existem (por código)

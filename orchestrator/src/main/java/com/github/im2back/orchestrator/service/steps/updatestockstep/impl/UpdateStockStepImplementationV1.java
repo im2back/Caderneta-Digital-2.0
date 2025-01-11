@@ -26,7 +26,7 @@ public class UpdateStockStepImplementationV1 implements UpdateStockStep {
 	public List<StockUpdateResponseDTO> execute(PurchaseRequestDTO dto) {
 
 		ResponseEntity<List<StockUpdateResponseDTO>> responseStockClient = stockClient
-				.updateStock(dto.purchasedItems());
+				.updateStockAfterPurchase(dto.purchasedItems());
 		List<StockUpdateResponseDTO> stockUpdateResponseDTOList = responseStockClient.getBody();
 		return stockUpdateResponseDTOList;
 

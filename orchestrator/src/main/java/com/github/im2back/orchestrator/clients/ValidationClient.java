@@ -13,7 +13,9 @@ import com.github.im2back.orchestrator.dto.in.PurchaseRequestDTO;
 public interface ValidationClient {
 
     @PostMapping("/validations/purchase")
-    ResponseEntity<Void> valid(@RequestBody PurchaseRequestDTO dto);   
+    ResponseEntity<Void> valid(@RequestBody PurchaseRequestDTO dto); 
+	
+
 }
 
 

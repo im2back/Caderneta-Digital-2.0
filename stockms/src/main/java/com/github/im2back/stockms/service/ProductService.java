@@ -3,6 +3,7 @@ package com.github.im2back.stockms.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.im2back.stockms.model.dto.inputdata.NewProductToSaveDTO;
 import com.github.im2back.stockms.model.dto.inputdata.PurchasedItemDTO;
 import com.github.im2back.stockms.model.dto.inputdata.UndoPurchaseDTO;
+import com.github.im2back.stockms.model.dto.outputdata.MassiveReplenishmentResponseDTO;
 import com.github.im2back.stockms.model.dto.outputdata.ProductDTO;
 import com.github.im2back.stockms.model.dto.outputdata.StockUpdateAfterPurchaseResponseDTO;
 import com.github.im2back.stockms.model.entities.Product;
@@ -99,5 +101,24 @@ public class ProductService {
 		Product product = findProductById(dto.id());
 		product.updateAttributes(dto);
 		repository.save(product);
+	}
+
+	public List<MassiveReplenishmentResponseDTO> massiveReplenishment(List<StockUpdateAfterPurchaseResponseDTO> dtoIn) {
+		List<MassiveReplenishmentResponseDTO> response = new ArrayList<>();
+		
+		List<String> extractedCodes = dtoIn.stream().map(p -> p.code()).collect(Collectors.toList());
+		List<Product> products = repository.findByCodes(extractedCodes);
+		
+		Map<String, Product> productMap = products.stream().collect(Collectors.toMap(Product::getCode, p -> p));
+		
+		for(StockUpdateAfterPurchaseResponseDTO p : dtoIn) {
+			var product = productMap.getOrDefault(p.code(), null);
+			product.setQuantity(product.getQuantity() + p.quantity());
+			response.add(new MassiveReplenishmentResponseDTO(product, p.quantity()));
+		}
+			
+		repository.saveAll(productMap.values());
+		
+		return response;
 	}
 }
