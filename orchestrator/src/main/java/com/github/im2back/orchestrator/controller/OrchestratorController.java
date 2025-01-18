@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.im2back.orchestrator.dto.in.PurchaseHistoryResponseDTO;
 import com.github.im2back.orchestrator.dto.in.PurchaseRequestDTO;
-import com.github.im2back.orchestrator.service.OrchestratorService;
+import com.github.im2back.orchestrator.service.orchestrator.OrchestratorService;
 
 import lombok.RequiredArgsConstructor;
 

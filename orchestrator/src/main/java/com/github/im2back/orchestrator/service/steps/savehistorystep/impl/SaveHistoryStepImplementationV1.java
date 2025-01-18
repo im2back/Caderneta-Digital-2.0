@@ -8,15 +8,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.github.im2back.orchestrator.clients.CustomerClient;
-import com.github.im2back.orchestrator.clients.StockClient;
-import com.github.im2back.orchestrator.clients.exception.ServiceUnavailableCustomException;
 import com.github.im2back.orchestrator.dto.in.PurchaseHistoryResponseDTO;
 import com.github.im2back.orchestrator.dto.in.PurchaseRequestDTO;
 import com.github.im2back.orchestrator.dto.in.StockUpdateResponseDTO;
 import com.github.im2back.orchestrator.dto.out.PurchaseHistoryDTO;
 import com.github.im2back.orchestrator.dto.out.UpdatedProducts;
+import com.github.im2back.orchestrator.service.circuitbreaker.CircuitBreakerStrategyContext;
 import com.github.im2back.orchestrator.service.steps.savehistorystep.SaveHistoryStep;
 
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +26,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SaveHistoryStepImplementationV1 implements SaveHistoryStep {
 	
-	private final StockClient stockClient;
+	private final CircuitBreakerStrategyContext circuitBreakerStrategyContext;
 	private final CustomerClient customerClient;
+	private final CircuitBreakerRegistry circuitBreakerRegistry;
 	
 	@Override
 	@Retry(name = "retryCustomerClient")
@@ -45,17 +46,16 @@ public class SaveHistoryStepImplementationV1 implements SaveHistoryStep {
 	}
 	
 	public PurchaseHistoryResponseDTO fallbackMethod(PurchaseRequestDTO dto,List<StockUpdateResponseDTO> stockUpdateResponseDTOList, Throwable e) {		
-			var response = stockClient.massiveReplenishmentInStock(stockUpdateResponseDTOList);
-			
-			if(response != null) {
-				throw new ServiceUnavailableCustomException("Compra revertida. Causa: "+e.getMessage(), 503, null);
-			}
-			// retorno nulo apenas para compilar
-			return null;
+	 	var circuitBreakerState = getCircuitBreakerState("circuitBreakerCustomerClient");	
+		
+	 	circuitBreakerStrategyContext.setStrategy(circuitBreakerState);
+	 	circuitBreakerStrategyContext.executeStrategy(stockUpdateResponseDTOList, e);			
+		return null; // retorno nulo apenas para compilar
 	}
 	
-
-	
-	
-	
+	public String getCircuitBreakerState(String circuitBreakerName) {    
+	    io.github.resilience4j.circuitbreaker.CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker(circuitBreakerName);
+	    // Retorna o estado (CLOSED, OPEN, HALF_OPEN)
+	    return circuitBreaker.getState().name();
+	}	
 }

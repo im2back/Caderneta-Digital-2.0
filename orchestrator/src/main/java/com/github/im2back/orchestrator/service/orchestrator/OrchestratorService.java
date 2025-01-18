@@ -1,4 +1,4 @@
-package com.github.im2back.orchestrator.service;
+package com.github.im2back.orchestrator.service.orchestrator;
 
 import java.util.List;
 
