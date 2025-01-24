@@ -1,4 +1,4 @@
-# Status de Desenvolvimento 25/12/2024 EM REFATORAÇÃO, API QUEBRADA ATÉ O TÉRMINO 🟢 
+# Status de Desenvolvimento 24/01/2025 EM REFATORAÇÃO, API QUEBRADA ATÉ O TÉRMINO 🟢 
 ### Projeto passando por refatoração visando :
  - Desacoplar os microsserviços, melhorando sua coesão e modificando o funcionamento das comunicações
  - Melhora de performance
@@ -12,8 +12,11 @@ Acoplamento elevado e baixa coesão: A comunicação atual entre os microsservi�
   De acordo com as necessidades/demandas do local onde a aplicação será utiilizada é inviavel o uso de comunicação assincrona por isso uso predominante de comunicação síncrona foi priorizado em detrimento da comunicação assíncrona, devido às restrições impostas pelas regras de negócio, que não permitem a implementação de fluxos tardios. Com a introdução do novo orquestrador, a necessidade de comunicação direta entre os microsserviços será eliminada, tornando o fluxo mais claro, eficiente e desacoplado. Houve necessidade de adicionar outros dois microsserviços : RELATORIOS-MS e VALIDATION-MS, estes por sua vez preenchem demandas afim de desafogar os outros microsserviços e preencher necessidades impostas pela comunicação sincrona.
    
 ### Prévias da refatoração, novos fluxos :
-![Nova Arquitetura, Caderneta de Mercearia drawio](https://github.com/user-attachments/assets/ba39d837-bcfc-42be-8671-2fb2bc629aa7)
+![{847FAA72-78F1-4625-A640-EE181AF1511F}](https://github.com/user-attachments/assets/ebb831e9-f6b0-4d7e-9fff-4fc245119eff)
 
+
+# 📽️ APRESENTANDO PREVIAS DO NOVO FLUXO DE COMPRA !
+[![Assista ao meu vídeo no YouTube](https://img.youtube.com/vi/DfYECgSrudg/0.jpg)](https://www.youtube.com/watch?v=DfYECgSrudg)
 
 
 ## ⚖️ Licença 
