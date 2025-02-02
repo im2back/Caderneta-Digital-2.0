@@ -1,61 +1,81 @@
 package com.github.im2back.orchestrator.service.steps.savehistorystep.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.im2back.orchestrator.clients.CustomerClient;
 import com.github.im2back.orchestrator.dto.in.PurchaseHistoryResponseDTO;
 import com.github.im2back.orchestrator.dto.in.PurchaseRequestDTO;
 import com.github.im2back.orchestrator.dto.in.StockUpdateResponseDTO;
-import com.github.im2back.orchestrator.dto.out.PurchaseHistoryDTO;
-import com.github.im2back.orchestrator.dto.out.UpdatedProducts;
+import com.github.im2back.orchestrator.exception.customexceptions.CircuitBreakerCustomException;
 import com.github.im2back.orchestrator.service.circuitbreaker.CircuitBreakerStrategyContext;
 import com.github.im2back.orchestrator.service.steps.savehistorystep.SaveHistoryStep;
+import com.github.im2back.orchestrator.service.utils.ServiceUtils;
+import com.github.im2back.orchestrator.utils.Util;
 
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.retry.annotation.Retry;
+import io.github.resilience4j.retry.Retry;
+import io.github.resilience4j.retry.RetryRegistry;
 import lombok.RequiredArgsConstructor;
 
 @Primary
 @Service
 @RequiredArgsConstructor
 public class SaveHistoryStepImplementationV1 implements SaveHistoryStep {
-	
+
 	private final CircuitBreakerStrategyContext circuitBreakerStrategyContext;
 	private final CustomerClient customerClient;
 	private final CircuitBreakerRegistry circuitBreakerRegistry;
-	
-	@Override
-	@Retry(name = "retryCustomerClient")
-	@CircuitBreaker(name = "circuitBreakerCustomerClient", fallbackMethod = "fallbackMethod")
-	public PurchaseHistoryResponseDTO execute(PurchaseRequestDTO dto,List<StockUpdateResponseDTO> stockUpdateResponseDTOList) {
-		List<UpdatedProducts> products = new ArrayList<>();
-		PurchaseHistoryDTO purchaseHistoryDTO = new PurchaseHistoryDTO(dto.document(), products);
-		
-		stockUpdateResponseDTOList.forEach(t -> {
-			products.add(new UpdatedProducts(t.name(), t.price(), t.code(), t.quantity()));
-		});
+	private final RetryRegistry retryRegistry;
 
-		ResponseEntity<PurchaseHistoryResponseDTO> responseCustomerClient = customerClient.persistPurchaseHistory(purchaseHistoryDTO);
-		return responseCustomerClient.getBody();
+	@Override
+	public PurchaseHistoryResponseDTO execute(PurchaseRequestDTO purchaseRequestDTO,
+			List<StockUpdateResponseDTO> stockUpdateResponseDTOList) throws JsonProcessingException {
+
+		CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker("circuitBreakerCustomerClient");
+		Retry retry = retryRegistry.retry("retryCustomerClient");
+
+		String circuitBreakerState = Util.getCircuitBreakerState(circuitBreakerRegistry,"circuitBreakerCustomerClient");
+
+		switch (circuitBreakerState) {
+		case "CLOSED", "HALF_OPEN" -> {
+			try {
+				return executeWithRetryAndCircuitBreakerContext(purchaseRequestDTO, stockUpdateResponseDTOList,circuitBreaker, retry);
+			} catch (Exception e) {
+				return fallbackMethod(purchaseRequestDTO, stockUpdateResponseDTOList, e);
+			}
+		}
+
+		case "OPEN" -> {
+			return fallbackMethod(purchaseRequestDTO, stockUpdateResponseDTOList, null);
+		}
+		default -> throw new CircuitBreakerCustomException("Status desconhecido: " + circuitBreakerState);
+		}
 	}
-	
-	public PurchaseHistoryResponseDTO fallbackMethod(PurchaseRequestDTO dto,List<StockUpdateResponseDTO> stockUpdateResponseDTOList, Throwable e) {		
-	 	var circuitBreakerState = getCircuitBreakerState("circuitBreakerCustomerClient");	
-		
-	 	circuitBreakerStrategyContext.setStrategy(circuitBreakerState);
-	 	circuitBreakerStrategyContext.executeStrategy(stockUpdateResponseDTOList, e);			
+
+	public PurchaseHistoryResponseDTO fallbackMethod(PurchaseRequestDTO dto,
+			List<StockUpdateResponseDTO> stockUpdateResponseDTOList, Throwable e) throws JsonProcessingException {
+		String circuitBreakerState = Util.getCircuitBreakerState(circuitBreakerRegistry,
+				"circuitBreakerCustomerClient");
+
+		circuitBreakerStrategyContext.setStrategy(circuitBreakerState + "_CIRCUITBREAKERCUSTOMERCLIENT");
+		circuitBreakerStrategyContext.executeStrategy(dto, stockUpdateResponseDTOList, e);
 		return null; // retorno nulo apenas para compilar
 	}
-	
-	public String getCircuitBreakerState(String circuitBreakerName) {    
-	    io.github.resilience4j.circuitbreaker.CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker(circuitBreakerName);
-	    // Retorna o estado (CLOSED, OPEN, HALF_OPEN)
-	    return circuitBreaker.getState().name();
-	}	
+
+	private PurchaseHistoryResponseDTO executeWithRetryAndCircuitBreakerContext(PurchaseRequestDTO purchaseRequestDTO,
+			List<StockUpdateResponseDTO> stockUpdateResponseDTOList, CircuitBreaker circuitBreaker, Retry retry)
+			throws Exception {
+		return Retry.decorateCallable(retry, circuitBreaker.decorateCallable(() -> {
+			ResponseEntity<PurchaseHistoryResponseDTO> responseCustomerClient = customerClient.persistPurchaseHistory(
+					ServiceUtils.assemblePurchaseHistoryDTO(purchaseRequestDTO, stockUpdateResponseDTOList));
+			return responseCustomerClient.getBody();
+		})).call();
+	}
+
 }

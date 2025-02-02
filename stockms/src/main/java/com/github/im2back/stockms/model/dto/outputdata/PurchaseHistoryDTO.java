@@ -1,4 +1,4 @@
-package com.github.im2back.orchestrator.dto.out;
+package com.github.im2back.stockms.model.dto.outputdata;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 public record PurchaseHistoryDTO(
 		@NotBlank
 		String document,	
-		List<UpdatedProductsDTO> products
+		List<UpdatedProducts> products
 		
 		) {
 

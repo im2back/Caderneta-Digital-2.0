@@ -6,9 +6,15 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.im2back.orchestrator.dto.in.PurchaseRequestDTO;
 import com.github.im2back.orchestrator.dto.in.StockUpdateResponseDTO;
-import com.github.im2back.orchestrator.service.circuitbreaker.closedImpl.CircuitBreakerClosedStrategyImplV1;
-import com.github.im2back.orchestrator.service.circuitbreaker.openImpl.CircuitBreakerOpenStrategyImplV1;
+import com.github.im2back.orchestrator.service.circuitbreaker.closedImpl.stepsavehistory.CircuitBreakerSaveHistoryClosedStrategyImplV1;
+import com.github.im2back.orchestrator.service.circuitbreaker.closedImpl.stepupdatestock.CircuitBreakerStockUpdateClosedStrategyImplV1;
+import com.github.im2back.orchestrator.service.circuitbreaker.halfopenImpl.stepsavehistory.CircuitBreakerSaveHistoryHalfOpenStrategyImplV1;
+import com.github.im2back.orchestrator.service.circuitbreaker.halfopenImpl.stepupdatestock.CircuitBreakerUpdateStockHalfOpenStrategyImplV1;
+import com.github.im2back.orchestrator.service.circuitbreaker.openImpl.stepsavehistory.CircuitBreakerSaveHistoryOpenStrategyImplV1;
+import com.github.im2back.orchestrator.service.circuitbreaker.openImpl.stepupdatestock.CircuitBreakerStockUpdateOpenStrategyImplV1;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -17,23 +23,37 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CircuitBreakerStrategyContext {
 
-	private CircuitBreakerInterfaceStrategy circuitBreakerStateStrategy;
-	private final CircuitBreakerClosedStrategyImplV1 circuitBreakerClosedStrategyV1;
-	private final CircuitBreakerOpenStrategyImplV1 circuitBreakerOpenStrategyV1;
+	private CircuitBreakerStrategyInterface circuitBreakerStateStrategy;
 	
-	private static final Map<String,CircuitBreakerInterfaceStrategy> strategies = new HashMap<>();
+	private final CircuitBreakerSaveHistoryClosedStrategyImplV1 circuitBreakerSaveHistoryClosedStrategyImplV1;
+	private final CircuitBreakerSaveHistoryOpenStrategyImplV1 circuitBreakerSaveHistoryOpenStrategyImplV1;
+	private final CircuitBreakerSaveHistoryHalfOpenStrategyImplV1 circuitBreakerSaveHistoryHalfOpenStrategyImplV1;
 	
+	private final CircuitBreakerStockUpdateClosedStrategyImplV1 circuitBreakerStockUpdateClosedStrategyImplV1;
+	private final CircuitBreakerStockUpdateOpenStrategyImplV1 circuitBreakerStockUpdateOpenStrategyImplV1;
+	private final CircuitBreakerUpdateStockHalfOpenStrategyImplV1 circuitBreakerUpdateStockHalfOpenStrategyImplV1;
+
+
+	private static final Map<String, CircuitBreakerStrategyInterface> strategies = new HashMap<>();
+
 	@PostConstruct
 	private void initializeStrategies() {
-		strategies.put("OPEN", circuitBreakerOpenStrategyV1);
-		strategies.put("CLOSED", circuitBreakerClosedStrategyV1);		
+		strategies.put("OPEN_CIRCUITBREAKERCUSTOMERCLIENT", circuitBreakerSaveHistoryOpenStrategyImplV1);
+		strategies.put("CLOSED_CIRCUITBREAKERCUSTOMERCLIENT", circuitBreakerSaveHistoryClosedStrategyImplV1);
+		strategies.put("HALF_OPEN_CIRCUITBREAKERCUSTOMERCLIENT", circuitBreakerSaveHistoryHalfOpenStrategyImplV1);
+
+		strategies.put("OPEN_CIRCUITBREAKERSTOCKCLIENT", circuitBreakerStockUpdateOpenStrategyImplV1);
+		strategies.put("CLOSED_CIRCUITBREAKERSTOCKCLIENT", circuitBreakerStockUpdateClosedStrategyImplV1);
+		strategies.put("HALF_OPEN_CIRCUITBREAKERSTOCKCLIENT", circuitBreakerUpdateStockHalfOpenStrategyImplV1);
+		
 	}
-	
+
 	public void setStrategy(String param) {
-		this.circuitBreakerStateStrategy = strategies.getOrDefault(param,null);
+		this.circuitBreakerStateStrategy = strategies.getOrDefault(param, null);
 	}
-	
-	public void executeStrategy(List<StockUpdateResponseDTO> stockUpdateResponseDTOList,Throwable e) {
-		circuitBreakerStateStrategy.execute(stockUpdateResponseDTOList,e);
+
+	public void executeStrategy(PurchaseRequestDTO purchaseRequestDTO,
+			List<StockUpdateResponseDTO> stockUpdateResponseDTOList, Throwable e) throws JsonProcessingException {
+		circuitBreakerStateStrategy.execute(purchaseRequestDTO, stockUpdateResponseDTOList, e);
 	}
 }

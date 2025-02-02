@@ -1,4 +1,4 @@
-package com.github.im2back.orchestrator.dto.in;
+package com.github.im2back.stockms.model.dto.inputdata;
 
 import java.util.List;
 import jakarta.validation.Valid;

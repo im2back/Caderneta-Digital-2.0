@@ -84,6 +84,13 @@ public class CustomerService {
 
 		return assembleResponse(dtoRequest, customer);
 	}
+	
+	@Transactional
+	public void registerPurchaseAsync(PurchaseHistoryInDTO dtoRequest) {
+		Customer customer = findCustomerByDocument(dtoRequest.document());
+		addPurchaseToCustomerHistory(dtoRequest, customer);
+		repository.save(customer);
+	}
 
 	private void addPurchaseToCustomerHistory(PurchaseHistoryInDTO dtoRequest, Customer customer) {
 		Instant instant = Instant.now();
