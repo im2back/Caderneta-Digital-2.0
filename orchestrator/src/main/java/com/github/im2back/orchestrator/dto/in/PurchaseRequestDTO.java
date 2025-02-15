@@ -12,7 +12,7 @@ public record PurchaseRequestDTO(
 		
 		@Valid
 		@NotEmpty
-		List<PurchasedItem> purchasedItems
+		List<PurchasedItemDTO> purchasedItems
 		) {
 
 }

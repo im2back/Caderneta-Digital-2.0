@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 public record PurchaseHistoryDTO(
 		@NotBlank
 		String document,	
-		List<UpdatedProducts> products
+		List<UpdatedProductsDTO> products
 		
 		) {
 

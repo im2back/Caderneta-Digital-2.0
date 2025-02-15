@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.github.im2back.orchestrator.config.FeignConfig;
 import com.github.im2back.orchestrator.dto.in.MassiveReplenishmentResponseDTO;
-import com.github.im2back.orchestrator.dto.in.PurchasedItem;
+import com.github.im2back.orchestrator.dto.in.PurchasedItemDTO;
 import com.github.im2back.orchestrator.dto.in.StockUpdateResponseDTO;
 
 import jakarta.validation.Valid;
@@ -19,7 +19,7 @@ import jakarta.validation.constraints.NotEmpty;
 public interface StockClient {
 	
 	@PutMapping
-	public ResponseEntity<List<StockUpdateResponseDTO>> updateStockAfterPurchase(@RequestBody @Valid List<PurchasedItem> dto);
+	public ResponseEntity<List<StockUpdateResponseDTO>> updateStockAfterPurchase(@RequestBody @Valid List<PurchasedItemDTO> dto);
 
 	@PutMapping("/restock")
 	public ResponseEntity<List<MassiveReplenishmentResponseDTO>> massiveReplenishmentInStock(@RequestBody

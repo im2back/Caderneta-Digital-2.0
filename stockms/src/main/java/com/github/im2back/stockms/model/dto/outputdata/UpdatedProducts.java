@@ -1,4 +1,4 @@
-package com.github.im2back.orchestrator.dto.out;
+package com.github.im2back.stockms.model.dto.outputdata;
 
 import java.math.BigDecimal;
 

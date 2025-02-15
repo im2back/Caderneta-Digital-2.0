@@ -17,7 +17,7 @@ public class CustomFeignErrorDecoder implements ErrorDecoder {
 		String responseBody = extractTheBodyInJsonFormat(response);
 		 		
 		switch (response.status()) {
-		case 503:
+		case 500,501,502,503:
 			throw new ServiceUnavailableCustomException(
 				"Service unavailable for: " + methodKey + "Cause: " + responseBody, 503, methodKey);
 		
