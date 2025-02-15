@@ -2,6 +2,7 @@ package com.github.im2back.orchestrator.service.steps.updatestockstep.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -11,14 +12,12 @@ import com.github.im2back.orchestrator.clients.StockClient;
 import com.github.im2back.orchestrator.dto.in.PurchaseRequestDTO;
 import com.github.im2back.orchestrator.dto.in.StockUpdateResponseDTO;
 import com.github.im2back.orchestrator.exception.customexceptions.CircuitBreakerCustomException;
-import com.github.im2back.orchestrator.service.circuitbreaker.CircuitBreakerStrategyContext;
+import com.github.im2back.orchestrator.service.circuitbreaker.manager.RedisCircuitBreakerStateManager;
+import com.github.im2back.orchestrator.service.circuitbreaker.strategy.CircuitBreakerStrategyContext;
 import com.github.im2back.orchestrator.service.steps.updatestockstep.UpdateStockStep;
-import com.github.im2back.orchestrator.utils.Util;
 
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
-import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.github.resilience4j.retry.Retry;
-import io.github.resilience4j.retry.RetryRegistry;
 import lombok.RequiredArgsConstructor;
 
 
@@ -29,20 +28,35 @@ public class UpdateStockStepImplementationV1 implements UpdateStockStep {
 		
 	private final StockClient stockClient;
 	private final CircuitBreakerStrategyContext circuitBreakerStrategyContext;
-	private final CircuitBreakerRegistry circuitBreakerRegistry;
-	private final RetryRegistry retryRegistry;
+	private final RedisCircuitBreakerStateManager redisCircuitBreakerManager;
+	
+	@Qualifier("circuitBreakerStockClient")
+	private final CircuitBreaker circuitBreakerStockClient;
+	@Qualifier("retryStockClient")
+	private final Retry retryStockClient;
 	
 	@Override
 	public List<StockUpdateResponseDTO> execute(PurchaseRequestDTO purchaseRequestDTO) throws JsonProcessingException {
 		
-		CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker("circuitBreakerStockClient"); 
-		Retry retry = retryRegistry.retry("retryStockClient");	
-		String circuitBreakerState = Util.getCircuitBreakerState(circuitBreakerRegistry, "circuitBreakerStockClient"); 
+		String currentState = redisCircuitBreakerManager.updateLocalCircuitBreakerState(circuitBreakerStockClient,"circuitBreakerStockClient");
 		
-		switch (circuitBreakerState) {
-			case "CLOSED", "HALF_OPEN" -> {
+		switch (currentState) {
+			case "CLOSED" -> {
+				redisCircuitBreakerManager.closedEvaluateCircuitTransition("circuitBreakerStockClient");
 				try {
-					return  executeWithCircuitBreakerAndRetry(purchaseRequestDTO, circuitBreaker, retry);
+					var response =  updateStockFaultToleranceContext(purchaseRequestDTO);
+					redisCircuitBreakerManager.updateRequestResultsInRedis("1","circuitBreakerStockClient");
+						return response;
+				} catch (Exception e) {
+					return fallBackMethod(purchaseRequestDTO, e);
+				}
+			}
+			case "HALF_OPEN" -> {
+				redisCircuitBreakerManager.halfOpenEvaluateCircuitTransition("circuitBreakerStockClient");
+				try {
+					var response =   updateStockFaultToleranceContextCircuitOnly(purchaseRequestDTO);
+					redisCircuitBreakerManager.updateRequestResultsInRedis("1","circuitBreakerStockClient");
+						return response;
 				} catch (Exception e) {
 					return fallBackMethod(purchaseRequestDTO, e);
 				}
@@ -51,26 +65,33 @@ public class UpdateStockStepImplementationV1 implements UpdateStockStep {
 			case "OPEN" -> {
 				return fallBackMethod(purchaseRequestDTO, null);
 			}
-			default -> throw new CircuitBreakerCustomException("Status desconhecido: " + circuitBreakerState);
-		}		
+			default -> throw new CircuitBreakerCustomException("Stock Step - Status desconhecido: " + currentState);
+		}	
+		
 	}
 	
-	public List<StockUpdateResponseDTO> fallBackMethod(PurchaseRequestDTO dto, Throwable e) throws JsonProcessingException {
- 	var circuitBreakerState = Util.getCircuitBreakerState(circuitBreakerRegistry,"circuitBreakerStockClient");	
-	 	
- 		List<StockUpdateResponseDTO> list = null;// dado mocado para preencher assinatura revisar
- 	
-	 	circuitBreakerStrategyContext.setStrategy(circuitBreakerState+"_CIRCUITBREAKERSTOCKCLIENT");
-	 	circuitBreakerStrategyContext.executeStrategy(dto,list, e);	
-	 	
-		return null; // retorno nulo apenas para compilar
-	}
-	
-	private List<StockUpdateResponseDTO> executeWithCircuitBreakerAndRetry(PurchaseRequestDTO purchaseRequestDTO,
-			CircuitBreaker circuitBreaker, Retry retry) throws Exception {
-		return Retry.decorateCallable(retry, circuitBreaker.decorateCallable(() -> {
+	private List<StockUpdateResponseDTO> updateStockFaultToleranceContext(PurchaseRequestDTO purchaseRequestDTO)throws Exception {
+		return Retry.decorateCallable(retryStockClient, circuitBreakerStockClient.decorateCallable(() -> {
 			ResponseEntity<List<StockUpdateResponseDTO>> responseStockClient = stockClient.updateStockAfterPurchase(purchaseRequestDTO.purchasedItems());
 			return responseStockClient.getBody(); })).call();
 	}
+	
+	private List<StockUpdateResponseDTO> updateStockFaultToleranceContextCircuitOnly(PurchaseRequestDTO purchaseRequestDTO)throws Exception {
+		var response = CircuitBreaker.decorateCallable(circuitBreakerStockClient, () -> {
+			ResponseEntity<List<StockUpdateResponseDTO>> responseStockClient = stockClient.updateStockAfterPurchase(purchaseRequestDTO.purchasedItems());
+			return responseStockClient.getBody(); }).call();
+		return response;
+	}
+	
+	public List<StockUpdateResponseDTO> fallBackMethod(PurchaseRequestDTO dto, Throwable e) throws JsonProcessingException {
+		redisCircuitBreakerManager.updateRequestResultsInRedis("0","circuitBreakerStockClient");
+		
+ 		List<StockUpdateResponseDTO> list = null;
+ 		String localCircuitBreakerState = circuitBreakerStockClient.getState().name();
+	 	circuitBreakerStrategyContext.setStrategy(localCircuitBreakerState+"_CIRCUITBREAKERSTOCKCLIENT");
+	 	circuitBreakerStrategyContext.executeStrategy(dto,list, e);	
+	 	
+	 	 throw new CircuitBreakerCustomException("Erro no FallBack do StepStock: " + e.getMessage());
+	}	
 
 }

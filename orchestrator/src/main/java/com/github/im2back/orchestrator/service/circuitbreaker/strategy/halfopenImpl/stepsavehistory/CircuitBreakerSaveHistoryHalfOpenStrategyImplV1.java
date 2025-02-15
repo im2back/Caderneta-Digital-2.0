@@ -1,4 +1,4 @@
-package com.github.im2back.orchestrator.service.circuitbreaker.halfopenImpl.stepsavehistory;
+package com.github.im2back.orchestrator.service.circuitbreaker.strategy.halfopenImpl.stepsavehistory;
 
 import java.util.List;
 
@@ -9,8 +9,8 @@ import com.github.im2back.orchestrator.amqp.publishers.PublishReprocessSaveHisto
 import com.github.im2back.orchestrator.dto.in.PurchaseRequestDTO;
 import com.github.im2back.orchestrator.dto.in.StockUpdateResponseDTO;
 import com.github.im2back.orchestrator.exception.customexceptions.AsynchronousProcessingException;
-import com.github.im2back.orchestrator.service.circuitbreaker.CircuitBreakerStrategyInterface;
-import com.github.im2back.orchestrator.service.utils.ServiceUtils;
+import com.github.im2back.orchestrator.service.circuitbreaker.strategy.CircuitBreakerStrategyInterface;
+import com.github.im2back.orchestrator.service.utils.Utils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,7 +28,7 @@ public class CircuitBreakerSaveHistoryHalfOpenStrategyImplV1 implements CircuitB
 		System.out.println("====>ENTROU NO HALF OPEN<====");
 		System.out.println();
 
-		var purchaseHistoryDTO = ServiceUtils.assemblePurchaseHistoryDTO(purchaseRequestDTO,
+		var purchaseHistoryDTO = Utils.assemblePurchaseHistoryDTO(purchaseRequestDTO,
 				stockUpdateResponseDTOList);
 
 		publishReprocessHistory.sendReprocessHistory(purchaseHistoryDTO);

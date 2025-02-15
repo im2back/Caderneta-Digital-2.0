@@ -1,6 +1,11 @@
-package com.github.im2back.orchestrator.service.circuitbreaker.config;
+package com.github.im2back.orchestrator.service.circuitbreaker.event;
 
 
+import java.util.concurrent.TimeUnit;
+
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
@@ -14,7 +19,9 @@ import lombok.RequiredArgsConstructor;
 public class CircuitBreakerEventListener {
 
     private final CircuitBreakerRegistry circuitBreakerRegistry;
-
+    private final ValueOperations<String, String> valueOperations;
+    private final RedissonClient redissonClient; 
+    
     @PostConstruct
     public void registerListeners() {
         String circuitBreakerNameCustomer = "circuitBreakerCustomerClient";
@@ -41,13 +48,22 @@ public class CircuitBreakerEventListener {
 
     private void forceHalfOpenAfterDelay(String circuitBreakerName) {
         CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker(circuitBreakerName);
-
         new Thread(() -> {
+            RLock lock = redissonClient.getLock("lock:" + circuitBreakerName);
             try {
-                Thread.sleep(30000); 
-                circuitBreaker.transitionToHalfOpenState();
+                if (lock.tryLock(0, 30, TimeUnit.SECONDS)) { // Evita que múltiplas instâncias executem esse código simultaneamente
+                    Thread.sleep(30000); 
+                    circuitBreaker.transitionToHalfOpenState();
+                    valueOperations.set(circuitBreakerName + ":state", "HALF_OPEN");
+                    valueOperations.set(circuitBreakerName + ":countBased", "0");
+                    valueOperations.set(circuitBreakerName + ":resultRequest", "[]");
+                }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
+            } finally {
+                if (lock.isHeldByCurrentThread()) {
+                    lock.unlock();
+                }
             }
         }).start();
     }

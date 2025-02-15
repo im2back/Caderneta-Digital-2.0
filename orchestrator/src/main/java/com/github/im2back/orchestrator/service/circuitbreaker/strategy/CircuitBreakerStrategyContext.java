@@ -1,4 +1,4 @@
-package com.github.im2back.orchestrator.service.circuitbreaker;
+package com.github.im2back.orchestrator.service.circuitbreaker.strategy;
 
 import java.util.HashMap;
 import java.util.List;
@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.im2back.orchestrator.dto.in.PurchaseRequestDTO;
 import com.github.im2back.orchestrator.dto.in.StockUpdateResponseDTO;
-import com.github.im2back.orchestrator.service.circuitbreaker.closedImpl.stepsavehistory.CircuitBreakerSaveHistoryClosedStrategyImplV1;
-import com.github.im2back.orchestrator.service.circuitbreaker.closedImpl.stepupdatestock.CircuitBreakerStockUpdateClosedStrategyImplV1;
-import com.github.im2back.orchestrator.service.circuitbreaker.halfopenImpl.stepsavehistory.CircuitBreakerSaveHistoryHalfOpenStrategyImplV1;
-import com.github.im2back.orchestrator.service.circuitbreaker.halfopenImpl.stepupdatestock.CircuitBreakerUpdateStockHalfOpenStrategyImplV1;
-import com.github.im2back.orchestrator.service.circuitbreaker.openImpl.stepsavehistory.CircuitBreakerSaveHistoryOpenStrategyImplV1;
-import com.github.im2back.orchestrator.service.circuitbreaker.openImpl.stepupdatestock.CircuitBreakerStockUpdateOpenStrategyImplV1;
+import com.github.im2back.orchestrator.service.circuitbreaker.strategy.closedImpl.stepsavehistory.CircuitBreakerSaveHistoryClosedStrategyImplV1;
+import com.github.im2back.orchestrator.service.circuitbreaker.strategy.closedImpl.stepupdatestock.CircuitBreakerStockUpdateClosedStrategyImplV1;
+import com.github.im2back.orchestrator.service.circuitbreaker.strategy.halfopenImpl.stepsavehistory.CircuitBreakerSaveHistoryHalfOpenStrategyImplV1;
+import com.github.im2back.orchestrator.service.circuitbreaker.strategy.halfopenImpl.stepupdatestock.CircuitBreakerUpdateStockHalfOpenStrategyImplV1;
+import com.github.im2back.orchestrator.service.circuitbreaker.strategy.openImpl.stepsavehistory.CircuitBreakerSaveHistoryOpenStrategyImplV1;
+import com.github.im2back.orchestrator.service.circuitbreaker.strategy.openImpl.stepupdatestock.CircuitBreakerStockUpdateOpenStrategyImplV1;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;

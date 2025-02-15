@@ -1,4 +1,4 @@
-package com.github.im2back.orchestrator.service.circuitbreaker.closedImpl.stepsavehistory;
+package com.github.im2back.orchestrator.service.circuitbreaker.strategy.closedImpl.stepsavehistory;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import com.github.im2back.orchestrator.clients.StockClient;
 import com.github.im2back.orchestrator.clients.exception.ServiceUnavailableCustomException;
 import com.github.im2back.orchestrator.dto.in.PurchaseRequestDTO;
 import com.github.im2back.orchestrator.dto.in.StockUpdateResponseDTO;
-import com.github.im2back.orchestrator.service.circuitbreaker.CircuitBreakerStrategyInterface;
+import com.github.im2back.orchestrator.service.circuitbreaker.strategy.CircuitBreakerStrategyInterface;
 
 import lombok.RequiredArgsConstructor;
 

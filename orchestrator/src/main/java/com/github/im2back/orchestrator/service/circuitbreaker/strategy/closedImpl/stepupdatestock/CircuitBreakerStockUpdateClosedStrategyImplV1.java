@@ -1,4 +1,4 @@
-package com.github.im2back.orchestrator.service.circuitbreaker.closedImpl.stepupdatestock;
+package com.github.im2back.orchestrator.service.circuitbreaker.strategy.closedImpl.stepupdatestock;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.im2back.orchestrator.clients.exception.ServiceUnavailableCustomException;
 import com.github.im2back.orchestrator.dto.in.PurchaseRequestDTO;
 import com.github.im2back.orchestrator.dto.in.StockUpdateResponseDTO;
-import com.github.im2back.orchestrator.service.circuitbreaker.CircuitBreakerStrategyInterface;
+import com.github.im2back.orchestrator.service.circuitbreaker.strategy.CircuitBreakerStrategyInterface;
 
 @Service
 public class CircuitBreakerStockUpdateClosedStrategyImplV1 implements CircuitBreakerStrategyInterface {

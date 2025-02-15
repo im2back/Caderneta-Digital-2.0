@@ -1,4 +1,4 @@
-package com.github.im2back.orchestrator.service.circuitbreaker.openImpl.stepupdatestock;
+package com.github.im2back.orchestrator.service.circuitbreaker.strategy.openImpl.stepupdatestock;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import com.github.im2back.orchestrator.amqp.publishers.PublishReprocessUpdateSto
 import com.github.im2back.orchestrator.dto.in.PurchaseRequestDTO;
 import com.github.im2back.orchestrator.dto.in.StockUpdateResponseDTO;
 import com.github.im2back.orchestrator.exception.customexceptions.AsynchronousProcessingException;
-import com.github.im2back.orchestrator.service.circuitbreaker.CircuitBreakerStrategyInterface;
+import com.github.im2back.orchestrator.service.circuitbreaker.strategy.CircuitBreakerStrategyInterface;
 
 import lombok.RequiredArgsConstructor;
 

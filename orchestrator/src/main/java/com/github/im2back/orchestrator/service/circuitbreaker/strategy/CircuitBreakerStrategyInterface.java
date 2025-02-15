@@ -1,4 +1,4 @@
-package com.github.im2back.orchestrator.service.circuitbreaker;
+package com.github.im2back.orchestrator.service.circuitbreaker.strategy;
 
 import java.util.List;
 
