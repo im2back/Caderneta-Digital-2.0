@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.github.im2back.orchestrator.config.FeignConfig;
 import com.github.im2back.orchestrator.dto.in.MassiveReplenishmentResponseDTO;
 import com.github.im2back.orchestrator.dto.in.PurchasedItemDTO;
-import com.github.im2back.orchestrator.dto.in.StockUpdateResponseDTO;
+import com.github.im2back.orchestrator.dto.in.StockResponseDTO;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -19,9 +19,9 @@ import jakarta.validation.constraints.NotEmpty;
 public interface StockClient {
 	
 	@PutMapping
-	public ResponseEntity<List<StockUpdateResponseDTO>> updateStockAfterPurchase(@RequestBody @Valid List<PurchasedItemDTO> dto);
+	public ResponseEntity<List<StockResponseDTO>> updateStockAfterPurchase(@RequestBody @Valid List<PurchasedItemDTO> dto);
 
 	@PutMapping("/restock")
 	public ResponseEntity<List<MassiveReplenishmentResponseDTO>> massiveReplenishmentInStock(@RequestBody
-			@NotEmpty(message = "Input movie list cannot be empty.") @Valid List<StockUpdateResponseDTO> dtoIn);
+			@NotEmpty(message = "Input movie list cannot be empty.") @Valid List<StockResponseDTO> dtoIn);
 }

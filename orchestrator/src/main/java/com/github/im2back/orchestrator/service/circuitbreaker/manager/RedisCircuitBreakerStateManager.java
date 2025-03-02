@@ -17,6 +17,7 @@ import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 
 @Component
 public class RedisCircuitBreakerStateManager {
+	
 
 	private final ValueOperations<String, String> valueOperations;
 	private final CircuitBreakerRegistry circuitBreakerRegistry;
@@ -65,6 +66,8 @@ public class RedisCircuitBreakerStateManager {
 	}
 
 	public void halfOpenEvaluateCircuitTransition(String circuitBreakerName) throws JsonMappingException, JsonProcessingException {
+		
+		CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker(circuitBreakerName);
 		String counterString = valueOperations.get(circuitBreakerName + ":countBased");
 		Integer counterInt = Integer.parseInt(counterString);
 		int failedRequestsCount = 0;
@@ -85,11 +88,9 @@ public class RedisCircuitBreakerStateManager {
 			}
 
 			if (failedRequestsCount != 0) {
-				CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker(circuitBreakerName);
 				circuitBreaker.transitionToOpenState();
 				valueOperations.set(circuitBreakerName + ":state", "OPEN");
 			} else {
-				CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker(circuitBreakerName);
 				circuitBreaker.transitionToClosedState();
 				valueOperations.set(circuitBreakerName + ":state", "CLOSED");
 			}
@@ -97,14 +98,8 @@ public class RedisCircuitBreakerStateManager {
 		}
 	}
 
-	private void resetMetrics(String circuitBreakerName) {
-		valueOperations.set(circuitBreakerName + ":countBased", "0");
-		valueOperations.set(circuitBreakerName + ":resultRequest", "[]");
-	}
-	
 	public void updateRequestResultsInRedis(String result, String circuitBreakerName) throws JsonProcessingException, JsonMappingException {
 		String requestResultJson = valueOperations.get(circuitBreakerName+ ":resultRequest");
-		ObjectMapper objectMapper = new ObjectMapper();
 		List<String> requestResultObject = objectMapper.readValue(requestResultJson, new TypeReference<List<String>>() {});
 		requestResultObject.add(result);
 		valueOperations.set(circuitBreakerName + ":resultRequest", objectMapper.writeValueAsString(requestResultObject));
@@ -132,5 +127,10 @@ public class RedisCircuitBreakerStateManager {
 			default -> throw new CircuitBreakerCustomException("Update Status Manager - Status desconhecido: " + currentCircuitStateFromRedis);
 		}
 		
+	}
+	
+	private void resetMetrics(String circuitBreakerName) {
+		valueOperations.set(circuitBreakerName + ":countBased", "0");
+		valueOperations.set(circuitBreakerName + ":resultRequest", "[]");
 	}
 }

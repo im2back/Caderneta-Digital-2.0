@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.im2back.orchestrator.dto.in.PurchaseRequestDTO;
-import com.github.im2back.orchestrator.dto.in.StockUpdateResponseDTO;
+import com.github.im2back.orchestrator.dto.in.StockResponseDTO;
 import com.github.im2back.orchestrator.service.circuitbreaker.strategy.closedImpl.stepsavehistory.CircuitBreakerSaveHistoryClosedStrategyImplV1;
 import com.github.im2back.orchestrator.service.circuitbreaker.strategy.closedImpl.stepupdatestock.CircuitBreakerStockUpdateClosedStrategyImplV1;
 import com.github.im2back.orchestrator.service.circuitbreaker.strategy.halfopenImpl.stepsavehistory.CircuitBreakerSaveHistoryHalfOpenStrategyImplV1;
@@ -53,7 +53,7 @@ public class CircuitBreakerStrategyContext {
 	}
 
 	public void executeStrategy(PurchaseRequestDTO purchaseRequestDTO,
-			List<StockUpdateResponseDTO> stockUpdateResponseDTOList, Throwable e) throws JsonProcessingException {
+			List<StockResponseDTO> stockUpdateResponseDTOList, Throwable e) throws JsonProcessingException {
 		circuitBreakerStateStrategy.execute(purchaseRequestDTO, stockUpdateResponseDTOList, e);
 	}
 }

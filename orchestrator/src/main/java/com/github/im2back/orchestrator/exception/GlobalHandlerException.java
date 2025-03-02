@@ -14,6 +14,7 @@ import com.github.im2back.orchestrator.clients.exception.ServiceUnavailableCusto
 import com.github.im2back.orchestrator.dto.in.PurchaseHistoryResponseDTO;
 import com.github.im2back.orchestrator.exception.customexceptions.AsynchronousProcessingException;
 import com.github.im2back.orchestrator.exception.customexceptions.CircuitBreakerCustomException;
+import com.github.im2back.orchestrator.exception.customexceptions.GenericException;
 import com.github.im2back.orchestrator.exception.customexceptions.HalfOpenCustomException;
 
 import feign.RetryableException;
@@ -128,5 +129,21 @@ public class GlobalHandlerException {
 		body.setMessages(messages);
 		
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
-	}	
+	}
+	
+	@ExceptionHandler(GenericException.class)
+	public ResponseEntity<StandardError> genericServiceException(GenericException exception,
+			HttpServletRequest request) {
+
+		List<String> messages = new ArrayList<>();
+		messages.add(exception.getMessage());
+
+		StandardError body = new StandardError();
+		body.setError("Processing Delayed");
+		body.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+		body.setPath(request.getRequestURI());
+		body.setMessages(messages);
+		
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
+	}
 }

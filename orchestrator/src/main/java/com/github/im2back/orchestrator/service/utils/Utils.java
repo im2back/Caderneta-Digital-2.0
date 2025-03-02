@@ -4,16 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.im2back.orchestrator.dto.in.PurchaseRequestDTO;
-import com.github.im2back.orchestrator.dto.in.StockUpdateResponseDTO;
+import com.github.im2back.orchestrator.dto.in.StockResponseDTO;
 import com.github.im2back.orchestrator.dto.out.PurchaseHistoryDTO;
 import com.github.im2back.orchestrator.dto.out.UpdatedProductsDTO;
+import com.github.im2back.orchestrator.exception.customexceptions.GenericException;
 
 public class Utils {
 
-	public static PurchaseHistoryDTO assemblePurchaseHistoryDTO(PurchaseRequestDTO dto,
-			List<StockUpdateResponseDTO> stockUpdateResponseDTOList) {
+	public static PurchaseHistoryDTO assemblePurchaseHistoryDTO(PurchaseRequestDTO dto,List<StockResponseDTO> stockUpdateResponseDTOList) {
+		
+		if(stockUpdateResponseDTOList.isEmpty() || stockUpdateResponseDTOList == null) {
+			throw new GenericException(" O objeto StockUpdateResponseDTOList é inválido");
+		}
+		
 		List<UpdatedProductsDTO> products = new ArrayList<>();
-
 		stockUpdateResponseDTOList.forEach(t -> {
 			products.add(new UpdatedProductsDTO(t.name(), t.price(), t.code(), t.quantity()));
 		});
