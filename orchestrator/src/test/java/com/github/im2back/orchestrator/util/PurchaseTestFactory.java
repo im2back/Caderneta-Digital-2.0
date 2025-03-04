@@ -43,5 +43,14 @@ public class PurchaseTestFactory {
 		return list;
 	}
 	
+	public static PurchaseHistoryResponseDTO createPurchaseHistoryResponseDTOSuccessful() {
+		PurchasedProductDTO productDTO1 = new PurchasedProductDTO("Nescau", 2, new BigDecimal(10));
+		PurchasedProductDTO productDTO2 = new PurchasedProductDTO("Arroz", 3, new BigDecimal(5));
+		List<PurchasedProductDTO> productDTOs = new ArrayList<>();
+		productDTOs.add(productDTO1);
+		productDTOs.add(productDTO2);
+		
+		return new PurchaseHistoryResponseDTO("Jefferson", productDTOs, new BigDecimal(100));
+	}	
 
 }
