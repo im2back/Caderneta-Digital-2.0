@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.im2back.orchestrator.amqp.publishers.PublishReprocessUpdateStock;
 import com.github.im2back.orchestrator.dto.in.PurchaseRequestDTO;
-import com.github.im2back.orchestrator.dto.in.StockUpdateResponseDTO;
+import com.github.im2back.orchestrator.dto.in.StockResponseDTO;
 import com.github.im2back.orchestrator.exception.customexceptions.AsynchronousProcessingException;
 import com.github.im2back.orchestrator.service.circuitbreaker.strategy.CircuitBreakerStrategyInterface;
 
@@ -20,13 +20,9 @@ public class CircuitBreakerUpdateStockHalfOpenStrategyImplV1 implements CircuitB
 	private final PublishReprocessUpdateStock publishReprocessUpdateStock;
 
 	@Override
-	public void execute(PurchaseRequestDTO purchaseRequestDTO, List<StockUpdateResponseDTO> stockUpdateResponseDTOList,
+	public void execute(PurchaseRequestDTO purchaseRequestDTO, List<StockResponseDTO> stockUpdateResponseDTOList,
 			Throwable e) throws JsonProcessingException {
-		
-		System.out.println();
-		System.out.println("HALF-OPEN -> UpdateStock Async ");
-		System.out.println();
-
+	
 		//Enviar para a fila para atualização de estoque assincrona 
 		//Atualiza o estoque e envia menssagem para a fila do customer processar de forma assincrona
 		publishReprocessUpdateStock.sendReprocessHistory(purchaseRequestDTO);

@@ -8,7 +8,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.im2back.orchestrator.amqp.publishers.PublishReprocessSaveHistory;
 import com.github.im2back.orchestrator.clients.exception.ServiceUnavailableCustomException;
 import com.github.im2back.orchestrator.dto.in.PurchaseRequestDTO;
-import com.github.im2back.orchestrator.dto.in.StockUpdateResponseDTO;
+import com.github.im2back.orchestrator.dto.in.StockResponseDTO;
+import com.github.im2back.orchestrator.dto.out.PurchaseHistoryDTO;
 import com.github.im2back.orchestrator.exception.customexceptions.AsynchronousProcessingException;
 import com.github.im2back.orchestrator.service.circuitbreaker.strategy.CircuitBreakerStrategyInterface;
 import com.github.im2back.orchestrator.service.utils.Utils;
@@ -22,13 +23,10 @@ public class CircuitBreakerSaveHistoryOpenStrategyImplV1 implements CircuitBreak
 	private final PublishReprocessSaveHistory publishReprocessHistory;
 	
 	@Override
-	public void execute(PurchaseRequestDTO purchaseRequestDTO,List<StockUpdateResponseDTO> stockUpdateResponseDTOList,Throwable e)
+	public void execute(PurchaseRequestDTO purchaseRequestDTO,List<StockResponseDTO> stockUpdateResponseDTOList,Throwable e)
 			throws ServiceUnavailableCustomException, JsonProcessingException {	
-		System.out.println();
-		System.out.println("OPEN - SaveHistory Async ");
-		System.out.println();
-		
-		var purchaseHistoryDTO = Utils.assemblePurchaseHistoryDTO(purchaseRequestDTO, stockUpdateResponseDTOList);
+
+		PurchaseHistoryDTO purchaseHistoryDTO = Utils.assemblePurchaseHistoryDTO(purchaseRequestDTO, stockUpdateResponseDTOList);
 		
 		publishReprocessHistory.sendReprocessHistory(purchaseHistoryDTO);
 		

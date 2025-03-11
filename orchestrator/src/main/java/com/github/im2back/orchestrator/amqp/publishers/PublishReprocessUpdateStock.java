@@ -14,15 +14,16 @@ import lombok.RequiredArgsConstructor;
 public class PublishReprocessUpdateStock {
 	
 		private final RabbitTemplate rabbitTemplate;
+		
+		private final ObjectMapper objectMapper;
 
 		private String convertIntoJson(PurchaseRequestDTO  data) throws JsonProcessingException {
-			ObjectMapper mapper = new ObjectMapper();
-			var json = mapper.writeValueAsString(data);		
+			String json = this.objectMapper.writeValueAsString(data);		
 			return json;	
 		}	
 
 		public void sendReprocessHistory(PurchaseRequestDTO  data) throws JsonProcessingException {
-			var json = convertIntoJson(data);
-			rabbitTemplate.convertAndSend("reprocess.steps.direct.exchange","stock.reprocess.update.routing.key",json);
+			String json = convertIntoJson(data);
+			this.rabbitTemplate.convertAndSend("reprocess.steps.direct.exchange","stock.reprocess.update.routing.key",json);
 		}
 }
