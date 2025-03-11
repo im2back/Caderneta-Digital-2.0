@@ -16,11 +16,7 @@ public class CircuitBreakerStockUpdateClosedStrategyImplV1 implements CircuitBre
 	@Override
 	public void execute(PurchaseRequestDTO purchaseRequestDTO, List<StockResponseDTO> stockUpdateResponseDTOList,Throwable e) 
 			throws JsonProcessingException,ServiceUnavailableCustomException {	
-
-		System.out.println();
-		System.out.println("CLOSED - UpdateStock ");
-		System.out.println();
-		
+	
 		throw new ServiceUnavailableCustomException("Compra cancelada. Causa: "+e.getMessage(), 503, null);		
 	}
 }

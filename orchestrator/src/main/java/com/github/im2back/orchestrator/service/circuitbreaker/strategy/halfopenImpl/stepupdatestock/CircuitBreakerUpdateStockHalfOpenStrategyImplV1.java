@@ -22,11 +22,7 @@ public class CircuitBreakerUpdateStockHalfOpenStrategyImplV1 implements CircuitB
 	@Override
 	public void execute(PurchaseRequestDTO purchaseRequestDTO, List<StockResponseDTO> stockUpdateResponseDTOList,
 			Throwable e) throws JsonProcessingException {
-		
-		System.out.println();
-		System.out.println("HALF-OPEN -> UpdateStock Async ");
-		System.out.println();
-
+	
 		//Enviar para a fila para atualização de estoque assincrona 
 		//Atualiza o estoque e envia menssagem para a fila do customer processar de forma assincrona
 		publishReprocessUpdateStock.sendReprocessHistory(purchaseRequestDTO);

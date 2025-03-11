@@ -23,11 +23,6 @@ public class CircuitBreakerSaveHistoryHalfOpenStrategyImplV1 implements CircuitB
 	@Override
 	public void execute(PurchaseRequestDTO purchaseRequestDTO, List<StockResponseDTO> stockUpdateResponseDTOList,
 			Throwable e) throws JsonProcessingException {
-
-		System.out.println();
-		System.out.println("====>ENTROU NO HALF OPEN<====");
-		System.out.println();
-
 		var purchaseHistoryDTO = Utils.assemblePurchaseHistoryDTO(purchaseRequestDTO,
 				stockUpdateResponseDTOList);
 

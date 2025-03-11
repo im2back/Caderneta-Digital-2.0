@@ -20,11 +20,6 @@ public class CircuitBreakerSaveHistoryClosedStrategyImplV1 implements CircuitBre
 	
 	@Override
 	public void execute(PurchaseRequestDTO purchaseRequestDTO,List<StockResponseDTO> stockUpdateResponseDTOList,Throwable e) {
-		
-		System.out.println();
-		System.out.println("CLOSED - SaveHistory ");
-		System.out.println();
-		
 		stockClient.massiveReplenishmentInStock(stockUpdateResponseDTOList);			
 		throw new ServiceUnavailableCustomException("Compra cancelada. Causa: "+e.getMessage(), 503, null);		
 	}

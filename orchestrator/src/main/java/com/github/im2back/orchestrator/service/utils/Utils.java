@@ -14,7 +14,7 @@ public class Utils {
 	public static PurchaseHistoryDTO assemblePurchaseHistoryDTO(PurchaseRequestDTO dto,List<StockResponseDTO> stockUpdateResponseDTOList) {
 		
 		if(stockUpdateResponseDTOList.isEmpty() || stockUpdateResponseDTOList == null) {
-			throw new GenericException(" O objeto StockUpdateResponseDTOList é inválido");
+			throw new GenericException("Object StockUpdateResponseDTOList is invalid");
 		}
 		
 		List<UpdatedProductsDTO> products = new ArrayList<>();
