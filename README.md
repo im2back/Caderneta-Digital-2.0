@@ -1,4 +1,4 @@
-# Status de Desenvolvimento 24/01/2025 EM REFATORAÇÃO, API QUEBRADA ATÉ O TÉRMINO 🟢 
+# Status de Desenvolvimento 10/03/2025 EM REFATORAÇÃO, API QUEBRADA ATÉ O TÉRMINO 🟢 
 ### Projeto passando por refatoração visando :
  - Desacoplar os microsserviços, melhorando sua coesão e modificando o funcionamento das comunicações
  - Melhora de performance
@@ -24,7 +24,7 @@ Acoplamento elevado e baixa coesão: A comunicação atual entre os microsservi�
 <br>
 
 ### Downloads 📥
--Docker Compose :
+-Docker Compose (Quebrado, novo compose em breve):
 https://drive.google.com/file/d/11OoiuY3xI_hGuP2o_8TLSRqfWA5b_tef/view?usp=sharing
 
 # Sobre a API 
@@ -50,7 +50,7 @@ Esse esforço envolve trabalhar eficientemente com branches e pull requests para
 - Realização e Gestão de Compras
 - Dashboard de Métricas para acompanhamento de desempenho de vendas
 
-# 📽️ Consumindo a API Via Docker e Explicando Funcionalidades
+# 📽️ Consumindo a API Via Docker e Explicando Funcionalidades (⚠️ Back end antes do refatoramento)
 [![Assista ao meu vídeo no YouTube](https://img.youtube.com/vi/TzxQAzlENJ8/0.jpg)](https://www.youtube.com/watch?v=TzxQAzlENJ8)
 
 <br><br>
@@ -82,17 +82,6 @@ Esse esforço envolve trabalhar eficientemente com branches e pull requests para
 
 ### Tela de Gerênciamento de Estoque
 ![STOCKPRINT](https://github.com/user-attachments/assets/55547653-f6aa-40dd-8335-80f626973dcf)
-
-
-
-<br>
-
-# Fluxograma do Ciclo de Compra
-- Este Fluxograma faz uma representação do principal processo da aplicação, a compra de um produto e como a requisição interage/percorre os microsserviços. <br>
-  📌OBS: Este fluxograma leva em consideração apenas o caso de sucesso.
-<br>
-
-![microservices](https://github.com/im2back/Caderneta-Digital-2.0/assets/117541466/1baaf31d-53ba-4c5e-adaf-7063fe8fe0a7)
 
 <br>
 
