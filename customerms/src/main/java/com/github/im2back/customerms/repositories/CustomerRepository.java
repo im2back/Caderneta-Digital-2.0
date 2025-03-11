@@ -36,9 +36,11 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 			+ " WHERE pr.purchaseDate >= FUNCTION('DATE_FORMAT', CURRENT_DATE, '%Y-%m-01')")
 	Double partialValueOfTheCurrentMonth();
 
-	@Query("SELECT SUM(pr.productprice * pr.quantity) " + "FROM Customer c JOIN c.purchaseRecord pr "
-			+ " WHERE DATE(pr.purchaseDate) = CURRENT_DATE")
-	Double partialVAlueForCurrentDay();
+	@Query("SELECT SUM(pr.productprice * pr.quantity) " +
+		       "FROM Customer c JOIN c.purchaseRecord pr " +
+		       "WHERE CAST(pr.purchaseDate AS date) = CURRENT_DATE")
+		Double partialVAlueForCurrentDay();
+
 	
 	@Query(value = "SELECT DATE(purchase_date) AS purchaseDate, SUM(product_price * product_quantity) AS totalValue " +
             "FROM tb_purchase " +
@@ -47,7 +49,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "ORDER BY purchaseDate DESC", nativeQuery = true)
 	List<Object[]> findTotalValueForLast7DaysExcludingToday();
 
-	 
 	@Query("SELECT SUM(pr.productprice * pr.quantity) FROM PurchaseRecord pr WHERE pr.status = EM_ABERTO")
 	Double totalOutstandingAmount();
 

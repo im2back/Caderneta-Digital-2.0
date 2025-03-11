@@ -15,7 +15,6 @@ public interface ValidationClient {
     @PostMapping("/validations/purchase")
     ResponseEntity<Void> valid(@RequestBody PurchaseRequestDTO dto); 
 	
-
 }
 
 

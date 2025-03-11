@@ -107,7 +107,6 @@
 			<artifactId>redisson-spring-boot-starter</artifactId>
 			<version>3.22.0</version> <!-- Verifique a versão mais recente -->
 		</dependency>
-
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

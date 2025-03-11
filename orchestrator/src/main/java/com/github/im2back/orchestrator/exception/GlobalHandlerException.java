@@ -43,7 +43,7 @@ public class GlobalHandlerException {
 	}
 		
 	@ExceptionHandler(UnknownHostException.class)
-	public ResponseEntity<StandardError> UnknownHostException(UnknownHostException exception, HttpServletRequest request) {
+	public ResponseEntity<StandardError> UnknownfHostException(UnknownHostException exception, HttpServletRequest request) {
 		//"Service unavailable for: " + methodKey + "Cause: " + responseBody, 503, methodKey);
 				
 		List<String> messages = new ArrayList<>();
