@@ -20,10 +20,8 @@ public class OrchestratorReprocessHistoryListner {
 	
 	@RabbitListener(queues = "customer.history.queue")
 	public void receiveMessages(@Payload String msg) throws JsonMappingException, JsonProcessingException {
-		System.out.println("(========== Processando HISTORICO Assincrono ==========)");
 		PurchaseHistoryInDTO purchaseHistoryInDTO = convert(msg);
 		customerService.registerPurchaseAsync(purchaseHistoryInDTO);
-		System.out.println("(========== FIM DO PROCESSAMENTO  ==========)");
 	}
 	
 	private PurchaseHistoryInDTO convert(String payload) throws JsonMappingException, JsonProcessingException {

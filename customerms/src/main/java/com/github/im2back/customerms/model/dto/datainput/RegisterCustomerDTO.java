@@ -4,7 +4,7 @@ import com.github.im2back.customerms.model.dto.dataoutput.AddressDTO;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record NewCustomerDTO(
+public record RegisterCustomerDTO(
 		
 		@NotBlank
 		String name,

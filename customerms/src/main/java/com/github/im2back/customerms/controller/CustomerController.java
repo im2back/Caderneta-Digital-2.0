@@ -2,6 +2,7 @@ package com.github.im2back.customerms.controller;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.github.im2back.customerms.exceptions.StandardError;
-import com.github.im2back.customerms.model.dto.datainput.NewCustomerDTO;
+import com.github.im2back.customerms.model.dto.datainput.RegisterCustomerDTO;
 import com.github.im2back.customerms.model.dto.datainput.PurchaseHistoryInDTO;
 import com.github.im2back.customerms.model.dto.dataoutput.CustomerDTO;
 import com.github.im2back.customerms.model.dto.dataoutput.PurchaseHistoryOutDTO;
@@ -76,8 +77,8 @@ public class CustomerController {
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					schema = @Schema(implementation = CustomerDTO.class))),
 			@ApiResponse(
-				    responseCode = "409",
-				    description = "Retorna status 409 Em caso de validação de duplicidade de atributos unicos",
+				    responseCode = "422",
+				    description = "Retorna status 422 Em caso de validação de duplicidade de atributos unicos",
 				    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 				    schema = @Schema(implementation = StandardError.class))),
 			@ApiResponse(
@@ -87,7 +88,7 @@ public class CustomerController {
 				    schema = @Schema(implementation = StandardError.class))),
 	})
 	@PostMapping
-	ResponseEntity<CustomerDTO> saveNewCustomer(@RequestBody @Valid NewCustomerDTO customer,
+	ResponseEntity<CustomerDTO> saveNewCustomer(@RequestBody @Valid RegisterCustomerDTO customer,
 			UriComponentsBuilder uriBuilder) {
 		CustomerDTO response = service.saveNewCustomer(customer);
 		var uri = uriBuilder.path("/customer/{id}").buildAndExpand(response.id()).toUri();
@@ -136,7 +137,7 @@ public class CustomerController {
 	
 	@Operation(summary = "Exclui do banco de dados uma compra registrada incorretamente, com base no purchaseId informado no path")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200",description = "Exclui a compra, retorna Status 200 e um corpo vazio",
+			@ApiResponse(responseCode = "204",description = "Exclui a compra, retorna Status 200 e um corpo vazio",
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					schema = @Schema(implementation = Void.class))),
 			@ApiResponse(
@@ -145,10 +146,10 @@ public class CustomerController {
 				    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 				    schema = @Schema(implementation = StandardError.class))),
 	})
-	@PatchMapping("/purchase-history/{purchaseId}/undo")
+	@DeleteMapping("/purchase-history/{purchaseId}")
 	ResponseEntity<Void> undoPurchase(@PathVariable Long purchaseId) {
 		service.undoPurchase(purchaseId);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.noContent().build();
 	}
 	
 	@Operation(summary = "Quita uma compra mudando seu status de EM_ABERTO para PAGO com base no purchaseId recebido no path ")
@@ -167,7 +168,7 @@ public class CustomerController {
 				    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 				    schema = @Schema(implementation = StandardError.class))),
 	})
-	@PatchMapping("/purchase-history/{purchaseId}/payment")
+	@PatchMapping("/purchase-history/{purchaseId}")
 	ResponseEntity<Void> individualPayment(@PathVariable Long purchaseId) {
 		service.individualPayment(purchaseId);
 		return ResponseEntity.ok().build();
@@ -201,7 +202,7 @@ public class CustomerController {
 				    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 				    schema = @Schema(implementation = StandardError.class))),
 	})
-	@PatchMapping("/purchase-history/{document}")
+	@PatchMapping("/purchase-history/document/{document}")
 	ResponseEntity<Void> clearDebt(@PathVariable String document) {
         service.clearDebt(document);	
 		return ResponseEntity.ok().build();
@@ -219,5 +220,4 @@ public class CustomerController {
         	return ResponseEntity.ok(response);
 	}
 	
-
 }

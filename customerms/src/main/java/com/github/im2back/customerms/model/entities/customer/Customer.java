@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.im2back.customerms.model.dto.datainput.NewCustomerDTO;
+import com.github.im2back.customerms.model.dto.datainput.RegisterCustomerDTO;
 import com.github.im2back.customerms.model.entities.purchase.PurchaseRecord;
 
 import jakarta.persistence.CascadeType;
@@ -42,7 +42,7 @@ public class Customer {
 		this.address = address;	
 	}
 	
-	public Customer(NewCustomerDTO dtoIn) {
+	public Customer(RegisterCustomerDTO dtoIn) {
 		super();
 		this.name = dtoIn.name();
 		this.document = dtoIn.document();

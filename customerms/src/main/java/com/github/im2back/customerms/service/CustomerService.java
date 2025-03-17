@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.im2back.customerms.model.dto.datainput.NewCustomerDTO;
+import com.github.im2back.customerms.model.dto.datainput.RegisterCustomerDTO;
 import com.github.im2back.customerms.model.dto.datainput.PurchaseHistoryInDTO;
 import com.github.im2back.customerms.model.dto.dataoutput.CustomerDTO;
 import com.github.im2back.customerms.model.dto.dataoutput.ProductDataToPdf;
@@ -59,7 +59,7 @@ public class CustomerService {
 	}
 
 	@Transactional
-	public CustomerDTO saveNewCustomer(NewCustomerDTO dtoIn) {
+	public CustomerDTO saveNewCustomer(RegisterCustomerDTO dtoIn) {
 
 		customerValidations.forEach(t -> t.valid(dtoIn));
 
@@ -118,24 +118,21 @@ public class CustomerService {
 
 	public void generatePurchaseInvoice(String document) {
 		Customer customer = findCustomerByDocument(document);
-		List<ProductDataToPdf> productDataToPdfList = getProductDataToPdfList(customer);
+		List<ProductDataToPdf> productDataToPdfList = getProductDataToPdfList(customer.getPurchaseRecord());
 
-		pdfGenerator.generatePdf(productDataToPdfList, customer, getPath(customer));
+		pdfGenerator.generatePdf(productDataToPdfList, customer, getPath(customer.getName()));
 	}
 
-	private List<ProductDataToPdf> getProductDataToPdfList(Customer customer) {
-		List<PurchaseRecord> list1 = customer.getPurchaseRecord();
-		list1.removeIf(t -> t.getStatus().equals(Status.PAGO));
-
-		var ProductDataToPdfList = list1.stream().map(t -> new ProductDataToPdf(t)).collect(Collectors.toList());
-
+	private List<ProductDataToPdf> getProductDataToPdfList(List<PurchaseRecord> list) {
+		list.removeIf(t -> t.getStatus().equals(Status.PAGO));
+		var ProductDataToPdfList = list.stream().map(t -> new ProductDataToPdf(t)).collect(Collectors.toList());
 		return ProductDataToPdfList;
 	}
 
-	private String getPath(Customer customer) {
+	private String getPath(String customerName) {
 		String userHome = System.getProperty("user.home");
 		String desktopDirectory = Paths.get(userHome).toString();
-		var path = Paths.get(desktopDirectory, customer.getName() + "_nota_fiscal_" + ".pdf").toString();
+		var path = Paths.get(desktopDirectory, customerName + "_nota_fiscal_" + ".pdf").toString();
 		return path;
 	}
 
@@ -145,8 +142,11 @@ public class CustomerService {
 	}
 
 	public DataForMetricsDTO metrics() {
-		return new DataForMetricsDTO(repository.totalValueForLastMonth(), repository.partialValueOfTheCurrentMonth(),
-				repository.partialVAlueForCurrentDay(), repository.totalOutstandingAmount(),
+		return new DataForMetricsDTO(
+				repository.totalValueForLastMonth(),
+				repository.partialValueOfTheCurrentMonth(),
+				repository.partialVAlueForCurrentDay(),
+				repository.totalOutstandingAmount(),
 				getTotalValuesForLast7Days());
 	}
 

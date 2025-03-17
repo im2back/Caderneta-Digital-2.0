@@ -39,8 +39,11 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	@Query("SELECT SUM(pr.productprice * pr.quantity) " +
 		       "FROM Customer c JOIN c.purchaseRecord pr " +
 		       "WHERE CAST(pr.purchaseDate AS date) = CURRENT_DATE")
-		Double partialVAlueForCurrentDay();
-
+	Double partialVAlueForCurrentDay();
+	
+//	@Query("SELECT SUM(pr.productprice * pr.quantity) " + "FROM Customer c JOIN c.purchaseRecord pr "
+// 			+ " WHERE DATE(pr.purchaseDate) = CURRENT_DATE")
+// 	Double partialVAlueForCurrentDay();
 	
 	@Query(value = "SELECT DATE(purchase_date) AS purchaseDate, SUM(product_price * product_quantity) AS totalValue " +
             "FROM tb_purchase " +
