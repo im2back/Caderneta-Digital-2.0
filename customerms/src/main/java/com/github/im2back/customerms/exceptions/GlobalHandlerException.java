@@ -49,12 +49,12 @@ public class GlobalHandlerException {
 	ResponseEntity<StandardError> customerRegisterValidations(CustomerRegisterValidationException ex,HttpServletRequest request) {
 		
 		StandardError response = new StandardError(
-				HttpStatus.CONFLICT.value(),
+				HttpStatus.UNPROCESSABLE_ENTITY.value(),
 				"Error at register customer",
 				ex.getErrorMessages(), 
 				request.getRequestURI());
 
-		return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+		return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(response);
 	}
 	
 }
