@@ -49,4 +49,10 @@ public class CustomerFactory {
 		AddressDTO addressDTO = new AddressDTO(address);
 		return new RegisterCustomerDTO("", "", "", "", addressDTO);
 	}
+	
+	public static RegisterCustomerDTO createRegisterCustomerDTONotRegistered() {
+		Address address = new Address("Rua", "06", "complemento");
+		AddressDTO addressDTO = new AddressDTO(address);
+		return new RegisterCustomerDTO("Unregistered", "99826467523", "unregistred@gmail.com", "91222051023", addressDTO);
+	}
 }
