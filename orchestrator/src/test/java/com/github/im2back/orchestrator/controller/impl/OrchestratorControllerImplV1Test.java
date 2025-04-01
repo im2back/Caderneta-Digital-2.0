@@ -34,10 +34,10 @@ class OrchestratorControllerImplV1Test {
 	private JacksonTester<PurchaseRequestDTO> purchaseRequestDTOJackson;
 	@Autowired
 	private JacksonTester<PurchaseHistoryResponseDTO> purchaseHistoryResponseDTOJackson;
-
+	
 	@Test
 	@DisplayName("Should process purchase successfully and return expected response")
-	void shouldProcessPurchaseSuccessfully() throws Exception {
+	void orchestratePurchase_ShouldProcessPurchaseSuccessfully_WhenPurchaseRequestIsValid() throws Exception {
 		//ARRANGE
 		PurchaseRequestDTO purchaseRequestDTO = PurchaseTestFactory.createValidPurchaseRequestDTO();
 		PurchaseHistoryResponseDTO purchaseHistoryResponseDTO  = PurchaseTestFactory.createPurchaseHistoryResponseDTOSuccessful();

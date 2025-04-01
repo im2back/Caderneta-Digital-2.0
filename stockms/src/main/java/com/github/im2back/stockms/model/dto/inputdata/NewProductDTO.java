@@ -1,4 +1,4 @@
-package com.github.im2back.stockms.model.dto.outputdata;
+package com.github.im2back.stockms.model.dto.inputdata;
 
 import java.math.BigDecimal;
 
@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-public record StockUpdateAfterPurchaseResponseDTO(
+public record NewProductDTO(
 
 		@NotBlank 
 		String name,
@@ -21,10 +21,13 @@ public record StockUpdateAfterPurchaseResponseDTO(
 
 		@NotNull
 		@Positive
-		Integer quantity
+		Integer quantity,
+		
+		String productUrl
 		) {
-	 public StockUpdateAfterPurchaseResponseDTO(Product product, Integer quantity) {
-		this(product.getName(), product.getPrice(), product.getCode(), quantity);
+	
+	 public NewProductDTO(Product product, Integer quantity) {
+		this(product.getName(), product.getPrice(), product.getCode(), quantity,product.getProductUrl());
 	}
 
 }

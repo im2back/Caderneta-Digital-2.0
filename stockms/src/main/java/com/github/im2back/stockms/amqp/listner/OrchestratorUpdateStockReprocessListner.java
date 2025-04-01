@@ -1,7 +1,7 @@
 package com.github.im2back.stockms.amqp.listner;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.im2back.stockms.amqp.publish.PublishCustomerReprocessHistory;
 import com.github.im2back.stockms.model.dto.inputdata.PurchaseRequestDTO;
 import com.github.im2back.stockms.model.dto.outputdata.PurchaseHistoryDTO;
-import com.github.im2back.stockms.model.dto.outputdata.StockUpdateAfterPurchaseResponseDTO;
+import com.github.im2back.stockms.model.dto.outputdata.UpdatedStockResponseDTO;
 import com.github.im2back.stockms.model.dto.outputdata.UpdatedProducts;
 import com.github.im2back.stockms.service.ProductService;
 
@@ -28,13 +28,11 @@ public class OrchestratorUpdateStockReprocessListner {
 	
 	@RabbitListener(queues = "stock.update.queue")
 	public void receiveMessages(@Payload String msg) throws JsonMappingException, JsonProcessingException {
-		System.out.println("(========== Processamento de Stock Assincrono ==========)");
-		
+
 		PurchaseRequestDTO purchaseRequestDTO = convert(msg);
-		var response = productService.updateQuantityProductsAfterPurchase(purchaseRequestDTO.purchasedItems());
-		customerReprocessHistory.sendReprocessSaveHistory(assemblePurchaseHistoryDTO(purchaseRequestDTO,response));
-		
-		System.out.println("(========== Enviando para o Customer Processar ==========)");
+		List<UpdatedStockResponseDTO> response = this.productService.updateQuantityProductsAfterPurchase(purchaseRequestDTO.purchasedItems());
+		PurchaseHistoryDTO purchaseHistoryDTO = assemblePurchaseHistoryDTO(purchaseRequestDTO,response);
+		this.customerReprocessHistory.sendReprocessSaveHistory(purchaseHistoryDTO);
 	}
 	
 	private PurchaseRequestDTO convert(String payload) throws JsonMappingException, JsonProcessingException {
@@ -42,12 +40,11 @@ public class OrchestratorUpdateStockReprocessListner {
 		 return mapper.readValue(payload, PurchaseRequestDTO.class);
 	}
 	
-	private PurchaseHistoryDTO assemblePurchaseHistoryDTO(PurchaseRequestDTO dto, List<StockUpdateAfterPurchaseResponseDTO> stockUpdateResponseDTOList) {
-		List<UpdatedProducts> products = new ArrayList<>();
+	private PurchaseHistoryDTO assemblePurchaseHistoryDTO(PurchaseRequestDTO dto, List<UpdatedStockResponseDTO> stockUpdateResponseDTOList) {
 		
-		stockUpdateResponseDTOList.forEach(t -> {
-			products.add(new UpdatedProducts(t.name(), t.price(), t.code(), t.quantity()));
-		});
+		List<UpdatedProducts> products = stockUpdateResponseDTOList.stream()
+			    .map(t -> new UpdatedProducts(t.name(), t.price(), t.code(), t.quantity()))
+			    .collect(Collectors.toList());
 		
 		PurchaseHistoryDTO purchaseHistoryDTO = new PurchaseHistoryDTO(dto.document(), products);
 		

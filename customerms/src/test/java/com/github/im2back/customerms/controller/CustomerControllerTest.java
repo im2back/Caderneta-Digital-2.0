@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +53,9 @@ class CustomerControllerTest {
 	@Autowired
 	private JacksonTester<PurchaseHistoryInDTO> jacksonTesterPurchaseHistoryInDTO;
 
-	@Test
-	void findCustomerByIdShouldReturnCustomerDTOAndHttpStatus200WhenIdIsValid() throws Exception {
+	 @Test
+	 @DisplayName("Given a valid id, when finding customer by id then return CustomerDTO and HTTP status 200")
+	 void findCustomer_ByIdShouldReturnCustomerDTOAndHttpStatus200WhenIdIsValid() throws Exception {
 		//ARRANGE
 		Long id = 1l;
 		CustomerDTO customer = CustomerFactory.createCustomerDTO();

@@ -32,8 +32,8 @@ class OrchestratorControllerImplV1IntegrationTest {
 	private JacksonTester<PurchaseHistoryResponseDTO> purchaseHistoryResponseDTOJackson;
 
 	@Test
-	void guivenNoAvailableProductsWhenValidatingStockThenReturnHttpStatus422() throws Exception {
-		// GUIVEN
+	void givenNoAvailableProductsWhenValidatingStockThenReturnHttpStatus422() throws Exception {
+		// GIVEN
 		PurchaseRequestDTO purchaseRequestDTO = PurchaseTestFactory.createInvalidPurchaseRequestDTO();
 		String jsonRequest = this.purchaseRequestDTOJackson.write(purchaseRequestDTO).getJson();
 		
@@ -47,8 +47,8 @@ class OrchestratorControllerImplV1IntegrationTest {
 	}
 	
 	@Test
-	void guivenCpfNotRegisteredWhenValidatingCustomerThenReturnHttpStatus422() throws Exception {
-		// GUIVEN
+	void givenCpfNotRegisteredWhenValidatingCustomerThenReturnHttpStatus422() throws Exception {
+		// GIVEN
 		PurchaseRequestDTO purchaseRequestDTO = PurchaseTestFactory.createInvalidPurchaseRequestDTOUserNotExist();
 		String jsonRequest = this.purchaseRequestDTOJackson.write(purchaseRequestDTO).getJson();
 			
@@ -62,7 +62,7 @@ class OrchestratorControllerImplV1IntegrationTest {
 	}
 	
 	@Test
-	void guivenProductCodeNotRegisteredWhenValidatingStockThenReturnHttpStatus422() throws Exception {
+	void givenProductCodeNotRegisteredWhenValidatingStockThenReturnHttpStatus422() throws Exception {
 		// ARRANGE
 		PurchaseRequestDTO purchaseRequestDTO = PurchaseTestFactory.createInvalidPurchaseRequestDTOProductNotExist();
 		String jsonRequest = this.purchaseRequestDTOJackson.write(purchaseRequestDTO).getJson();
@@ -76,8 +76,8 @@ class OrchestratorControllerImplV1IntegrationTest {
 	}
 	
 	@Test
-	void guivenUserInactiveWhenValidatingCustomeThenReturnHttpStatus422() throws Exception {
-		// GUIVEN
+	void givenUserInactiveWhenValidatingCustomeThenReturnHttpStatus422() throws Exception {
+		// GIVEN
 		PurchaseRequestDTO purchaseRequestDTO = PurchaseTestFactory.createInvalidPurchaseRequestDTOUserInactive();
 		
 		String jsonRequest = this.purchaseRequestDTOJackson.write(purchaseRequestDTO).getJson();
@@ -91,8 +91,8 @@ class OrchestratorControllerImplV1IntegrationTest {
 	}
 	
 	@Test
-	void guivenPurchaseWhenSucefullThenReturnPurchaseDtoAndHttpStatus200() throws Exception {
-		// GUIVEN
+	void givenPurchaseWhenSucefullThenReturnPurchaseDtoAndHttpStatus200() throws Exception {
+		// GIVEN
 		PurchaseRequestDTO purchaseRequestDTO = PurchaseTestFactory.createValidPurchaseRequestDTO();
 		PurchaseHistoryResponseDTO purchaseHistoryResponseDTO = PurchaseTestFactory
 				.createPurchaseHistoryResponseDTOSuccessful();
