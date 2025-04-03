@@ -93,4 +93,13 @@ public class ProductFactoryTest {
 		list.add(purchasedItemDTO2);
 		return list;
 	}
+	
+	public static List<PurchasedItemDTO> createListPurchasedItemDTONotFoundCode() {
+		PurchasedItemDTO purchasedItemDTO1 = new PurchasedItemDTO("001", 5);
+		PurchasedItemDTO purchasedItemDTO2 = new PurchasedItemDTO("050", 5);
+		List<PurchasedItemDTO> list = new ArrayList<>();
+		list.add(purchasedItemDTO1);
+		list.add(purchasedItemDTO2);
+		return list;
+	}
 }

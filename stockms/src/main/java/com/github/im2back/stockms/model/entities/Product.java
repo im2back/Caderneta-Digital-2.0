@@ -72,9 +72,6 @@ public class Product {
 	    if (dto.price() != null) {
 	        this.price = dto.price();
 	    }
-	    if (dto.code() != null && !dto.code().trim().isEmpty()) {
-	        this.code = dto.code();
-	    }
 	    if (dto.quantity() != null) {
 	        this.quantity = dto.quantity();
 	    }
