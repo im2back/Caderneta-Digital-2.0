@@ -76,7 +76,7 @@ class OrchestratorUpdateStockReprocessListnerTest {
 		verify(this.customerReprocessHistory).sendReprocessSaveHistory(this.captorPurchaseHistoryDTO.capture());
 		PurchaseHistoryDTO purchaseHistoryDTOCaptured = this.captorPurchaseHistoryDTO.getValue();
 		Assertions.assertEquals("00769203213", purchaseHistoryDTOCaptured.document());
-		Assertions.assertTrue(purchaseHistoryDTOCaptured.products().size() == 2, "Verifica se a resposta tem o mesmo número de produtos comprados");
+		Assertions.assertEquals(2, purchaseHistoryDTOCaptured.products().size(), "Verifica se a resposta tem o mesmo número de produtos comprados");
 		
 		purchaseHistoryDTOCaptured.products().forEach(t -> {
 			Assertions.assertTrue(t.code().equals("001") || t.code().equals("003"), "Verifica se o retorno contem todos produtos");
