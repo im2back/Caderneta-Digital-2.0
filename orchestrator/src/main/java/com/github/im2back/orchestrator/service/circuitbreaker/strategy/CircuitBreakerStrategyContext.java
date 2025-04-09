@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.im2back.orchestrator.dto.in.PurchaseRequestDTO;
 import com.github.im2back.orchestrator.dto.in.StockResponseDTO;
-import com.github.im2back.orchestrator.service.circuitbreaker.strategy.closedImpl.stepsavehistory.CircuitBreakerSaveHistoryClosedStrategyImplV1;
-import com.github.im2back.orchestrator.service.circuitbreaker.strategy.closedImpl.stepupdatestock.CircuitBreakerStockUpdateClosedStrategyImplV1;
-import com.github.im2back.orchestrator.service.circuitbreaker.strategy.halfopenImpl.stepsavehistory.CircuitBreakerSaveHistoryHalfOpenStrategyImplV1;
-import com.github.im2back.orchestrator.service.circuitbreaker.strategy.halfopenImpl.stepupdatestock.CircuitBreakerUpdateStockHalfOpenStrategyImplV1;
-import com.github.im2back.orchestrator.service.circuitbreaker.strategy.openImpl.stepsavehistory.CircuitBreakerSaveHistoryOpenStrategyImplV1;
-import com.github.im2back.orchestrator.service.circuitbreaker.strategy.openImpl.stepupdatestock.CircuitBreakerStockUpdateOpenStrategyImplV1;
+import com.github.im2back.orchestrator.service.circuitbreaker.strategy.closedimpl.stepsavehistory.CircuitBreakerSaveHistoryClosedStrategyImplV1;
+import com.github.im2back.orchestrator.service.circuitbreaker.strategy.closedimpl.stepupdatestock.CircuitBreakerStockUpdateClosedStrategyImplV1;
+import com.github.im2back.orchestrator.service.circuitbreaker.strategy.halfopenimpl.stepsavehistory.CircuitBreakerSaveHistoryHalfOpenStrategyImplV1;
+import com.github.im2back.orchestrator.service.circuitbreaker.strategy.halfopenimpl.stepupdatestock.CircuitBreakerUpdateStockHalfOpenStrategyImplV1;
+import com.github.im2back.orchestrator.service.circuitbreaker.strategy.openimpl.stepsavehistory.CircuitBreakerSaveHistoryOpenStrategyImplV1;
+import com.github.im2back.orchestrator.service.circuitbreaker.strategy.openimpl.stepupdatestock.CircuitBreakerStockUpdateOpenStrategyImplV1;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;

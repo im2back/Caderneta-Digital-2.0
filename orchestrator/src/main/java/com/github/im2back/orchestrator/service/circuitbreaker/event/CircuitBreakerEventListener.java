@@ -45,7 +45,7 @@ public class CircuitBreakerEventListener {
             forceHalfOpenAfterDelay(event.getCircuitBreakerName());
         }
     }
-
+    
     private void forceHalfOpenAfterDelay(String circuitBreakerName) {
         CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker(circuitBreakerName);
         new Thread(() -> {

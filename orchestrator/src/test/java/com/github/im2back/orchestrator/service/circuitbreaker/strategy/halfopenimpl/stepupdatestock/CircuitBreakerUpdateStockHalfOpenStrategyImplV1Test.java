@@ -1,4 +1,4 @@
-package com.github.im2back.orchestrator.service.circuitbreaker.strategy.openImpl.stepupdatestock;
+package com.github.im2back.orchestrator.service.circuitbreaker.strategy.halfopenimpl.stepupdatestock;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -23,27 +23,27 @@ import com.github.im2back.orchestrator.util.ExceptionTestFactory;
 import com.github.im2back.orchestrator.util.PurchaseTestFactory;
 
 @ExtendWith(MockitoExtension.class)
-class CircuitBreakerStockUpdateOpenStrategyImplV1Test {
+class CircuitBreakerUpdateStockHalfOpenStrategyImplV1Test {
 	
 	@InjectMocks
-	private CircuitBreakerStockUpdateOpenStrategyImplV1 circuitBreakerStockUpdateOpenStrategyImplV1;
-	
+	private CircuitBreakerUpdateStockHalfOpenStrategyImplV1 circuitBreakerUpdateStockHalfOpenStrategyImplV1;
 	@Mock
-	private PublishReprocessUpdateStock publishReprocessUpdateStock;
-
+	private  PublishReprocessUpdateStock publishReprocessUpdateStock;
+	
 	@Test
-	@DisplayName("Should throw AsynchronousProcessingException and trigger reprocess when stock update fails in open state")
-	void shouldThrowAsynchronousProcessingExceptionAndTriggerReprocessWhenStockUpdateFailsInOpenState() throws JsonProcessingException {
+	@DisplayName("Should throw AsynchronousProcessingException and trigger reprocess when stock update fails")
+	void shouldThrowAsynchronousProcessingExceptionAndTriggerReprocessWhenStockUpdateFails() throws JsonProcessingException {
 		//ARRANGE
 		PurchaseRequestDTO purchaseRequestDTO = PurchaseTestFactory.createValidPurchaseRequestDTO();
 		List<StockResponseDTO> stockResponseDTO = PurchaseTestFactory.createSuccessfulStockUpdateResponse();
 		Throwable throwable = ExceptionTestFactory.createServiceUnavailableCustomException();
 		doNothing().when(publishReprocessUpdateStock).sendReprocessHistory(any());
 		
-		//ACT + act
+		 //ACT
 		assertThrows(AsynchronousProcessingException.class, 
-				() -> circuitBreakerStockUpdateOpenStrategyImplV1.execute(purchaseRequestDTO, stockResponseDTO, throwable));
+				() ->circuitBreakerUpdateStockHalfOpenStrategyImplV1.execute(purchaseRequestDTO, stockResponseDTO, throwable));
 		
+		//ASSERT
 		verify(publishReprocessUpdateStock).sendReprocessHistory(purchaseRequestDTO);
 		
 	}

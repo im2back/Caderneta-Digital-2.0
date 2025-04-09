@@ -16,21 +16,17 @@ import jakarta.servlet.http.HttpServletRequest;
 public class GlobalHandlerException {
 
 	@ExceptionHandler(PurchaseValidationException.class)
-	ResponseEntity<StandardError> PurchaseValidationException(PurchaseValidationException ex, HttpServletRequest request) {
-		
+	ResponseEntity<StandardError> purchaseValidationException(PurchaseValidationException ex,
+			HttpServletRequest request) {
+
 		List<String> erros = new ArrayList<>();
-		ex.getErrorMessages().forEach(t ->{
-			erros.add(t);
-		});
-		
-		StandardError response = new StandardError(
-				HttpStatus.UNPROCESSABLE_ENTITY.value(),
-				"Error at Purchase", 
-				erros,
+		ex.getErrorMessages().forEach(t -> erros.add(t));
+
+		StandardError response = new StandardError(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Error at Purchase", erros,
 				request.getRequestURI());
 
 		return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(response);
 
 	}
-	
+
 }

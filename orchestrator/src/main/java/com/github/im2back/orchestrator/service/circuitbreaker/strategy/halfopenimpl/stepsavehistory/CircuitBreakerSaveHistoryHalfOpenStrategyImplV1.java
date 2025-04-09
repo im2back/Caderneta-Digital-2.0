@@ -1,4 +1,4 @@
-package com.github.im2back.orchestrator.service.circuitbreaker.strategy.halfopenImpl.stepsavehistory;
+package com.github.im2back.orchestrator.service.circuitbreaker.strategy.halfopenimpl.stepsavehistory;
 
 import java.util.List;
 

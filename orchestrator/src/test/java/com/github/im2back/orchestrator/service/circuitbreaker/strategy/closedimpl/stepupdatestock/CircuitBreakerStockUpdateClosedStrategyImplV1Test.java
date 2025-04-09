@@ -1,4 +1,4 @@
-package com.github.im2back.orchestrator.service.circuitbreaker.strategy.closedImpl.stepupdatestock;
+package com.github.im2back.orchestrator.service.circuitbreaker.strategy.closedimpl.stepupdatestock;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

@@ -18,12 +18,9 @@ public class Utils {
 		}
 		
 		List<UpdatedProductsDTO> products = new ArrayList<>();
-		stockUpdateResponseDTOList.forEach(t -> {
-			products.add(new UpdatedProductsDTO(t.name(), t.price(), t.code(), t.quantity()));
-		});
+		stockUpdateResponseDTOList.forEach(t -> products.add(new UpdatedProductsDTO(t.name(), t.price(), t.code(), t.quantity())));
 
 		PurchaseHistoryDTO purchaseHistoryDTO = new PurchaseHistoryDTO(dto.document(), products);
-
 			return purchaseHistoryDTO;
 	}
 

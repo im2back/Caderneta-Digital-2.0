@@ -1,4 +1,4 @@
-package com.github.im2back.orchestrator.service.circuitbreaker.strategy.openImpl.stepsavehistory;
+package com.github.im2back.orchestrator.service.circuitbreaker.strategy.halfopenimpl.stepsavehistory;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
@@ -26,25 +26,23 @@ import com.github.im2back.orchestrator.util.ExceptionTestFactory;
 import com.github.im2back.orchestrator.util.PurchaseTestFactory;
 
 @ExtendWith(MockitoExtension.class)
-class CircuitBreakerSaveHistoryOpenStrategyImplV1Test {
+class CircuitBreakerSaveHistoryHalfOpenStrategyImplV1Test {
 
 	@InjectMocks
-	private CircuitBreakerSaveHistoryOpenStrategyImplV1 breakerSaveHistoryOpenStrategyImplV1;
+	private CircuitBreakerSaveHistoryHalfOpenStrategyImplV1 circuitBreakerSaveHistoryHalfOpenStrategyImplV1;
 
 	@Mock
 	private PublishReprocessSaveHistory publishReprocessHistory;
 
 	@Test
-	@DisplayName("Should throw AsynchronousProcessingException and trigger reprocess when saving purchase history fails")
-	void shouldThrowAsynchronousProcessingExceptionAndTriggerReprocessWhenSavingPurchaseHistoryFails()
-			throws JsonProcessingException {
+	@DisplayName("Should throw AsynchronousProcessingException when an asynchronous processing error occurs")
+	void shouldThrowAsynchronousProcessingExceptionWhenProcessingFails() throws JsonProcessingException {
 		// ARRANGE
 		PurchaseRequestDTO purchaseRequestDTO = PurchaseTestFactory.createValidPurchaseRequestDTO();
 		List<StockResponseDTO> stockResponseDTO = PurchaseTestFactory.createSuccessfulStockUpdateResponse();
 		Throwable throwable = ExceptionTestFactory.createServiceUnavailableCustomException();
 		PurchaseHistoryDTO purchaseHistoryDTO = Utils.assemblePurchaseHistoryDTO(purchaseRequestDTO, stockResponseDTO);
 
-		// ACT + ASSERT
 		try (MockedStatic<Utils> mockedUtils = mockStatic(Utils.class)) {
 			mockedUtils.when(() -> Utils.assemblePurchaseHistoryDTO(purchaseRequestDTO, stockResponseDTO))
 					.thenReturn(purchaseHistoryDTO);
@@ -52,13 +50,12 @@ class CircuitBreakerSaveHistoryOpenStrategyImplV1Test {
 			doNothing().when(publishReprocessHistory).sendReprocessHistory(purchaseHistoryDTO);
 
 			// ACT + ASSERT
-			assertThrows(AsynchronousProcessingException.class, () -> breakerSaveHistoryOpenStrategyImplV1
+			assertThrows(AsynchronousProcessingException.class, () -> circuitBreakerSaveHistoryHalfOpenStrategyImplV1
 					.execute(purchaseRequestDTO, stockResponseDTO, throwable));
-			verify(publishReprocessHistory).sendReprocessHistory(purchaseHistoryDTO);
 
+			verify(publishReprocessHistory).sendReprocessHistory(purchaseHistoryDTO);
 			mockedUtils.verify(() -> Utils.assemblePurchaseHistoryDTO(purchaseRequestDTO, stockResponseDTO));
 		}
-
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.github.im2back.orchestrator.service.circuitbreaker.strategy.halfopenImpl.stepupdatestock;
+package com.github.im2back.orchestrator.service.circuitbreaker.strategy.openimpl.stepupdatestock;
 
 import java.util.List;
 
@@ -13,23 +13,23 @@ import com.github.im2back.orchestrator.service.circuitbreaker.strategy.CircuitBr
 
 import lombok.RequiredArgsConstructor;
 
-@Service
 @RequiredArgsConstructor
-public class CircuitBreakerUpdateStockHalfOpenStrategyImplV1 implements CircuitBreakerStrategyInterface {
+@Service
+public class CircuitBreakerStockUpdateOpenStrategyImplV1 implements CircuitBreakerStrategyInterface {
 	
 	private final PublishReprocessUpdateStock publishReprocessUpdateStock;
 
 	@Override
-	public void execute(PurchaseRequestDTO purchaseRequestDTO, List<StockResponseDTO> stockUpdateResponseDTOList,
+	public void execute(PurchaseRequestDTO purchaseRequestDTO , List<StockResponseDTO> stockUpdateResponseDTOList,
 			Throwable e) throws JsonProcessingException {
-	
+		
 		//Enviar para a fila para atualização de estoque assincrona 
 		//Atualiza o estoque e envia menssagem para a fila do customer processar de forma assincrona
-		publishReprocessUpdateStock.sendReprocessHistory(purchaseRequestDTO);
+		publishReprocessUpdateStock.sendReprocessHistory(purchaseRequestDTO);		
 		
 		//Lança a excecao e breka o processamento da etapa 3 qe será realizada de forma assincrona
 		throw new AsynchronousProcessingException("Pedido enviado para processamento assincrono.",202);
-
+		
 	}
 
 }

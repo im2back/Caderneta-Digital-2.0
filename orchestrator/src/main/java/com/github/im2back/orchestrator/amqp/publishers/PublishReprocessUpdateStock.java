@@ -17,9 +17,8 @@ public class PublishReprocessUpdateStock {
 		
 		private final ObjectMapper objectMapper;
 
-		private String convertIntoJson(PurchaseRequestDTO  data) throws JsonProcessingException {
-			String json = this.objectMapper.writeValueAsString(data);		
-			return json;	
+		private String convertIntoJson(PurchaseRequestDTO  data) throws JsonProcessingException { 	
+			return this.objectMapper.writeValueAsString(data);	
 		}	
 
 		public void sendReprocessHistory(PurchaseRequestDTO  data) throws JsonProcessingException {

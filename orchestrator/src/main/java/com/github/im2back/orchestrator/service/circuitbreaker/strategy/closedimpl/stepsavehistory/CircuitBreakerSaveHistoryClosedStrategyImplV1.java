@@ -1,4 +1,4 @@
-package com.github.im2back.orchestrator.service.circuitbreaker.strategy.closedImpl.stepsavehistory;
+package com.github.im2back.orchestrator.service.circuitbreaker.strategy.closedimpl.stepsavehistory;
 
 import java.util.List;
 

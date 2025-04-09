@@ -1,4 +1,4 @@
-package com.github.im2back.orchestrator.service.circuitbreaker.strategy.closedImpl.stepsavehistory;
+package com.github.im2back.orchestrator.service.circuitbreaker.strategy.closedimpl.stepsavehistory;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
