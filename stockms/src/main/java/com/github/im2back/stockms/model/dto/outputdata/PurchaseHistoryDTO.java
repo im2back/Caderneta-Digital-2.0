@@ -10,7 +10,6 @@ public record PurchaseHistoryDTO(
 		@NotBlank
 		String document,	
 		List<UpdatedProducts> products
-		
 		) {
 
 	

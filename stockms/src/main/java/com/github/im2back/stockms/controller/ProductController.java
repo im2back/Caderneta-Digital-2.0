@@ -17,15 +17,17 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.github.im2back.stockms.exceptions.StandardError;
-import com.github.im2back.stockms.model.dto.inputdata.NewProductToSaveDTO;
+import com.github.im2back.stockms.model.dto.inputdata.NewProductDTO;
+import com.github.im2back.stockms.model.dto.inputdata.ProductMassiveReplenishmentDTO;
 import com.github.im2back.stockms.model.dto.inputdata.PurchasedItemDTO;
 import com.github.im2back.stockms.model.dto.inputdata.UndoPurchaseDTO;
 import com.github.im2back.stockms.model.dto.outputdata.MassiveReplenishmentResponseDTO;
 import com.github.im2back.stockms.model.dto.outputdata.ProductDTO;
-import com.github.im2back.stockms.model.dto.outputdata.StockUpdateAfterPurchaseResponseDTO;
+import com.github.im2back.stockms.model.dto.outputdata.UpdatedStockResponseDTO;
 import com.github.im2back.stockms.service.ProductService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -57,7 +59,7 @@ public class ProductController {
 	})
 	@GetMapping("/{id}")
 	public ResponseEntity<ProductDTO> findProductById(@PathVariable Long id) {
-		ProductDTO response =  new ProductDTO(service.findProductById(id));
+		var response = this.service.findProductById(id);
 		return ResponseEntity.ok(response);
 	}
 	
@@ -74,9 +76,9 @@ public class ProductController {
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					schema = @Schema(implementation = StandardError.class))),
 	})
-	@GetMapping("/{code}")
+	@GetMapping("/code/{code}")
 	public ResponseEntity<ProductDTO> findProductByCode(@PathVariable String code) {
-		ProductDTO response =  new ProductDTO(service.findProductByCode(code));
+		ProductDTO response =  this.service.findProductByCode(code);
 		return ResponseEntity.ok(response);
 	}
 	
@@ -99,7 +101,7 @@ public class ProductController {
 					schema = @Schema(implementation = StandardError.class))),
 	})
 	@PostMapping
-	public ResponseEntity<ProductDTO> saveNewProduct(@RequestBody @Valid NewProductToSaveDTO dtoIn, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<ProductDTO> saveNewProduct(@RequestBody @Valid NewProductDTO dtoIn, UriComponentsBuilder uriBuilder) {
 		ProductDTO response = service.saveNewProduct(dtoIn);
 		var uri = uriBuilder.path("/product/{id}").buildAndExpand(response.id()).toUri();
 		return ResponseEntity.created(uri).body(response);
@@ -126,7 +128,7 @@ public class ProductController {
 					responseCode = "200",
 					description = "Retorna um StockUpdateAfterPurchaseResponseDTO(dto da compra) após atualizar o estoque e deduzir os produtos comprados",
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-					schema = @Schema(implementation = StockUpdateAfterPurchaseResponseDTO.class))),
+					schema = @Schema(implementation = UpdatedStockResponseDTO.class))),
 			@ApiResponse(
 					responseCode = "400",
 					description = "Retorna um StandardError em caso de exeção durante as validações de compra",
@@ -139,10 +141,10 @@ public class ProductController {
 					schema = @Schema(implementation = StandardError.class))),
 	})
 	@PutMapping
-	public ResponseEntity<List<StockUpdateAfterPurchaseResponseDTO>> updateStockAfterPurchase(
+	public ResponseEntity<List<UpdatedStockResponseDTO>> updateStockAfterPurchase(
 			@RequestBody @NotEmpty(message = "Input movie list cannot be empty.") @Valid List<PurchasedItemDTO> dtoIn) {
 	
-		List<StockUpdateAfterPurchaseResponseDTO> stockUpdateResponseDTOList = service.updateQuantityProductsAfterPurchase(dtoIn);
+		List<UpdatedStockResponseDTO> stockUpdateResponseDTOList = service.updateQuantityProductsAfterPurchase(dtoIn);
 		return ResponseEntity.ok().body(stockUpdateResponseDTOList);
 	}
 	
@@ -170,8 +172,22 @@ public class ProductController {
 		return ResponseEntity.ok().build();
 	}
 	
+	@Operation(summary = ("Recebe um List<ProductMassiveReplenishmentDTO> e faz a reposição do estoque"))
+	@ApiResponses(value = {
+			@ApiResponse(
+					responseCode = "200",
+					description = "Em caso de sucesso retorna apenas o status 200 e um corpo do tipo List<MassiveReplenishmentResponseDTO>",
+					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+							 array = @ArraySchema(schema = @Schema(implementation = ProductMassiveReplenishmentDTO.class)))),
+			@ApiResponse(
+					responseCode = "400",
+					description = "Retorna um StandardError em caso de exeção durante as validações do BeanValidation",
+					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+					schema = @Schema(implementation = StandardError.class))),
+	})
 	@PutMapping("/restock")
-	public ResponseEntity<List<MassiveReplenishmentResponseDTO>> massiveReplenishmentInStock(@RequestBody @NotEmpty(message = "Input movie list cannot be empty.") @Valid List<StockUpdateAfterPurchaseResponseDTO> dtoIn) {
+	public ResponseEntity<List<MassiveReplenishmentResponseDTO>> massiveReplenishmentInStock(@RequestBody
+			@NotEmpty(message = "Input movie list cannot be empty.") @Valid List<ProductMassiveReplenishmentDTO> dtoIn) {
 		var response = service.massiveReplenishment(dtoIn);
 		return ResponseEntity.ok(response);
 	}
@@ -184,19 +200,14 @@ public class ProductController {
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					schema = @Schema(implementation = Void.class))),
 			@ApiResponse(
-					responseCode = "400",
-					description = "Retorna um StandardError em caso de exeção durante as validações do BeanValidation",
-					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-					schema = @Schema(implementation = StandardError.class))),
-			@ApiResponse(
 					responseCode = "404",
 					description = "Retorna um StandardError caso um dos produto não seja localizado no BD",
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 					schema = @Schema(implementation = StandardError.class))),
 	})
 	@PatchMapping("/{id}")
-	public ResponseEntity<Void> updateProduct(@PathVariable Long id ,@RequestBody @Valid ProductDTO dtoIn) {
-		service.updateProduct(dtoIn);
+	public ResponseEntity<Void> updateProduct(@PathVariable Long id ,@RequestBody ProductDTO dtoIn) {
+		service.updateProduct(dtoIn,id);
 		return ResponseEntity.ok().build();
 	}
 

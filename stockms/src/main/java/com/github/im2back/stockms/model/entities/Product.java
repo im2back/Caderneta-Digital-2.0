@@ -2,7 +2,7 @@ package com.github.im2back.stockms.model.entities;
 
 import java.math.BigDecimal;
 
-import com.github.im2back.stockms.model.dto.inputdata.NewProductToSaveDTO;
+import com.github.im2back.stockms.model.dto.inputdata.NewProductDTO;
 import com.github.im2back.stockms.model.dto.outputdata.ProductDTO;
 
 import jakarta.persistence.Column;
@@ -35,7 +35,7 @@ public class Product {
 		this.productUrl = productUrl;
 	}
 	
-	public Product(NewProductToSaveDTO p) {
+	public Product(NewProductDTO p) {
 		super();
 		this.name = p.name();
 		this.price = p.price();
@@ -66,19 +66,16 @@ public class Product {
 	
 	
 	public void updateAttributes(ProductDTO dto) {
-	    if (dto.name().trim() != null) {
+	    if (dto.name() != null && !dto.name().trim().isEmpty()) {
 	        this.name = dto.name();
 	    }
 	    if (dto.price() != null) {
 	        this.price = dto.price();
 	    }
-	    if (dto.code().trim() != null) {
-	        this.code = dto.code();
-	    }
 	    if (dto.quantity() != null) {
 	        this.quantity = dto.quantity();
 	    }
-	    if (dto.productUrl().trim() != null) {
+	    if (dto.productUrl() != null && !dto.productUrl().trim().isEmpty()) {
 	        this.productUrl = dto.productUrl();
 	    }
 	}

@@ -8,8 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
 
 import com.github.im2back.stockms.service.exceptions.ProductNotFoundException;
@@ -17,7 +17,7 @@ import com.github.im2back.stockms.service.exceptions.ProductNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalHandlerExceptions {
 
 	@ExceptionHandler(ProductNotFoundException.class)

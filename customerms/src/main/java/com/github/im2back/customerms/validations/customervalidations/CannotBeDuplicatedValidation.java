@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.github.im2back.customerms.model.dto.datainput.RegisterCustomerDTO;
 import com.github.im2back.customerms.model.entities.customer.Customer;
@@ -44,14 +43,10 @@ public class CannotBeDuplicatedValidation implements CustomerValidations {
 	        }
 	    }
 
-	@Transactional(readOnly = true)
 	private List<Customer> consulta(RegisterCustomerDTO requestDto) {
 		List<Customer> customers = repository.findByEmailOrDocumentOrPhone(
 	           requestDto.email(), requestDto.document(), requestDto.phone()
 	        );
 		return customers;
 	}
-	
-
-
 }

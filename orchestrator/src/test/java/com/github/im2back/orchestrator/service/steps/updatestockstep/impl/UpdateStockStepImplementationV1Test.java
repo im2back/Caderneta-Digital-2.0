@@ -29,7 +29,6 @@ import org.springframework.http.ResponseEntity;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.im2back.orchestrator.clients.StockClient;
 import com.github.im2back.orchestrator.clients.exception.ServiceUnavailableCustomException;
-import com.github.im2back.orchestrator.dto.in.PurchaseHistoryResponseDTO;
 import com.github.im2back.orchestrator.dto.in.PurchaseRequestDTO;
 import com.github.im2back.orchestrator.dto.in.StockResponseDTO;
 import com.github.im2back.orchestrator.exception.customexceptions.AsynchronousProcessingException;
@@ -168,11 +167,10 @@ class UpdateStockStepImplementationV1Test {
 		verify(circuitBreakerStrategyContext).executeStrategy(eq(purchaseRequestDTO), any(), any());		
 	}
     
-    void executeShouldReturnPurchaseHistoryResponseDTOWhenSynchronousRequestSucceedsAndCircuitBreakerIsHalfOpen() throws JsonProcessingException {
+    void execute_ShouldReturnPurchaseHistoryResponseDTO_WhenSynchronousRequestSucceedsAndCircuitBreakerIsHalfOpen() throws JsonProcessingException {
 
 		//ARRANGE
 		PurchaseRequestDTO purchaseRequestDTO = PurchaseTestFactory.createValidPurchaseRequestDTO();
-		PurchaseHistoryResponseDTO purchaseHistoryResponseDTO = PurchaseTestFactory.createSuccessfulPurchaseHistory();
 		List<StockResponseDTO> stockUpdateResponseDTOs = PurchaseTestFactory.createSuccessfulStockUpdateResponse();
 		String circuitBreakerName = "circuitBreakerStockClient";
 		String state ="HALF_OPEN";
@@ -185,15 +183,15 @@ class UpdateStockStepImplementationV1Test {
 		doNothing().when(redisCircuitBreakerManager).updateRequestResultsInRedis(resultRequest, circuitBreakerName);
 		doNothing().when(redisCircuitBreakerManager).halfOpenEvaluateCircuitTransition(circuitBreakerName);
 		
-		//ACT
-		var response = stockStep.execute(purchaseRequestDTO);
+		//ACT 
+		List<StockResponseDTO> response = this.stockStep.execute(purchaseRequestDTO);
 		
 		//ASSERT
 		verify(redisCircuitBreakerManager).halfOpenEvaluateCircuitTransition(circuitBreakerName);
 		verify(redisCircuitBreakerManager).updateLocalCircuitBreakerState(any(), any());
 		verify(redisCircuitBreakerManager).updateRequestResultsInRedis(resultRequest, circuitBreakerName);
 		verify(stockClient).updateStockAfterPurchase(purchaseRequestDTO.purchasedItems());
-		Assertions.assertEquals(purchaseHistoryResponseDTO, response, "Deveria retornar a resposta devolvida pelo microsserviço de Customer");	
+		Assertions.assertEquals(stockUpdateResponseDTOs, response, "Deveria retornar a resposta devolvida pelo microsserviço de stock");	
 	}
 	
     @Test

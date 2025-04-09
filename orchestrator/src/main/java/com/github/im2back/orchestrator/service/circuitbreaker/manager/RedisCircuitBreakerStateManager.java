@@ -1,6 +1,7 @@
 package com.github.im2back.orchestrator.service.circuitbreaker.manager;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.im2back.orchestrator.exception.customexceptions.CircuitBreakerCustomException;
 
@@ -30,12 +30,12 @@ public class RedisCircuitBreakerStateManager {
 		this.objectMapper = objectMapper; 
 	}
 
-	public CircuitBreaker getCircuitBreaker(String name) throws JsonMappingException, JsonProcessingException {
+	public CircuitBreaker getCircuitBreaker(String name) throws JsonProcessingException {
 		CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker(name);
 		return circuitBreaker;
 	}
 
-	public void closedEvaluateCircuitTransition(String circuitBreakerName)throws JsonMappingException, JsonProcessingException {
+	public void closedEvaluateCircuitTransition(String circuitBreakerName)throws  JsonProcessingException {
 
 		String counterString = valueOperations.get(circuitBreakerName + ":countBased");
 		Integer counterInt = Integer.parseInt(counterString);
@@ -65,7 +65,7 @@ public class RedisCircuitBreakerStateManager {
 		}
 	}
 
-	public void halfOpenEvaluateCircuitTransition(String circuitBreakerName) throws JsonMappingException, JsonProcessingException {
+	public void halfOpenEvaluateCircuitTransition(String circuitBreakerName) throws JsonProcessingException {
 		
 		CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker(circuitBreakerName);
 		String counterString = valueOperations.get(circuitBreakerName + ":countBased");
@@ -98,7 +98,7 @@ public class RedisCircuitBreakerStateManager {
 		}
 	}
 
-	public void updateRequestResultsInRedis(String result, String circuitBreakerName) throws JsonProcessingException, JsonMappingException {
+	public void updateRequestResultsInRedis(String result, String circuitBreakerName) throws JsonProcessingException {
 		String requestResultJson = valueOperations.get(circuitBreakerName+ ":resultRequest");
 		List<String> requestResultObject = objectMapper.readValue(requestResultJson, new TypeReference<List<String>>() {});
 		requestResultObject.add(result);
@@ -107,7 +107,8 @@ public class RedisCircuitBreakerStateManager {
 
 	public String updateLocalCircuitBreakerState(CircuitBreaker circuitBreaker,String circuitBreakerName) {
 		
-		String currentCircuitStateFromRedis = valueOperations.get(circuitBreakerName + ":state");
+		String currentCircuitStateFromRedis = Optional.ofNullable(valueOperations.get(circuitBreakerName + ":state"))
+			    .orElseThrow(() -> new CircuitBreakerCustomException("O estado do disjuntor não pode ser nulo"));
 		
 		switch(currentCircuitStateFromRedis) {	
 			case "OPEN" -> {

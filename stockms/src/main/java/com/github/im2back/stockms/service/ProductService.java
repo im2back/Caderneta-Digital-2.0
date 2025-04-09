@@ -9,12 +9,13 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.im2back.stockms.model.dto.inputdata.NewProductToSaveDTO;
+import com.github.im2back.stockms.model.dto.inputdata.NewProductDTO;
+import com.github.im2back.stockms.model.dto.inputdata.ProductMassiveReplenishmentDTO;
 import com.github.im2back.stockms.model.dto.inputdata.PurchasedItemDTO;
 import com.github.im2back.stockms.model.dto.inputdata.UndoPurchaseDTO;
 import com.github.im2back.stockms.model.dto.outputdata.MassiveReplenishmentResponseDTO;
 import com.github.im2back.stockms.model.dto.outputdata.ProductDTO;
-import com.github.im2back.stockms.model.dto.outputdata.StockUpdateAfterPurchaseResponseDTO;
+import com.github.im2back.stockms.model.dto.outputdata.UpdatedStockResponseDTO;
 import com.github.im2back.stockms.model.entities.Product;
 import com.github.im2back.stockms.repositories.ProductRepository;
 import com.github.im2back.stockms.service.exceptions.ProductNotFoundException;
@@ -28,20 +29,21 @@ public class ProductService {
 	private final ProductRepository repository;
 
 	@Transactional(readOnly = true)
-	public Product findProductById(Long id) {
-		return repository.findById(id)
+	public ProductDTO findProductById(Long id) {
+		Product product = repository.findById(id)
 				.orElseThrow(() -> new ProductNotFoundException("Product Not found for id: " + id));
+		return new ProductDTO(product);
 	}
 
 	@Transactional(readOnly = true)
-	public Product findProductByCode(String code) {
+	public ProductDTO findProductByCode(String code) {
 		Product product = repository.findByCode(code)
 				.orElseThrow(() -> new ProductNotFoundException("Product Not found for code: " + code));
-		return product;
+		return new ProductDTO(product);
 	}
 
 	@Transactional
-	public ProductDTO saveNewProduct(NewProductToSaveDTO p) {
+	public ProductDTO saveNewProduct(NewProductDTO p) {
 			Product product = repository.save(new Product(p));
 			return new ProductDTO(product);	
 	}
@@ -52,11 +54,11 @@ public class ProductService {
 	}
 
 	@Transactional
-	public List<StockUpdateAfterPurchaseResponseDTO> updateQuantityProductsAfterPurchase(List<PurchasedItemDTO> dto) {
+	public List<UpdatedStockResponseDTO> updateQuantityProductsAfterPurchase(List<PurchasedItemDTO> dto) {
 			
 		List<Product> products = findProductsByCodes(dto);
 		List<Product> listOfProductsThatHaveBeenUpdated = persistChangesInTheQuantityOfProducts(dto, products);
-		List<StockUpdateAfterPurchaseResponseDTO> response = buildUpdateResponse(dto, listOfProductsThatHaveBeenUpdated);
+		List<UpdatedStockResponseDTO> response = buildUpdateResponse(dto, listOfProductsThatHaveBeenUpdated);
 		
 		return  response;
 	}
@@ -71,13 +73,13 @@ public class ProductService {
 		return repository.saveAll(productHashMap.values());	 
 	}
 	
-	private List<StockUpdateAfterPurchaseResponseDTO> buildUpdateResponse(List<PurchasedItemDTO> productsList ,List<Product> products) {
-		List<StockUpdateAfterPurchaseResponseDTO> response = new ArrayList<>();
+	private List<UpdatedStockResponseDTO> buildUpdateResponse(List<PurchasedItemDTO> productsList ,List<Product> products) {
+		List<UpdatedStockResponseDTO> response = new ArrayList<>();
 		HashMap<String, Product> productHashMap = new HashMap<>(products.stream().collect(Collectors.toMap(Product::getCode, p -> p)));
 		
 		productsList.forEach(p -> {
 			Product product = productHashMap.get(p.code());
-			response.add(new StockUpdateAfterPurchaseResponseDTO(product, p.quantity()));
+			response.add(new UpdatedStockResponseDTO(product, p.quantity()));
 		});
 		return response; 
 	}
@@ -91,19 +93,22 @@ public class ProductService {
 	
 	@Transactional
 	public void undoIndividualPurchase(UndoPurchaseDTO dto, String code) {
-		Product product = findProductByCode(code);
+		Product product = repository.findByCode(code)
+				.orElseThrow(() -> new ProductNotFoundException("Product Not found for code: " + code));
 		product.setQuantity(product.getQuantity() + dto.quantity());
 		repository.save(product);
 	}
 	
 	@Transactional
-	public void updateProduct(ProductDTO dto) {
-		Product product = findProductById(dto.id());
+	public void updateProduct(ProductDTO dto,Long id) {
+		Product product = repository.findById(id)
+				.orElseThrow(() -> new ProductNotFoundException("Product Not found for id: " + dto.id()));
+		
 		product.updateAttributes(dto);
 		repository.save(product);
 	}
 
-	public List<MassiveReplenishmentResponseDTO> massiveReplenishment(List<StockUpdateAfterPurchaseResponseDTO> dtoIn) {
+	public List<MassiveReplenishmentResponseDTO> massiveReplenishment(List<ProductMassiveReplenishmentDTO> dtoIn) {
 		List<MassiveReplenishmentResponseDTO> response = new ArrayList<>();
 		
 		List<String> extractedCodes = dtoIn.stream().map(p -> p.code()).collect(Collectors.toList());
@@ -111,7 +116,7 @@ public class ProductService {
 		
 		Map<String, Product> productMap = products.stream().collect(Collectors.toMap(Product::getCode, p -> p));
 		
-		for(StockUpdateAfterPurchaseResponseDTO p : dtoIn) {
+		for(ProductMassiveReplenishmentDTO p : dtoIn) {
 			var product = productMap.getOrDefault(p.code(), null);
 			product.setQuantity(product.getQuantity() + p.quantity());
 			response.add(new MassiveReplenishmentResponseDTO(product, p.quantity()));

@@ -4,6 +4,7 @@ public enum Status {
 
 	
 	DEFINIR_STATUS {
+		@Override
 		public Status setStatus(String document) {
 			return getStatusByDocument(document);}},
 	

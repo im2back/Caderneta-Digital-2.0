@@ -120,6 +120,38 @@
 
 	<build>
 		<plugins>
+			<!-- Testes unitários -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.1.2</version>
+				<configuration>
+					<includes>
+						<include>**/*Test.java</include>
+					</includes>
+				</configuration>
+			</plugin>
+
+			<!-- Testes de integração -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>3.1.2</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<includes>
+						<include>**/*IntegrationTest.java</include>
+					</includes>
+				</configuration>
+			</plugin>
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -137,15 +169,19 @@
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.7</version>
 				<executions>
+					<!-- Ativa o agente JaCoCo para coletar dados -->
 					<execution>
 						<id>jacoco-init</id>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
+
+					<!-- Gera o relatório após todos os testes (unit +
+					integração) -->
 					<execution>
 						<id>jacoco-report</id>
-						<phase>prepare-package</phase>
+						<phase>verify</phase> <!-- Antes estava prepare-package -->
 						<goals>
 							<goal>report</goal>
 						</goals>
@@ -164,6 +200,7 @@
 					</execution>
 				</executions>
 			</plugin>
+
 		</plugins>
 	</build>
 

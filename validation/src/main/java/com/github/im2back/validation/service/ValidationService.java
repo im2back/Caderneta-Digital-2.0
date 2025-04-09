@@ -24,10 +24,14 @@ import lombok.RequiredArgsConstructor;
 public class ValidationService {
 
 	private final CustomerRepository customerRepository;
+	
 	private final ProductRepository productRepository;
+	
 	private final List<PurchaseValidationsStock> stockPurchaseValidations;
+	
 	private final List<PurchaseValidationsCustomer> customerPurchaseValidations;
-
+	
+	@Transactional(readOnly = true)
 	public void validPurchase(ProductsPurchaseRequestDto dto) {
 		// Validação de produtos
 		List<Product> products = findByCodes(dto.purchasedItems());
@@ -38,16 +42,15 @@ public class ValidationService {
 		customerPurchaseValidations.forEach(t -> t.valid(customer));	
 	}
 	
-	@Transactional(readOnly = true)
 	protected List<Product> findByCodes(List<PurchasedItem> productsList) {	
 		List<String> productCodesList = new ArrayList<>();
 		productsList.forEach(t -> productCodesList.add(t.code()));		
-		List<Product> products = productRepository.findByCodes(productCodesList);
+		List<Product> products = this.productRepository.findByCodes(productCodesList);
 		return products;
 	}
 	
-	@Transactional(readOnly = true)
-	private Customer findByCustomerPerDocument(String document) {
+	
+	protected Customer findByCustomerPerDocument(String document) {
 		return customerRepository.findByDocument(document)
 				.orElseThrow(() -> new PurchaseValidationException(new ArrayList<>(Arrays.asList("User not found for document: " + document))));
 	}

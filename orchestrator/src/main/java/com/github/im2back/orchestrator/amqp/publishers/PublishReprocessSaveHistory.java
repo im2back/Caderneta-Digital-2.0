@@ -12,16 +12,17 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class PublishReprocessSaveHistory {
-	
-		private final RabbitTemplate rabbitTemplate;
-		private final ObjectMapper objectMapper;
 
-		private String convertIntoJson(PurchaseHistoryDTO data) throws JsonProcessingException {
-			String json = objectMapper.writeValueAsString(data);		
-			return json;	
-		}	
-		public void sendReprocessHistory(PurchaseHistoryDTO data) throws JsonProcessingException {
-			String json = convertIntoJson(data);
-			rabbitTemplate.convertAndSend("reprocess.steps.direct.exchange","customer.reprocess.history.routing.key",json);
-		}
+	private final RabbitTemplate rabbitTemplate;
+	private final ObjectMapper objectMapper;
+
+	private String convertIntoJson(PurchaseHistoryDTO data) throws JsonProcessingException {
+		return objectMapper.writeValueAsString(data);
+	}
+
+	public void sendReprocessHistory(PurchaseHistoryDTO data) throws JsonProcessingException {
+		String json = convertIntoJson(data);
+		rabbitTemplate.convertAndSend("reprocess.steps.direct.exchange", "customer.reprocess.history.routing.key",
+				json);
+	}
 }

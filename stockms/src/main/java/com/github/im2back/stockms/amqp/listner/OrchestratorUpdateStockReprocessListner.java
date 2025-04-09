@@ -1,6 +1,5 @@
 package com.github.im2back.stockms.amqp.listner;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -8,13 +7,12 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.im2back.stockms.amqp.publish.PublishCustomerReprocessHistory;
 import com.github.im2back.stockms.model.dto.inputdata.PurchaseRequestDTO;
 import com.github.im2back.stockms.model.dto.outputdata.PurchaseHistoryDTO;
-import com.github.im2back.stockms.model.dto.outputdata.StockUpdateAfterPurchaseResponseDTO;
 import com.github.im2back.stockms.model.dto.outputdata.UpdatedProducts;
+import com.github.im2back.stockms.model.dto.outputdata.UpdatedStockResponseDTO;
 import com.github.im2back.stockms.service.ProductService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,31 +25,24 @@ public class OrchestratorUpdateStockReprocessListner {
 	private final PublishCustomerReprocessHistory customerReprocessHistory;
 	
 	@RabbitListener(queues = "stock.update.queue")
-	public void receiveMessages(@Payload String msg) throws JsonMappingException, JsonProcessingException {
-		System.out.println("(========== Processamento de Stock Assincrono ==========)");
-		
+	public void receiveMessages(@Payload String msg) throws  JsonProcessingException {
+
 		PurchaseRequestDTO purchaseRequestDTO = convert(msg);
-		var response = productService.updateQuantityProductsAfterPurchase(purchaseRequestDTO.purchasedItems());
-		customerReprocessHistory.sendReprocessSaveHistory(assemblePurchaseHistoryDTO(purchaseRequestDTO,response));
-		
-		System.out.println("(========== Enviando para o Customer Processar ==========)");
+		List<UpdatedStockResponseDTO> response = this.productService.updateQuantityProductsAfterPurchase(purchaseRequestDTO.purchasedItems());
+		PurchaseHistoryDTO purchaseHistoryDTO = assemblePurchaseHistoryDTO(purchaseRequestDTO,response);
+		this.customerReprocessHistory.sendReprocessSaveHistory(purchaseHistoryDTO);
 	}
 	
-	private PurchaseRequestDTO convert(String payload) throws JsonMappingException, JsonProcessingException {
+	private PurchaseRequestDTO convert(String payload) throws  JsonProcessingException {
 		var mapper = new ObjectMapper();
 		 return mapper.readValue(payload, PurchaseRequestDTO.class);
 	}
 	
-	private PurchaseHistoryDTO assemblePurchaseHistoryDTO(PurchaseRequestDTO dto, List<StockUpdateAfterPurchaseResponseDTO> stockUpdateResponseDTOList) {
-		List<UpdatedProducts> products = new ArrayList<>();
+	private PurchaseHistoryDTO assemblePurchaseHistoryDTO(PurchaseRequestDTO dto, List<UpdatedStockResponseDTO> stockUpdateResponseDTOList) {
 		
-		stockUpdateResponseDTOList.forEach(t -> {
-			products.add(new UpdatedProducts(t.name(), t.price(), t.code(), t.quantity()));
-		});
+		List<UpdatedProducts> products = stockUpdateResponseDTOList.stream()
+			    .map(t -> new UpdatedProducts(t.name(), t.price(), t.code(), t.quantity())).toList();
 		
-		PurchaseHistoryDTO purchaseHistoryDTO = new PurchaseHistoryDTO(dto.document(), products);
-		
-		return purchaseHistoryDTO;
+		return  new PurchaseHistoryDTO(dto.document(), products);
 	}
-
 }
