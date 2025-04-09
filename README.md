@@ -87,12 +87,12 @@ Esse esforço envolve trabalhar eficientemente com branches e pull requests para
 
 <br>
 
-# 🧩 Testes Unitários e de Integração
+# 🧩 Testes Unitários e de Integração 
 - Testes de unidades feitos e integrados com ferramentas como  Jacoco e Sonarqube para melhor aferição de cobertura e qualidade.
 -  Para os testes de integração foram utilizados banco de dados em memoria.
 
 <br>
- ![image](https://github.com/user-attachments/assets/f2f9f7cf-b05b-419b-a2ca-749bef58c0b3)
+ [![image](https://github.com/user-attachments/assets/f2f9f7cf-b05b-419b-a2ca-749bef58c0b3)](https://github.com/im2back/Caderneta-Digital-2.0/blob/main/testes.png?raw=true)
 
 <br>
 
