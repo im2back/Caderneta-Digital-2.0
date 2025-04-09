@@ -1,4 +1,6 @@
-# Status de Desenvolvimento 10/03/2025 EM REFATORAÇÃO, API QUEBRADA ATÉ O TÉRMINO 🟢 
+# Status de Desenvolvimento 09/04/2025 EM REFATORAÇÃO, API QUEBRADA ATÉ O TÉRMINO 🟢 
+Próximo passo -> Hoje 09/04 foi finalizado os testes, agora será estudada a necessidade da criação do microsserviço de notificações.
+
 ### Projeto passando por refatoração visando :
  - Desacoplar os microsserviços, melhorando sua coesão e modificando o funcionamento das comunicações
  - Melhora de performance
@@ -85,20 +87,12 @@ Esse esforço envolve trabalhar eficientemente com branches e pull requests para
 
 <br>
 
-# 🧩 Testes Unitários
-- Testes de unidades feitos e integrados com ferramentas como : Jacoco e Sonarqube.
+# 🧩 Testes Unitários e de Integração
+- Testes de unidades feitos e integrados com ferramentas como  Jacoco e Sonarqube para melhor aferição de cobertura e qualidade.
+-  Para os testes de integração foram utilizados banco de dados em memoria.
 
 <br>
-  
-## Customer Microservice
-![customer-jacoco](https://github.com/user-attachments/assets/ade08480-be21-4f0e-aae7-f891f66545bf)
-![customer-sonarcube](https://github.com/user-attachments/assets/2f9a4338-d7fb-489b-9e01-756b4aa7a476)
-![tests](https://github.com/user-attachments/assets/9ac97e26-1ff9-479a-865f-50b1a7a47131)
-
-<br>
-  
-## Stock Microservice
-![teststockms](https://github.com/user-attachments/assets/70fa3805-fc65-4f03-98f2-4a2dbe3b000d)
+ ![image](https://github.com/user-attachments/assets/f2f9f7cf-b05b-419b-a2ca-749bef58c0b3)
 
 <br>
 
