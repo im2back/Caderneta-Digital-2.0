@@ -201,9 +201,9 @@ class CustomerServiceTest {
 			
 			Assertions.assertEquals("00769203213", customerSaved.getDocument());
 			Assertions.assertEquals(customerSaved.getPurchaseRecord().size(), 1);
-			Assertions.assertEquals(response.purchasedProducts().size(), 1);
-			Assertions.assertEquals(response.purchasedProducts().get(0).value(), new BigDecimal(19.99));
-			Assertions.assertEquals(response.purchasedProducts().get(0).productName(), "Nescau");
+			Assertions.assertEquals(1,response.purchasedProducts().size());
+			Assertions.assertEquals(new BigDecimal(19.99),response.purchasedProducts().get(0).value());
+			Assertions.assertEquals("Nescau",response.purchasedProducts().get(0).productName());
 	}
 	
 	@Test
@@ -227,7 +227,7 @@ class CustomerServiceTest {
 			Customer customerSaved = customerCaptor.getValue();
 			
 			Assertions.assertEquals("00769203213", customerSaved.getDocument());
-			Assertions.assertEquals(customerSaved.getPurchaseRecord().size(), 1);
+			Assertions.assertEquals(1,customerSaved.getPurchaseRecord().size());
 	}
 	
 	@Test
@@ -253,6 +253,7 @@ class CustomerServiceTest {
 		Method getProductDataToPdfList =  CustomerService.class.getDeclaredMethod("getProductDataToPdfList", List.class);
 		getProductDataToPdfList.setAccessible(true);
 		Object retorno = getProductDataToPdfList.invoke(customerService, customer.get().getPurchaseRecord());
+		@SuppressWarnings("unchecked")
 		List<ProductDataToPdf> productDataToPdfs = (List<ProductDataToPdf>) retorno;
 	
 		Method getPath =  CustomerService.class.getDeclaredMethod("getPath", String.class);
@@ -327,7 +328,7 @@ class CustomerServiceTest {
 	
 		dataForMetricsDTO.dataGraphicSevenDays().forEach(t ->{
 			DailyTotalDTO  dailyTotalDTO = dailyTotalMap.getOrDefault(t.totalValue(), null);
-			Assertions.assertTrue(dailyTotalDTO != null);
+			Assertions.assertNotNull(dailyTotalDTO);
 		});
 	}
 	
@@ -356,13 +357,14 @@ class CustomerServiceTest {
 				.stream()
 				.collect(Collectors.toMap(DailyTotalDTO::totalValue, dto -> dto));		
 	
-			Assertions.assertTrue(dailyTotalMap.getOrDefault(BigDecimal.valueOf(15.00).setScale(2, RoundingMode.HALF_UP), null) != null);
-			Assertions.assertTrue(dailyTotalMap.getOrDefault(BigDecimal.valueOf(11.00).setScale(2, RoundingMode.HALF_UP), null) != null);
-			Assertions.assertTrue(dailyTotalMap.getOrDefault(BigDecimal.valueOf(12.00).setScale(2, RoundingMode.HALF_UP), null) != null);
-			Assertions.assertTrue(dailyTotalMap.getOrDefault(BigDecimal.valueOf(13.00).setScale(2, RoundingMode.HALF_UP), null) != null);
-			Assertions.assertTrue(dailyTotalMap.getOrDefault(BigDecimal.valueOf(14.00).setScale(2, RoundingMode.HALF_UP), null) != null);
-			Assertions.assertTrue(dailyTotalMap.getOrDefault(BigDecimal.valueOf(16.00).setScale(2, RoundingMode.HALF_UP), null) != null);
-			Assertions.assertTrue(dailyTotalMap.getOrDefault(BigDecimal.valueOf(17.00).setScale(2, RoundingMode.HALF_UP), null) != null);
+		Assertions.assertNotNull(dailyTotalMap.getOrDefault(BigDecimal.valueOf(15.00).setScale(2, RoundingMode.HALF_UP), null));
+		Assertions.assertNotNull(dailyTotalMap.getOrDefault(BigDecimal.valueOf(11.00).setScale(2, RoundingMode.HALF_UP), null));
+		Assertions.assertNotNull(dailyTotalMap.getOrDefault(BigDecimal.valueOf(12.00).setScale(2, RoundingMode.HALF_UP), null));
+		Assertions.assertNotNull(dailyTotalMap.getOrDefault(BigDecimal.valueOf(13.00).setScale(2, RoundingMode.HALF_UP), null));
+		Assertions.assertNotNull(dailyTotalMap.getOrDefault(BigDecimal.valueOf(14.00).setScale(2, RoundingMode.HALF_UP), null));
+		Assertions.assertNotNull(dailyTotalMap.getOrDefault(BigDecimal.valueOf(16.00).setScale(2, RoundingMode.HALF_UP), null));
+		Assertions.assertNotNull(dailyTotalMap.getOrDefault(BigDecimal.valueOf(17.00).setScale(2, RoundingMode.HALF_UP), null));
+
 	}
 	
 	

@@ -26,8 +26,7 @@ class OrchestratorReprocessHistoryListnerTest {
 	
 	@Mock
 	private  CustomerService customerService;
-	
-	
+		
 	@Test
 	void receiveShouldProcessMessageWhenReceivingValidMessage() throws IOException {
 		//ARRANGE

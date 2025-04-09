@@ -8,7 +8,6 @@ public record DataForMetricsDTO(
 		Double partialValueForCurrentDay,
 		Double totalOutstandingAmount,
 		List<DailyTotalDTO> dataGraphicSevenDays 
-		
 		) {
 
 }

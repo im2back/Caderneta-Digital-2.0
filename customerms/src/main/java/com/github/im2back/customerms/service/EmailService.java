@@ -15,43 +15,43 @@ import jakarta.mail.util.ByteArrayDataSource;
 
 @Service
 public class EmailService {
-	 private final JavaMailSender javaMailSender;
+	
+	private final JavaMailSender javaMailSender;
 
-	    
-	    public EmailService(JavaMailSender javaMailSender) {
-	        this.javaMailSender = javaMailSender;
-	    }
+	public EmailService(JavaMailSender javaMailSender) {
+		this.javaMailSender = javaMailSender;
+	}
 
-	    public void enviarEmailComAnexo(PDDocument anexo, String destinatario) throws IOException {
-	        MimeMessage message = javaMailSender.createMimeMessage();
+	public void enviarEmailComAnexo(PDDocument anexo, String destinatario) throws IOException {
+		MimeMessage message = javaMailSender.createMimeMessage();
 
-	        try {
-	        	if(destinatario == null) {
-	        		return;
-	        	}
-	        	
-	            MimeMessageHelper helper = new MimeMessageHelper(message, true);
-	            helper.setTo(destinatario);
-	            helper.setSubject("Conta Detalhada");
-	            helper.setText("Caro cliente, segue em anexo um PDF contendo sua conta detalhada.");
+		try {
+			if (destinatario == null) {
+				return;
+			}
 
-	            //Converte o PDDocument para ByteArrayDataSource
-	            DataSource dataSource = new ByteArrayDataSource(getBytesFromPDDocument(anexo), "application/pdf");
-	            
-	            // anexando o PDF ao e-mail
-	            helper.addAttachment("NotaDetalhada.pdf", dataSource);
+			MimeMessageHelper helper = new MimeMessageHelper(message, true);
+			helper.setTo(destinatario);
+			helper.setSubject("Conta Detalhada");
+			helper.setText("Caro cliente, segue em anexo um PDF contendo sua conta detalhada.");
 
-	            javaMailSender.send(message);
-	        } catch (MessagingException e) {
-	            e.printStackTrace();
-	        }
-	    }
-	    
-	    private byte[] getBytesFromPDDocument(PDDocument document) throws IOException {
-	        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
-	            document.save(byteArrayOutputStream);
-	            return byteArrayOutputStream.toByteArray();
-	        }
-	    }
+			// Converte o PDDocument para ByteArrayDataSource
+			DataSource dataSource = new ByteArrayDataSource(getBytesFromPDDocument(anexo), "application/pdf");
+
+			// anexando o PDF ao e-mail
+			helper.addAttachment("NotaDetalhada.pdf", dataSource);
+
+			javaMailSender.send(message);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private byte[] getBytesFromPDDocument(PDDocument document) throws IOException {
+		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+			document.save(byteArrayOutputStream);
+			return byteArrayOutputStream.toByteArray();
+		}
+	}
 
 }

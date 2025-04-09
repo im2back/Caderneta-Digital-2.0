@@ -35,10 +35,11 @@ import lombok.RequiredArgsConstructor;
 public class CustomerService {
 
 	private final CustomerRepository repository;
+	
 	private final List<CustomerValidations> customerValidations;
+	
 	private final PdfGenerator pdfGenerator;
 
-	@Transactional(readOnly = true)
 	private Customer findCustomerByDocument(String document) {
 		return repository.findByDocument(document)
 				.orElseThrow(() -> new CustomerNotFoundException("User not found for document: " + document));
@@ -141,6 +142,7 @@ public class CustomerService {
 		repository.updateStatusByCustomerDocumentNative("PAGO", document, "EM_ABERTO");
 	}
 
+	@Transactional(readOnly = true)
 	public DataForMetricsDTO metrics() {
 		return new DataForMetricsDTO(
 				repository.totalValueForLastMonth(),
@@ -150,8 +152,7 @@ public class CustomerService {
 				getTotalValuesForLast7Days());
 	}
 
-	@Transactional(readOnly = true)
-	public List<DailyTotalDTO> getTotalValuesForLast7Days() {
+	protected List<DailyTotalDTO> getTotalValuesForLast7Days() {
 		List<Object[]> results = repository.findTotalValueForLast7DaysExcludingToday();
 		List<DailyTotalDTO> dailyTotals = new ArrayList<>();
 

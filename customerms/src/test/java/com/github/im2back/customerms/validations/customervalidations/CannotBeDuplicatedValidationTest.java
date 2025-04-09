@@ -36,8 +36,7 @@ class CannotBeDuplicatedValidationTest {
 		BDDMockito.when(this.repository.findByEmailOrDocumentOrPhone(anyString(), anyString(), anyString())).thenReturn(list);	
 		
 		//ACT+ ASSERT
-		this.cannotBeDuplicatedValidation.valid(registerCustomerDTO);
-		
+		Assertions.assertDoesNotThrow(() -> this.cannotBeDuplicatedValidation.valid(registerCustomerDTO));	
 	}
 	
 	@Test
