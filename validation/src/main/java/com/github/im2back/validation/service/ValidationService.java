@@ -24,8 +24,11 @@ import lombok.RequiredArgsConstructor;
 public class ValidationService {
 
 	private final CustomerRepository customerRepository;
+	
 	private final ProductRepository productRepository;
+	
 	private final List<PurchaseValidationsStock> stockPurchaseValidations;
+	
 	private final List<PurchaseValidationsCustomer> customerPurchaseValidations;
 
 	public void validPurchase(ProductsPurchaseRequestDto dto) {
@@ -42,7 +45,7 @@ public class ValidationService {
 	protected List<Product> findByCodes(List<PurchasedItem> productsList) {	
 		List<String> productCodesList = new ArrayList<>();
 		productsList.forEach(t -> productCodesList.add(t.code()));		
-		List<Product> products = productRepository.findByCodes(productCodesList);
+		List<Product> products = this.productRepository.findByCodes(productCodesList);
 		return products;
 	}
 	
