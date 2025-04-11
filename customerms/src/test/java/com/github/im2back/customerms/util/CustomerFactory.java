@@ -5,13 +5,13 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.im2back.customerms.model.dto.datainput.RegisterCustomerDTO;
-import com.github.im2back.customerms.model.dto.dataoutput.AddressDTO;
-import com.github.im2back.customerms.model.dto.dataoutput.CustomerDTO;
-import com.github.im2back.customerms.model.entities.customer.Address;
-import com.github.im2back.customerms.model.entities.customer.Customer;
-import com.github.im2back.customerms.model.entities.purchase.PurchaseRecord;
-import com.github.im2back.customerms.model.entities.purchase.Status;
+import com.github.im2back.customerms.domain.entities.customer.Address;
+import com.github.im2back.customerms.domain.entities.customer.Customer;
+import com.github.im2back.customerms.domain.entities.purchase.PurchaseRecord;
+import com.github.im2back.customerms.domain.enums.Status;
+import com.github.im2back.customerms.dto.datainput.RegisterCustomerDTO;
+import com.github.im2back.customerms.dto.dataoutput.AddressDTO;
+import com.github.im2back.customerms.dto.dataoutput.CustomerDTO;
 
 public class CustomerFactory {
 

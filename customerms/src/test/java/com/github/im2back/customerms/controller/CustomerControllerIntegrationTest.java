@@ -21,8 +21,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.im2back.customerms.model.dto.datainput.PurchaseHistoryInDTO;
-import com.github.im2back.customerms.model.dto.datainput.RegisterCustomerDTO;
+import com.github.im2back.customerms.dto.datainput.PurchaseHistoryInDTO;
+import com.github.im2back.customerms.dto.datainput.RegisterCustomerDTO;
 import com.github.im2back.customerms.util.CustomerFactory;
 import com.github.im2back.customerms.util.UtilObjectsFactory;
 

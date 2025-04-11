@@ -13,8 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.github.im2back.customerms.model.dto.datainput.RegisterCustomerDTO;
-import com.github.im2back.customerms.model.entities.customer.Customer;
+import com.github.im2back.customerms.domain.entities.customer.Customer;
+import com.github.im2back.customerms.dto.datainput.RegisterCustomerDTO;
 import com.github.im2back.customerms.repositories.CustomerRepository;
 import com.github.im2back.customerms.util.CustomerFactory;
 import com.github.im2back.customerms.validations.exceptions.CustomerRegisterValidationException;

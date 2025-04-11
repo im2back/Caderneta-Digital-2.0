@@ -6,12 +6,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.im2back.customerms.model.dto.datainput.PurchaseHistoryInDTO;
-import com.github.im2back.customerms.model.dto.datainput.PurchasedProductsDTO;
-import com.github.im2back.customerms.model.dto.dataoutput.PurchaseHistoryOutDTO;
-import com.github.im2back.customerms.model.dto.dataoutput.PurchasedProductDTO;
-import com.github.im2back.customerms.model.dto.dataoutput.metrics.DailyTotalDTO;
-import com.github.im2back.customerms.model.dto.dataoutput.metrics.DataForMetricsDTO;
+import com.github.im2back.customerms.dto.datainput.PurchaseHistoryInDTO;
+import com.github.im2back.customerms.dto.datainput.PurchasedProductsDTO;
+import com.github.im2back.customerms.dto.dataoutput.PurchaseHistoryOutDTO;
+import com.github.im2back.customerms.dto.dataoutput.PurchasedProductDTO;
+import com.github.im2back.customerms.dto.dataoutput.metrics.DailyTotalDTO;
+import com.github.im2back.customerms.dto.dataoutput.metrics.DataForMetricsDTO;
 
 public class UtilObjectsFactory {
 	

@@ -35,7 +35,8 @@
 			**/customerms/utils/PdfGenerator.java,
 			**/com/github/im2back/customerms/exceptions/**,
 			**/com/github/im2back/customerms/infra/configurations/**,
-			**/com/github/im2back/customerms/model/**,
+			**/com/github/im2back/customerms/domain/**,
+			**/com/github/im2back/customerms/dto/**,
 			**/com/github/im2back/customerms/validations/exceptions/**,
 			**/com/github/im2back/customerms/service/exeptions/**
 		</sonar.exclusions>
@@ -216,7 +217,8 @@
 									com/github/im2back/customerms/exceptions/**</exclude>
 								<exclude>
 									com/github/im2back/customerms/infra/configurations/**</exclude>
-								<exclude>com/github/im2back/customerms/model/**</exclude>
+								<exclude>com/github/im2back/customerms/domain/**</exclude>
+								<exclude>com/github/im2back/customerms/dto/**</exclude>
 								<exclude>
 									com/github/im2back/customerms/validations/exceptions/**</exclude>
 								<exclude>

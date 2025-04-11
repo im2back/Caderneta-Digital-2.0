@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.github.im2back.customerms.model.dto.datainput.RegisterCustomerDTO;
-import com.github.im2back.customerms.model.entities.customer.Customer;
+import com.github.im2back.customerms.domain.entities.customer.Customer;
+import com.github.im2back.customerms.dto.datainput.RegisterCustomerDTO;
 import com.github.im2back.customerms.repositories.CustomerRepository;
 import com.github.im2back.customerms.validations.exceptions.CustomerRegisterValidationException;
 

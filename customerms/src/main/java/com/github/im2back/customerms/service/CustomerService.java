@@ -12,19 +12,20 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.im2back.customerms.model.dto.datainput.RegisterCustomerDTO;
-import com.github.im2back.customerms.model.dto.datainput.PurchaseHistoryInDTO;
-import com.github.im2back.customerms.model.dto.dataoutput.CustomerDTO;
-import com.github.im2back.customerms.model.dto.dataoutput.ProductDataToPdf;
-import com.github.im2back.customerms.model.dto.dataoutput.PurchaseHistoryOutDTO;
-import com.github.im2back.customerms.model.dto.dataoutput.PurchasedProductDTO;
-import com.github.im2back.customerms.model.dto.dataoutput.metrics.DailyTotalDTO;
-import com.github.im2back.customerms.model.dto.dataoutput.metrics.DataForMetricsDTO;
-import com.github.im2back.customerms.model.entities.customer.Customer;
-import com.github.im2back.customerms.model.entities.purchase.PurchaseRecord;
-import com.github.im2back.customerms.model.entities.purchase.Status;
+import com.github.im2back.customerms.domain.entities.customer.Customer;
+import com.github.im2back.customerms.domain.entities.purchase.PurchaseRecord;
+import com.github.im2back.customerms.domain.enums.Status;
+import com.github.im2back.customerms.dto.datainput.PurchaseHistoryInDTO;
+import com.github.im2back.customerms.dto.datainput.RegisterCustomerDTO;
+import com.github.im2back.customerms.dto.dataoutput.CustomerDTO;
+import com.github.im2back.customerms.dto.dataoutput.ProductDataToPdf;
+import com.github.im2back.customerms.dto.dataoutput.PurchaseHistoryOutDTO;
+import com.github.im2back.customerms.dto.dataoutput.PurchasedProductDTO;
+import com.github.im2back.customerms.dto.dataoutput.metrics.DailyTotalDTO;
+import com.github.im2back.customerms.dto.dataoutput.metrics.DataForMetricsDTO;
 import com.github.im2back.customerms.repositories.CustomerRepository;
 import com.github.im2back.customerms.service.exeptions.CustomerNotFoundException;
+import com.github.im2back.customerms.service.exeptions.PurchaseNotFoundException;
 import com.github.im2back.customerms.utils.PdfGenerator;
 import com.github.im2back.customerms.validations.customervalidations.CustomerValidations;
 
@@ -168,8 +169,12 @@ public class CustomerService {
 
 	@Transactional
 	public void individualPayment(Long purchaseId) {
-		repository.individualPayment(Status.PAGO.toString(), purchaseId);
-			
+		Long exists = this.repository.existsPurchaseRecordById(purchaseId);
+		if(exists == null || exists != 1L) {
+			throw new PurchaseNotFoundException("Purchase not found for id "+ purchaseId);
+		}
+		
+		this.repository.individualPayment(Status.PAGO.toString(), purchaseId);
 	}
 
 }

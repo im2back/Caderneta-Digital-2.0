@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.github.im2back.customerms.dto.datainput.PurchaseHistoryInDTO;
+import com.github.im2back.customerms.dto.datainput.RegisterCustomerDTO;
+import com.github.im2back.customerms.dto.dataoutput.CustomerDTO;
+import com.github.im2back.customerms.dto.dataoutput.PurchaseHistoryOutDTO;
+import com.github.im2back.customerms.dto.dataoutput.metrics.DataForMetricsDTO;
 import com.github.im2back.customerms.exceptions.StandardError;
-import com.github.im2back.customerms.model.dto.datainput.RegisterCustomerDTO;
-import com.github.im2back.customerms.model.dto.datainput.PurchaseHistoryInDTO;
-import com.github.im2back.customerms.model.dto.dataoutput.CustomerDTO;
-import com.github.im2back.customerms.model.dto.dataoutput.PurchaseHistoryOutDTO;
-import com.github.im2back.customerms.model.dto.dataoutput.metrics.DataForMetricsDTO;
 import com.github.im2back.customerms.service.CustomerService;
 
 import io.swagger.v3.oas.annotations.Operation;

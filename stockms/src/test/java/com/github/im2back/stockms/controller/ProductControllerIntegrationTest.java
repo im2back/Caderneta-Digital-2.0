@@ -22,11 +22,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.im2back.stockms.model.dto.inputdata.NewProductDTO;
-import com.github.im2back.stockms.model.dto.inputdata.ProductMassiveReplenishmentDTO;
-import com.github.im2back.stockms.model.dto.inputdata.PurchasedItemDTO;
-import com.github.im2back.stockms.model.dto.inputdata.UndoPurchaseDTO;
-import com.github.im2back.stockms.model.dto.outputdata.ProductDTO;
+import com.github.im2back.stockms.dto.inputdata.NewProductDTO;
+import com.github.im2back.stockms.dto.inputdata.ProductMassiveReplenishmentDTO;
+import com.github.im2back.stockms.dto.inputdata.PurchasedItemDTO;
+import com.github.im2back.stockms.dto.inputdata.UndoPurchaseDTO;
+import com.github.im2back.stockms.dto.outputdata.ProductDTO;
 import com.github.im2back.stockms.utils.ProductFactoryTest;
 
 

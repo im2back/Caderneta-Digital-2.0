@@ -26,11 +26,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.github.im2back.customerms.model.dto.datainput.PurchaseHistoryInDTO;
-import com.github.im2back.customerms.model.dto.datainput.RegisterCustomerDTO;
-import com.github.im2back.customerms.model.dto.dataoutput.CustomerDTO;
-import com.github.im2back.customerms.model.dto.dataoutput.PurchaseHistoryOutDTO;
-import com.github.im2back.customerms.model.dto.dataoutput.metrics.DataForMetricsDTO;
+import com.github.im2back.customerms.dto.datainput.PurchaseHistoryInDTO;
+import com.github.im2back.customerms.dto.datainput.RegisterCustomerDTO;
+import com.github.im2back.customerms.dto.dataoutput.CustomerDTO;
+import com.github.im2back.customerms.dto.dataoutput.PurchaseHistoryOutDTO;
+import com.github.im2back.customerms.dto.dataoutput.metrics.DataForMetricsDTO;
 import com.github.im2back.customerms.service.CustomerService;
 import com.github.im2back.customerms.util.CustomerFactory;
 import com.github.im2back.customerms.util.ExceptionFactory;

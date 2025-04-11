@@ -12,8 +12,8 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
-import com.github.im2back.customerms.model.dto.dataoutput.ProductDataToPdf;
-import com.github.im2back.customerms.model.entities.customer.Customer;
+import com.github.im2back.customerms.domain.entities.customer.Customer;
+import com.github.im2back.customerms.dto.dataoutput.ProductDataToPdf;
 import com.github.im2back.customerms.service.EmailService;
 
 @Component

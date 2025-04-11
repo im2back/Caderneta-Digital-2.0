@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.github.im2back.customerms.model.entities.customer.Customer;
+import com.github.im2back.customerms.domain.entities.customer.Customer;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	
@@ -55,7 +55,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	@Query("SELECT SUM(pr.productprice * pr.quantity) FROM PurchaseRecord pr WHERE pr.status = EM_ABERTO")
 	Double totalOutstandingAmount();
 
-	
 	@Modifying
 	@Query(value = "UPDATE tb_purchase p " +
 	               "SET p.payment_status = :newStatus " +
@@ -74,6 +73,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	@Query(value = "UPDATE tb_purchase p SET p.payment_status = :paid WHERE p.id = :idPurchase ", nativeQuery = true)
 	void individualPayment(@Param("paid")String status, @Param("idPurchase") Long idPurchase);
 
+	@Query(value = "SELECT EXISTS (SELECT 1 FROM tb_purchase WHERE id = :purchaseId)", nativeQuery = true)
+	Long existsPurchaseRecordById(@Param("purchaseId") Long purchaseId);
 
-		
 }

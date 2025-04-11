@@ -5,10 +5,10 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.im2back.stockms.model.dto.inputdata.NewProductDTO;
-import com.github.im2back.stockms.model.dto.inputdata.PurchasedItemDTO;
-import com.github.im2back.stockms.model.dto.outputdata.ProductDTO;
-import com.github.im2back.stockms.model.entities.Product;
+import com.github.im2back.stockms.dto.inputdata.NewProductDTO;
+import com.github.im2back.stockms.dto.inputdata.PurchasedItemDTO;
+import com.github.im2back.stockms.dto.outputdata.ProductDTO;
+import com.github.im2back.stockms.domain.entities.Product;
 
 public class ProductFactoryTest {
 

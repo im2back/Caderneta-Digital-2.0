@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.github.im2back.stockms.model.dto.outputdata.PurchaseHistoryDTO;
-import com.github.im2back.stockms.model.dto.outputdata.UpdatedProducts;
-import com.github.im2back.stockms.model.dto.outputdata.UpdatedStockResponseDTO;
+import com.github.im2back.stockms.dto.outputdata.PurchaseHistoryDTO;
+import com.github.im2back.stockms.dto.outputdata.UpdatedProducts;
+import com.github.im2back.stockms.dto.outputdata.UpdatedStockResponseDTO;
 
 public class PurchaseDtosFactory {
 

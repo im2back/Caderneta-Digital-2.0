@@ -15,7 +15,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.im2back.stockms.model.dto.outputdata.PurchaseHistoryDTO;
+import com.github.im2back.stockms.dto.outputdata.PurchaseHistoryDTO;
 import com.github.im2back.stockms.utils.PurchaseDtosFactory;
 
 @ExtendWith(MockitoExtension.class)

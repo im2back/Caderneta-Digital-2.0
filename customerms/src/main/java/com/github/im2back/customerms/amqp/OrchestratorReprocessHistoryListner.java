@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.im2back.customerms.model.dto.datainput.PurchaseHistoryInDTO;
+import com.github.im2back.customerms.dto.datainput.PurchaseHistoryInDTO;
 import com.github.im2back.customerms.service.CustomerService;
 
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,7 @@
 package com.github.im2back.customerms.service;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 
@@ -27,18 +28,19 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.github.im2back.customerms.model.dto.datainput.PurchaseHistoryInDTO;
-import com.github.im2back.customerms.model.dto.datainput.PurchasedProductsDTO;
-import com.github.im2back.customerms.model.dto.datainput.RegisterCustomerDTO;
-import com.github.im2back.customerms.model.dto.dataoutput.CustomerDTO;
-import com.github.im2back.customerms.model.dto.dataoutput.ProductDataToPdf;
-import com.github.im2back.customerms.model.dto.dataoutput.PurchaseHistoryOutDTO;
-import com.github.im2back.customerms.model.dto.dataoutput.metrics.DailyTotalDTO;
-import com.github.im2back.customerms.model.dto.dataoutput.metrics.DataForMetricsDTO;
-import com.github.im2back.customerms.model.entities.customer.Customer;
-import com.github.im2back.customerms.model.entities.purchase.Status;
+import com.github.im2back.customerms.domain.entities.customer.Customer;
+import com.github.im2back.customerms.domain.enums.Status;
+import com.github.im2back.customerms.dto.datainput.PurchaseHistoryInDTO;
+import com.github.im2back.customerms.dto.datainput.PurchasedProductsDTO;
+import com.github.im2back.customerms.dto.datainput.RegisterCustomerDTO;
+import com.github.im2back.customerms.dto.dataoutput.CustomerDTO;
+import com.github.im2back.customerms.dto.dataoutput.ProductDataToPdf;
+import com.github.im2back.customerms.dto.dataoutput.PurchaseHistoryOutDTO;
+import com.github.im2back.customerms.dto.dataoutput.metrics.DailyTotalDTO;
+import com.github.im2back.customerms.dto.dataoutput.metrics.DataForMetricsDTO;
 import com.github.im2back.customerms.repositories.CustomerRepository;
 import com.github.im2back.customerms.service.exeptions.CustomerNotFoundException;
+import com.github.im2back.customerms.service.exeptions.PurchaseNotFoundException;
 import com.github.im2back.customerms.util.CustomerFactory;
 import com.github.im2back.customerms.util.ExceptionFactory;
 import com.github.im2back.customerms.util.UtilObjectsFactory;
@@ -69,7 +71,6 @@ class CustomerServiceTest {
 	
 	@Captor
 	private ArgumentCaptor<Customer> customerCaptor;
-
 
 	@Test
 	void findCustomerById_ShoudReturnCustomerDto_WhenIdIsValid() {
@@ -284,13 +285,30 @@ class CustomerServiceTest {
 	@Test
 	void individualPayment_ShoudReturnVoid_WhenSucess() {
 		//ARRANGE
-		Long id = 1l;	
+		Long id = 1l;
+		BDDMockito.when(this.repository.existsPurchaseRecordById(id)).thenReturn(1l);
+		doNothing().when(this.repository).individualPayment(Status.PAGO.toString(), id);
 		
 		//ACT
-			 this.customerService.individualPayment(id);
+		this.customerService.individualPayment(id);
 		
 		//ASSERT
-			verify(this.repository).individualPayment(Status.PAGO.toString(), id);
+		verify(this.repository).existsPurchaseRecordById(id);
+		verify(this.repository).individualPayment(Status.PAGO.toString(), id);
+	}
+	
+	@Test
+	void individualPayment_ShoudReturnPurchaseNotFoundException_WhenIdNotExist() {
+		//ARRANGE
+		Long id = 1l;
+		BDDMockito.when(this.repository.existsPurchaseRecordById(id)).thenReturn(0l);
+		
+		//ACT
+		Assertions.assertThrows(PurchaseNotFoundException.class, () -> this.customerService.individualPayment(id));
+		
+		
+		//ASSERT
+		verify(this.repository).existsPurchaseRecordById(id);
 	}
 	
 	@Test

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.github.im2back.customerms.service.exeptions.CustomerNotFoundException;
+import com.github.im2back.customerms.service.exeptions.PurchaseNotFoundException;
 import com.github.im2back.customerms.validations.exceptions.CustomerRegisterValidationException;
 
 
@@ -55,6 +56,16 @@ public class GlobalHandlerException {
 				request.getRequestURI());
 
 		return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(response);
+	}
+	
+	@ExceptionHandler(PurchaseNotFoundException.class)
+	ResponseEntity<StandardError> purchaseNotFoundException(PurchaseNotFoundException ex, HttpServletRequest request) {
+		List<String> messageErrosList = new ArrayList<>();
+		messageErrosList.add(ex.getMessage());
+		StandardError response = new StandardError(HttpStatus.NOT_FOUND.value(), "Not Found", messageErrosList,
+				request.getRequestURI());
+
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
 	}
 	
 }

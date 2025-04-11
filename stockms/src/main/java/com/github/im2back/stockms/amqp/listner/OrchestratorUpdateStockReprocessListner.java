@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.im2back.stockms.amqp.publish.PublishCustomerReprocessHistory;
-import com.github.im2back.stockms.model.dto.inputdata.PurchaseRequestDTO;
-import com.github.im2back.stockms.model.dto.outputdata.PurchaseHistoryDTO;
-import com.github.im2back.stockms.model.dto.outputdata.UpdatedProducts;
-import com.github.im2back.stockms.model.dto.outputdata.UpdatedStockResponseDTO;
+import com.github.im2back.stockms.dto.inputdata.PurchaseRequestDTO;
+import com.github.im2back.stockms.dto.outputdata.PurchaseHistoryDTO;
+import com.github.im2back.stockms.dto.outputdata.UpdatedProducts;
+import com.github.im2back.stockms.dto.outputdata.UpdatedStockResponseDTO;
 import com.github.im2back.stockms.service.ProductService;
 
 import lombok.RequiredArgsConstructor;

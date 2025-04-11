@@ -22,10 +22,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.im2back.stockms.amqp.publish.PublishCustomerReprocessHistory;
-import com.github.im2back.stockms.model.dto.inputdata.PurchaseRequestDTO;
-import com.github.im2back.stockms.model.dto.inputdata.PurchasedItemDTO;
-import com.github.im2back.stockms.model.dto.outputdata.PurchaseHistoryDTO;
-import com.github.im2back.stockms.model.dto.outputdata.UpdatedStockResponseDTO;
+import com.github.im2back.stockms.dto.inputdata.PurchaseRequestDTO;
+import com.github.im2back.stockms.dto.inputdata.PurchasedItemDTO;
+import com.github.im2back.stockms.dto.outputdata.PurchaseHistoryDTO;
+import com.github.im2back.stockms.dto.outputdata.UpdatedStockResponseDTO;
 import com.github.im2back.stockms.service.ProductService;
 import com.github.im2back.stockms.utils.ProductFactoryTest;
 

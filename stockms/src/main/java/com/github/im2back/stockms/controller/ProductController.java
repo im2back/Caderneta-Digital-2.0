@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.github.im2back.stockms.exceptions.StandardError;
-import com.github.im2back.stockms.model.dto.inputdata.NewProductDTO;
-import com.github.im2back.stockms.model.dto.inputdata.ProductMassiveReplenishmentDTO;
-import com.github.im2back.stockms.model.dto.inputdata.PurchasedItemDTO;
-import com.github.im2back.stockms.model.dto.inputdata.UndoPurchaseDTO;
-import com.github.im2back.stockms.model.dto.outputdata.MassiveReplenishmentResponseDTO;
-import com.github.im2back.stockms.model.dto.outputdata.ProductDTO;
-import com.github.im2back.stockms.model.dto.outputdata.UpdatedStockResponseDTO;
+import com.github.im2back.stockms.dto.inputdata.NewProductDTO;
+import com.github.im2back.stockms.dto.inputdata.ProductMassiveReplenishmentDTO;
+import com.github.im2back.stockms.dto.inputdata.PurchasedItemDTO;
+import com.github.im2back.stockms.dto.inputdata.UndoPurchaseDTO;
+import com.github.im2back.stockms.dto.outputdata.MassiveReplenishmentResponseDTO;
+import com.github.im2back.stockms.dto.outputdata.ProductDTO;
+import com.github.im2back.stockms.dto.outputdata.UpdatedStockResponseDTO;
 import com.github.im2back.stockms.service.ProductService;
 
 import io.swagger.v3.oas.annotations.Operation;
